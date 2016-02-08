@@ -1,5 +1,6 @@
 package com.starttrak.linkedin;
 
+import com.starttrak.jpa.NetworkEntity;
 import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.NetworkRepo;
@@ -28,6 +29,7 @@ import java.util.UUID;
  */
 public class LinkedinAuthResponseServlet extends HttpServlet {
 
+    private final static long STRK_ID = 0;
     private final static long LNKD_ID = 1;
 
     @Inject
@@ -41,7 +43,7 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        PrintWriter responseWriter = response.getWriter();
         //-=-=-
         if (request.getParameter("code") != null) {
             Client client = Client.create();
@@ -76,16 +78,17 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                     throw new IllegalStateException("Failed to get the profile : " + getResponse.getStatus());
                 }
                 String textProfile = getResponse.getEntity(String.class);
-                out.println("<h1>PROFILE</h1><br/>");
-                out.println("<h1>" + textProfile + "</h1>");
+                //out.println("<h1>PROFILE</h1><br/>");
+                //out.println("<h1>" + textProfile + "</h1>");
                 // -=-=-=-
                 Object jsonParsed = JSONValue.parse(textProfile);
                 JSONObject jsonProfile = (JSONObject) jsonParsed;
-                out.println(jsonProfile);
+                responseWriter.println(jsonProfile);
                 // -=-=-=-
                 //{"firstName":"Sergii","lastName":"Mavrov","emailAddress":"serg.mavrov@gmail.com",
                 // "headline":"Senior Java Software Engineer at Amadeus IT Group"}
-                out.println("<br/>");
+                //responseWriter.println("<br/>");
+                // -=-=-=-
                 String firstName = jsonProfile.get("firstName").toString();
                 String lastName = jsonProfile.get("lastName").toString();
                 String emailAddress = jsonProfile.get("emailAddress").toString();
@@ -93,15 +96,16 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                 String position = positionCompany[0];
                 String company = positionCompany[1];
                 // -=-=-=-
-                out.println(firstName + "<br/>");
-                out.println(lastName + "<br/>");
-                out.println(emailAddress + "<br/>");
-                out.println(position + "<br/>");
-                out.println(company + "<br/>");
-                out.println("<br/>");
-                out.println("OwnSessionID = " +
-                        updateLinkedinProfile(emailAddress, firstName, lastName,
-                                position, company, appKey) + "<br/>"
+                //responseWriter.println(firstName + "<br/>");
+                //responseWriter.println(lastName + "<br/>");
+                //responseWriter.println(emailAddress + "<br/>");
+                //responseWriter.println(position + "<br/>");
+                //responseWriter.println(company + "<br/>");
+                //responseWriter.println("<br/>");
+                // -=-=-=-
+                responseWriter.println("OwnSessionID = " +
+                                updateLinkedinProfile(emailAddress, firstName, lastName,
+                                        position, company, appKey) + "<br/>"
                 );
             }
             // -=-=-
@@ -110,16 +114,27 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
     }
 
     private String updateLinkedinProfile(String email, String firstName, String lastName,
-                                       String position, String company, String appKey) {
-        Optional<ProfileEntity> profile = profileRepo.findByNetwork(email);
+                                         String position, String company, String appKey) {
+        Optional<ProfileEntity> linkedinProfile = profileRepo.findByEmailNetwork(LNKD_ID, email);
         UserEntity user;
-        if (!profile.isPresent()) {
-            user = new UserEntity();
-            user.setData("linkedin processes");
-            user.setOwnSessionId(UUID.randomUUID().toString());
-            userRepo.create(user);
+        if (!linkedinProfile.isPresent()) {
+            Optional<ProfileEntity> otherProfile = profileRepo.findByEmail(email);
+            if (!otherProfile.isPresent()) {
+                user = new UserEntity();
+                user.setData("linkedin processes");
+                String ownSessionId = UUID.randomUUID().toString();
+                user.setOwnSessionId(ownSessionId);
+                userRepo.create(user);
+                createProfile(
+                        networkRepo.find(STRK_ID).orElseThrow(IllegalStateException::new),
+                        email,
+                        firstName, lastName,
+                        position,
+                        company, ownSessionId, user);
+            } else {
+                user = otherProfile.get().getUser();
+            }
             // -=-=-=-
-
             ProfileEntity newProfile = new ProfileEntity();
             newProfile.setEmail(email);
             newProfile.setName(firstName + " " + lastName);
@@ -130,12 +145,26 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                     orElseThrow(IllegalStateException::new));
             newProfile.setNetworkToken(appKey);
             profileRepo.create(newProfile);
+            // -=-=-=-a
         } else {
-            profile.get().setNetworkToken(appKey);
-            profileRepo.update(profile.get());
-            user = profile.get().getUser();
+            linkedinProfile.get().setNetworkToken(appKey);
+            profileRepo.update(linkedinProfile.get());
+            user = linkedinProfile.get().getUser();
         }
         return user.getOwnSessionId();
+    }
+
+    private void createProfile(NetworkEntity network, String email, String firstName, String lastName,
+                               String position, String company, String appKey, UserEntity user){
+        ProfileEntity newProfile = new ProfileEntity();
+        newProfile.setEmail(email);
+        newProfile.setName(firstName + " " + lastName);
+//                    position,
+//                    company,
+        newProfile.setUser(user);
+        newProfile.setNetwork(network);
+        newProfile.setNetworkToken(appKey);
+        profileRepo.create(newProfile);
     }
 
 }

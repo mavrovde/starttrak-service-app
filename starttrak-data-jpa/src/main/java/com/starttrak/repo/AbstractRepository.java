@@ -57,18 +57,14 @@ public abstract class AbstractRepository<ENTITY extends AbstractEntity>
         }
     }
 
-    protected List<ENTITY> findAllBy(Integer from, Integer items, Predicate... predicates) {
+    protected List<ENTITY> findAllBy(Optional<Page> page, Predicate... predicates) {
         if (predicates != null && predicates.length > 0) {
             selectCriteria.where(predicates);
         }
         typedQuery = getEm().createQuery(selectCriteria);
 //        typedQuery.setHint(CACHE_PARAM, cacheConfig.getEnabled());
-        if (from != null) {
-            typedQuery.setFirstResult(from);
-        }
-        if (items != null) {
-            typedQuery.setMaxResults(items);
-        }
+        typedQuery.setFirstResult(page.orElse(Page.DEFAULT).getOffset());
+        typedQuery.setMaxResults(page.orElse(Page.DEFAULT).getLimit());
         return typedQuery.getResultList();
     }
 

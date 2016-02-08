@@ -3,6 +3,7 @@ package com.starttrak.repo;
 import com.starttrak.jpa.ProfileEntity;
 
 import javax.enterprise.context.RequestScoped;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,11 +17,18 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         return ProfileEntity.class;
     }
 
-    public Optional<ProfileEntity> findByNetwork(String email) {
-        return findBy(
-                getBuilder().equal(getFrom(Operation.select).get("email"),
-                        email)
+    public Optional<ProfileEntity> findByEmail(String email) {
+        List<ProfileEntity> allProfiles = findAllBy(Page.OPTIONAL_DEFAULT,
+                getBuilder().equal(getFrom(Operation.select).get("email"), email)
         );
+        return allProfiles.stream().findAny();
+    }
+
+    public Optional<ProfileEntity> findByEmailNetwork(long networkId, String email) {
+        return findBy(getBuilder().and(
+                getBuilder().equal(getFrom(Operation.select).get("email"), email),
+                getBuilder().equal(getFrom(Operation.select).get("network").get("id"), networkId)
+        ));
     }
 
 }

@@ -104,6 +104,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     private int sizesMaxValue;
 
 
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "network_id", nullable = true)
     private NetworkEntity network;
