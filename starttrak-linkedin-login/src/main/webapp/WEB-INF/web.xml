@@ -1,0 +1,34 @@
+<web-app>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <servlet>
+        <servlet-name>LinkedInAuthRequestServlet</servlet-name>
+        <servlet-class>com.starttrak.linkedin.LinkedinAuthRequestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LinkedInAuthRequestServlet</servlet-name>
+        <url-pattern>/linkedin-authorize</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LinkedInAuthResponseServlet</servlet-name>
+        <servlet-class>com.starttrak.linkedin.LinkedinAuthResponseServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LinkedInAuthResponseServlet</servlet-name>
+        <url-pattern>/linkedin-auth-response</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+
+

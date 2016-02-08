@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="ST_PU" transaction-type="JTA">
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/starttrak</jta-data-source>
+
+        <class>com.starttrak.jpa.CompanyEntity</class>
+        <class>com.starttrak.jpa.CountryEntity</class>
+        <class>com.starttrak.jpa.IndustryEntity</class>
+        <class>com.starttrak.jpa.NetworkEntity</class>
+        <class>com.starttrak.jpa.PositionEntity</class>
+        <class>com.starttrak.jpa.ProfileEntity</class>
+        <class>com.starttrak.jpa.RegionEntity</class>
+        <class>com.starttrak.jpa.SeniorityEntity</class>
+        <class>com.starttrak.jpa.SizeEntity</class>
+        <class>com.starttrak.jpa.UserEntity</class>
+
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <properties>
+
+            <!-- SQL dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+
+            <property name="hibernate.current_session_context_class" value="jta"/>
+            <property name="hibernate.transaction.factory_class"
+                      value="org.hibernate.engine.transaction.internal.jta.CMTTransactionFactory"/>
+            <property name="hibernate.transaction.flush_before_completion" value="true"/>
+            <property name="hibernate.transaction.jta.platform"
+                      value="org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform"/>
+
+            <!-- Enable lazy loading outside transaction -->
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+
+            <!--<property name="hibernate.jndi.class" value="org.jnp.interfaces.NamingContextFactory"/>-->
+            <property name="hibernate.transaction.manager_lookup_class"
+                      value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+
+            <!-- Disable the second-level cache  -->
+            <property name="cache.provider_class" value="org.hibernate.cache.internal.NoCacheProvider"/>
+
+            <!--<property name="hibernate.cache.region.factory_class"-->
+                      <!--value="org.hibernate.cache.infinispan.JndiInfinispanRegionFactory"/>-->
+            <!--<property name="hibernate.cache.infinispan.cachemanager"-->
+                      <!--value="java:jboss/infinispan/container/hibernate_${developer.id}"/>-->
+            <!--<property name="hibernate.cache.infinispan.statistics" value="true"/>-->
+            <!--<property name="hibernate.cache.use_second_level_cache" value="true"/>-->
+            <!--<property name="hibernate.cache.use_query_cache" value="true"/>-->
+            <!--<property name="hibernate.cache.use_structured_entries" value="true"/>-->
+
+
+            <!-- Echo all executed SQL to stdout -->
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.generate_statistics" value="false"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+
+            <!-- Drop and re-create the database schema on startup -->
+            <!--
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            -->
+
+        </properties>
+    </persistence-unit>
+
+</persistence>
