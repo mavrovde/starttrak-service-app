@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
@@ -154,6 +155,7 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
         return user.getOwnSessionId();
     }
 
+    @Transactional(Transactional.TxType.REQUIRED)
     private void createProfile(NetworkEntity network, String email, String firstName, String lastName,
                                String position, String company, String appKey, UserEntity user){
         ProfileEntity newProfile = new ProfileEntity();

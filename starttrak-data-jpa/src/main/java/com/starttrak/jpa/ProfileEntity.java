@@ -104,13 +104,12 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     private int sizesMaxValue;
 
 
-
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "network_id", nullable = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "network_id", nullable = false)
     private NetworkEntity network;
 
     @Basic
-    @Column(name = "network_token", nullable = true)
+    @Column(name = "network_token", nullable = false)
     private String networkToken;
 
     @ManyToOne(optional = true)
