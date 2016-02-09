@@ -31,12 +31,4 @@ public class ProfileRestService {
 		return ping;
 	}
 
-//	@POST
-//	@Path("/post")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response createTrackInJSON(Ping ping) {
-//		String result = "Ping saved : " + ping;
-//		return Response.status(201).entity(result).build();
-//	}
-	
 }
