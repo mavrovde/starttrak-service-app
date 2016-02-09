@@ -4,6 +4,7 @@ import com.starttrak.jpa.UserEntity;
 
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class UserRepo extends AbstractRepository<UserEntity> {
         UserEntity user = new UserEntity();
         user.setData("linkedin processes " + email);
         String ownSessionId = UUID.randomUUID().toString();
+        user.setCreated(new Date());
         user.setOwnSessionId(ownSessionId);
         return create(user);
     }

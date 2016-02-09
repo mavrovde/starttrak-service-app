@@ -1,6 +1,7 @@
 package com.starttrak.jpa;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -110,6 +111,10 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @Basic
     @Column(name = "network_token", nullable = false)
     private String networkToken;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "last_login", nullable = false, columnDefinition = "DATETIME")
+    private Date lastLogin;
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "user_id", nullable = false)
@@ -302,6 +307,14 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
 
     public void setNetwork(NetworkEntity network) {
         this.network = network;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     public UserEntity getUser() {

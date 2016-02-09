@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -135,6 +136,7 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
             // -=-=-=-
         } else { // we have already linkedin profile
             linkedinProfile.get().setNetworkToken(appKey);
+            linkedinProfile.get().setLastLogin(new Date());
             profileRepo.update(linkedinProfile.get());
             user = linkedinProfile.get().getUser();
         }

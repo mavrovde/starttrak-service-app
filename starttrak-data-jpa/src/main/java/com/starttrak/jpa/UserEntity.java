@@ -1,7 +1,7 @@
 package com.starttrak.jpa;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -24,8 +24,8 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
     private long id;
 
-    @Basic
-    @Column(name = "created")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "created", nullable = false, columnDefinition = "DATETIME")
     private Date created;
 
     @Basic
@@ -44,7 +44,6 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public Date getCreated() {
         return created;

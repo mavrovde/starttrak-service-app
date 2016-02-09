@@ -7,6 +7,7 @@ import com.starttrak.jpa.UserEntity;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalStateException::new);
         newProfile.setNetwork(network);
         newProfile.setNetworkToken(appKey);
+        newProfile.setLastLogin(new Date());
         return create(newProfile);
     }
 
