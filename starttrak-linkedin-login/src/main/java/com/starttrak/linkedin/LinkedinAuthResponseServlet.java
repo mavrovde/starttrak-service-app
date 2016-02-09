@@ -105,8 +105,8 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                 //responseWriter.println("<br/>");
                 // -=-=-=-
                 responseWriter.println("OwnSessionID = " +
-                                updateLinkedinProfile(emailAddress, firstName, lastName,
-                                        position, company, appKey) + "<br/>"
+                        updateLinkedinProfile(emailAddress, firstName, lastName,
+                                position, company, appKey) + "<br/>"
                 );
             }
             // -=-=-
@@ -117,56 +117,28 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
     private String updateLinkedinProfile(String email, String firstName, String lastName,
                                          String position, String company, String appKey) {
         Optional<ProfileEntity> linkedinProfile = profileRepo.findByEmailNetwork(LNKD_ID, email);
-        UserEntity user;
-        if (!linkedinProfile.isPresent()) {
+        UserEntity user; // we are trying to define current user
+        if (!linkedinProfile.isPresent()) { //there is no linkedin profile
             Optional<ProfileEntity> otherProfile = profileRepo.findByEmail(email);
-            if (!otherProfile.isPresent()) {
-                user = new UserEntity();
-                user.setData("linkedin processes");
-                String ownSessionId = UUID.randomUUID().toString();
-                user.setOwnSessionId(ownSessionId);
-                userRepo.create(user);
-                createProfile(
-                        networkRepo.find(STRK_ID).orElseThrow(IllegalStateException::new),
-                        email,
-                        firstName, lastName,
-                        position,
-                        company, ownSessionId, user);
+            if (!otherProfile.isPresent()) { //there is no any social profiles
+                // create an user for starttrak
+                user = userRepo.create(email);
+                // create the starttrak profile
+                profileRepo.create(STRK_ID, email, firstName, lastName, position, company,
+                        user.getOwnSessionId(), user);
             } else {
+                // there was found at least one social profile, so take an user
                 user = otherProfile.get().getUser();
             }
+            // create linkedin profile
+            profileRepo.create(LNKD_ID, email, firstName, lastName, position, company, appKey, user);
             // -=-=-=-
-            ProfileEntity newProfile = new ProfileEntity();
-            newProfile.setEmail(email);
-            newProfile.setName(firstName + " " + lastName);
-//                    position,
-//                    company,
-            newProfile.setUser(user);
-            newProfile.setNetwork(networkRepo.find(LNKD_ID).
-                    orElseThrow(IllegalStateException::new));
-            newProfile.setNetworkToken(appKey);
-            profileRepo.create(newProfile);
-            // -=-=-=-a
-        } else {
+        } else { // we have already linkedin profile
             linkedinProfile.get().setNetworkToken(appKey);
             profileRepo.update(linkedinProfile.get());
             user = linkedinProfile.get().getUser();
         }
         return user.getOwnSessionId();
-    }
-
-    @Transactional(Transactional.TxType.REQUIRED)
-    private void createProfile(NetworkEntity network, String email, String firstName, String lastName,
-                               String position, String company, String appKey, UserEntity user){
-        ProfileEntity newProfile = new ProfileEntity();
-        newProfile.setEmail(email);
-        newProfile.setName(firstName + " " + lastName);
-//                    position,
-//                    company,
-        newProfile.setUser(user);
-        newProfile.setNetwork(network);
-        newProfile.setNetworkToken(appKey);
-        profileRepo.create(newProfile);
     }
 
 }

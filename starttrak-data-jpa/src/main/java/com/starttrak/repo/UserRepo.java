@@ -3,7 +3,9 @@ package com.starttrak.repo;
 import com.starttrak.jpa.UserEntity;
 
 import javax.enterprise.context.RequestScoped;
+import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -14,6 +16,15 @@ public class UserRepo extends AbstractRepository<UserEntity> {
     @Override
     public Class<UserEntity> getEntityClass() {
         return UserEntity.class;
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public UserEntity create(String email) {
+        UserEntity user = new UserEntity();
+        user.setData("linkedin processes " + email);
+        String ownSessionId = UUID.randomUUID().toString();
+        user.setOwnSessionId(ownSessionId);
+        return create(user);
     }
 
     public Optional<UserEntity> findByOwnSessionId(String ownSessionId) {
