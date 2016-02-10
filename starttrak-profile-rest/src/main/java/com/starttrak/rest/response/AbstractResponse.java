@@ -1,4 +1,6 @@
-package com.starttrak.rest;
+package com.starttrak.rest.response;
+
+import com.starttrak.rest.response.StandardResponse;
 
 /**
  * @author serg.mavrov@gmail.com

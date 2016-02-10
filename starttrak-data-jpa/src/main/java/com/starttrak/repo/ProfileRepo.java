@@ -25,12 +25,11 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     @Inject
     private NetworkRepo networkRepo;
 
-    @Transactional(Transactional.TxType.REQUIRED)
-    public ProfileEntity create(long networkId, String email, String firstName, String lastName,
-                                String position, String company, String appKey, UserEntity user) {
+    private ProfileEntity create(long networkId, String email, String name, String position, String company,
+                                 String appKey, UserEntity user) {
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
-        newProfile.setName(firstName + " " + lastName);
+        newProfile.setName(name);
 //                    position,
 //                    company,
         newProfile.setUser(user);
@@ -57,6 +56,19 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
     public Optional<ProfileEntity> findByOwnSessionId(String ownSessionId) {
         return findBy(getBuilder().equal(getFrom(Operation.select).get("networkToken"), ownSessionId));
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public ProfileEntity create(long networkId, String email, String firstName, String lastName,
+                                String position, String company, String appKey, UserEntity user) {
+        return create(networkId, email, firstName + " " + lastName, position, company, appKey, user);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public ProfileEntity create(long networkId, String email, String name, String phone, long positionId,
+                                String companyLabel, long countryId, long regionId, long seniorityId, long sizesId,
+                                String appKey, UserEntity user) {
+        return create(networkId, email, name, null, null, appKey, user);
     }
 
 }

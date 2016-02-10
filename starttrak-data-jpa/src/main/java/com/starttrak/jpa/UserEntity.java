@@ -36,6 +36,9 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "own_session_id")
     private String ownSessionId;
 
+    @Basic
+    @Column(name = "password")
+    private String password;
 
     public long getId() {
         return id;
@@ -69,6 +72,14 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
 
     public void setOwnSessionId(String ownSessionId) {
         this.ownSessionId = ownSessionId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

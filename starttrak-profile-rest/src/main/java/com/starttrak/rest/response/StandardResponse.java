@@ -1,4 +1,4 @@
-package com.starttrak.rest;
+package com.starttrak.rest.response;
 
 /**
  * @author serg.mavrov@gmail.com

@@ -1,7 +1,10 @@
-package com.starttrak.rest;
+package com.starttrak.rest.dictionaries;
 
 import com.starttrak.jpa.StandardEntity;
 import com.starttrak.repo.*;
+import com.starttrak.rest.response.AuthErrorResponse;
+import com.starttrak.rest.response.StandardResponse;
+import com.starttrak.rest.response.SuccessResponse;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -46,9 +49,8 @@ public class DictionariesRestService {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse getAllDictionaries(@HeaderParam("x-auth-id") String ownSessionId) {
-
-        Map<String, List<? extends StandardEntity>> content = new HashMap<>();
         try {
+            Map<String, List<? extends StandardEntity>> content = new HashMap<>();
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
             // -=-=-=-
             content.put("countries", countriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));

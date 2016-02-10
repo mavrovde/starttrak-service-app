@@ -20,9 +20,10 @@ public class UserRepo extends AbstractRepository<UserEntity> {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public UserEntity create(String email) {
+    public UserEntity create(String email, String password) {
         UserEntity user = new UserEntity();
         user.setData("linkedin processes " + email);
+        user.setPassword(password);
         String ownSessionId = UUID.randomUUID().toString();
         user.setCreated(new Date());
         user.setOwnSessionId(ownSessionId);
