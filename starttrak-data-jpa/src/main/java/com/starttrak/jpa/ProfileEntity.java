@@ -371,4 +371,34 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         result = 31 * result + (networkToken != null ? networkToken.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ProfileEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", country=" + country +
+                ", countryLabel='" + countryLabel + '\'' +
+                ", region=" + region +
+                ", regionLabel='" + regionLabel + '\'' +
+                ", company=" + company +
+                ", companyLabel='" + companyLabel + '\'' +
+                ", position=" + position +
+                ", positionLabel='" + positionLabel + '\'' +
+                ", industry=" + industry +
+                ", industryLabel='" + industryLabel + '\'' +
+                ", seniority=" + seniority +
+                ", seniorityLabel='" + seniorityLabel + '\'' +
+                ", sizes=" + sizes +
+                ", sizesLabel='" + sizesLabel + '\'' +
+                ", sizesMinValue=" + sizesMinValue +
+                ", sizesMaxValue=" + sizesMaxValue +
+                ", network=" + network +
+                ", networkToken='" + networkToken + '\'' +
+                ", lastLogin=" + lastLogin +
+                ", user=" + user +
+                '}';
+    }
 }

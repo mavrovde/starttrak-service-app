@@ -104,11 +104,13 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                 //responseWriter.println(position + "<br/>");
                 //responseWriter.println(company + "<br/>");
                 //responseWriter.println("<br/>");
-                // -=-=-=-
-                responseWriter.println("OwnSessionID = " +
+                //responseWriter.println("OwnSessionID = " +
+                //        updateLinkedinProfile(emailAddress, firstName, lastName,
+                //                position, company, appKey) + "<br/>"
+                //);
+                response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
                         updateLinkedinProfile(emailAddress, firstName, lastName,
-                                position, company, appKey) + "<br/>"
-                );
+                                position, company, appKey));
             }
             // -=-=-
         }

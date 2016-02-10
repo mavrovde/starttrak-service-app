@@ -55,4 +55,8 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         ));
     }
 
+    public Optional<ProfileEntity> findByOwnSessionId(String ownSessionId) {
+        return findBy(getBuilder().equal(getFrom(Operation.select).get("networkToken"), ownSessionId));
+    }
+
 }

@@ -94,4 +94,14 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         result = 31 * result + (ownSessionId != null ? ownSessionId.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", created=" + created +
+                ", data='" + data + '\'' +
+                ", ownSessionId='" + ownSessionId + '\'' +
+                '}';
+    }
 }
