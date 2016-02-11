@@ -1,13 +1,13 @@
-package com.starttrak.rest.response;
+package com.starttrak.rest.auth;
 
 /**
  * @author serg.mavrov@gmail.com
  */
-public class LoginResponse {
+public class OwnSession {
 
     private String sessionId;
 
-    public LoginResponse(String sessionId) {
+    public OwnSession(String sessionId) {
         this.sessionId = sessionId;
     }
 
@@ -24,7 +24,7 @@ public class LoginResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LoginResponse that = (LoginResponse) o;
+        OwnSession that = (OwnSession) o;
 
         return !(sessionId != null ? !sessionId.equals(that.sessionId) : that.sessionId != null);
 
@@ -37,7 +37,7 @@ public class LoginResponse {
 
     @Override
     public String toString() {
-        return "LoginResponse{" +
+        return "OwnSession{" +
                 "sessionId='" + sessionId + '\'' +
                 '}';
     }

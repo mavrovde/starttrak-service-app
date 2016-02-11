@@ -32,10 +32,11 @@ public class UserRepo extends AbstractRepository<UserEntity> {
     }
 
     public Optional<UserEntity> findByOwnSessionId(String ownSessionId) {
-        return findBy(
-                getBuilder().equal(getFrom(Operation.select).get("ownSessionId"),
-                        ownSessionId)
-        );
+        return findBy(getBuilder().equal(getFrom(Operation.select).get("ownSessionId"), ownSessionId));
+    }
+
+    public Optional<UserEntity> findByEmail(String email) {
+        return findBy(getBuilder().equal(getFrom(Operation.select).get("email"), email));
     }
 
 }
