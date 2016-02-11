@@ -36,8 +36,8 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
         newProfile.setName(name);
-//                    position,
-//                    company,
+        newProfile.setPositionLabel(position);
+        newProfile.setCompanyLabel(company);
         newProfile.setUser(user);
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalStateException::new);
         newProfile.setNetwork(network);
