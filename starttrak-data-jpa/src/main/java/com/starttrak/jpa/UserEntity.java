@@ -29,6 +29,10 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     private Date created;
 
     @Basic
+    @Column(name = "email")
+    private String email;
+
+    @Basic
     @Column(name = "data")
     private String data;
 
@@ -46,6 +50,14 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getCreated() {
@@ -92,6 +104,7 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         if (id != that.id) return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
         if (data != null ? !data.equals(that.data) : that.data != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (ownSessionId != null ? !ownSessionId.equals(that.ownSessionId) : that.ownSessionId != null) return false;
 
         return true;
@@ -102,6 +115,7 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (ownSessionId != null ? ownSessionId.hashCode() : 0);
         return result;
     }
@@ -111,8 +125,10 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         return "UserEntity{" +
                 "id=" + id +
                 ", created=" + created +
+                ", email='" + email + '\'' +
                 ", data='" + data + '\'' +
                 ", ownSessionId='" + ownSessionId + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

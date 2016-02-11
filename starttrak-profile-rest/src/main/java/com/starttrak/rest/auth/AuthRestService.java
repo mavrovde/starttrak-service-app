@@ -43,7 +43,8 @@ public class AuthRestService {
                 } else {
                     return new SuccessResponse<>(userRepo.create(
                             regRequest.getEmail(),
-                            regRequest.getPassword()
+                            regRequest.getPassword(),
+                            "registered by starttrak"
                     ).getOwnSessionId());
                 }
             case 1:

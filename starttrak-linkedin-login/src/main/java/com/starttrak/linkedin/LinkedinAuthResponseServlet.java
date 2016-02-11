@@ -59,7 +59,7 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
             Optional<ProfileEntity> otherProfile = profileRepo.findByEmail(profile.getEmailAddress());
             if (!otherProfile.isPresent()) { //there is no any social profiles
                 // create an user for starttrak
-                user = userRepo.create(profile.getEmailAddress(), "empty");
+                user = userRepo.create(profile.getEmailAddress(), "empty_password", "registered by linkedin");
                 // create the starttrak profile
                 profileRepo.create(STRK_ID, profile.getEmailAddress(),
                         profile.getFirstName(), profile.getLastName(),
