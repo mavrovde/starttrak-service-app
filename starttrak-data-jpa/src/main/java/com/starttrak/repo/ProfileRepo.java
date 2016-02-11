@@ -17,6 +17,8 @@ import java.util.Optional;
 @RequestScoped
 public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
+    private final static long STRK_ID = 0;
+
     @Override
     public Class<ProfileEntity> getEntityClass() {
         return ProfileEntity.class;
@@ -25,6 +27,10 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     @Inject
     private NetworkRepo networkRepo;
 
+    @Inject
+    private UserRepo userRepo;
+
+    @Transactional(Transactional.TxType.REQUIRED)
     private ProfileEntity create(long networkId, String email, String name, String position, String company,
                                  String appKey, UserEntity user) {
         ProfileEntity newProfile = new ProfileEntity();
@@ -69,6 +75,35 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                                 String companyLabel, long countryId, long regionId, long seniorityId, long sizesId,
                                 String appKey, UserEntity user) {
         return create(networkId, email, name, null, null, appKey, user);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public String updateSocialProfile(long networkId, String email, String firstName, String lastName,
+                                      String position, String company, String appKey) {
+        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(networkId, email);
+        UserEntity user; // we are trying to define current user
+        if (!linkedinProfile.isPresent()) { //there is no linkedin profile
+            Optional<ProfileEntity> otherProfile = findByEmail(email);
+            if (!otherProfile.isPresent()) { //there is no any social profiles
+                // create an user for starttrak
+                user = userRepo.create(email, "empty_password", "registered by linkedin");
+                // create the starttrak profile
+                create(STRK_ID, email, firstName, lastName, position, company,
+                        user.getOwnSessionId(), user);
+            } else {
+                // there was found at least one social profile, so take an user
+                user = otherProfile.get().getUser();
+            }
+            // create linkedin profile
+            create(networkId, email, firstName, lastName, position, company, appKey, user);
+            // -=-=-=-
+        } else { // we have already linkedin profile
+            linkedinProfile.get().setNetworkToken(appKey);
+            linkedinProfile.get().setLastLogin(new Date());
+            update(linkedinProfile.get());
+            user = linkedinProfile.get().getUser();
+        }
+        return user.getOwnSessionId();
     }
 
 }

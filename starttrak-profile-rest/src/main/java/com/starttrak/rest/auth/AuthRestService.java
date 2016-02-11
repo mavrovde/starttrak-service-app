@@ -1,11 +1,15 @@
 package com.starttrak.rest.auth;
 
+import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
 import com.starttrak.rest.request.RegRequest;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
+import com.starttrak.social.Linkedin;
+import com.starttrak.social.SocialNetworkClient;
+import com.starttrak.social.SocialNetworkProfile;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,12 +28,17 @@ import java.util.Optional;
 public class AuthRestService {
 
     private final static long STRK_ID = 0;
+    private final static long LNKD_ID = 1;
 
     @Inject
     private UserRepo userRepo;
 
     @Inject
     private ProfileRepo profileRepo;
+
+    @Inject
+    @Linkedin
+    private SocialNetworkClient linkedinClient;
 
     @POST
     @Path("/login")
@@ -49,7 +58,19 @@ public class AuthRestService {
                     ).getOwnSessionId()));
                 }
             case 1:
-                throw new IllegalStateException("no network login implemented");
+                Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(LNKD_ID, regRequest.getEmail());
+                if (linkedin.isPresent()) {
+                    return new SuccessResponse<>(new OwnSession(userRepo.findByEmail(
+                            regRequest.getEmail()).orElseThrow(AuthenticationException::new
+                    ).getOwnSessionId()));
+                } else {
+                    SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(regRequest.getAccessToken());
+                    return new SuccessResponse<>(new OwnSession(
+                            profileRepo.updateSocialProfile(LNKD_ID, profile.getEmailAddress(),
+                                    profile.getFirstName(), profile.getLastName(),
+                                    profile.getPosition(), profile.getCompany(),
+                                    regRequest.getAccessToken())));
+                }
             case 2:
                 throw new IllegalStateException("no network login implemented");
             case 3:
