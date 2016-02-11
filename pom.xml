@@ -34,9 +34,8 @@
 
     <modules>
         <module>starttrak-data-jpa</module>
-        <!--
-        <module>starttrak-network-login-declaration</module>
-        -->
+        <module>starttrak-network-client</module>
+        <module>starttrak-linkedin-client</module>
         <module>starttrak-linkedin-login</module>
         <module>starttrak-profile-rest</module>
     </modules>
