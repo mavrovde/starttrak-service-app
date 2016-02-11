@@ -39,8 +39,15 @@ public class LinkedinClient implements SocialNetworkClient {
         String lastName = jsonProfile.get("lastName").toString();
         String emailAddress = jsonProfile.get("emailAddress").toString();
         String[] positionCompany = jsonProfile.get("headline").toString().split(" at ");
-        String position = positionCompany[0];
-        String company = positionCompany[1];
+        String position;
+        String company;
+        if (positionCompany.length > 1) {
+            position = positionCompany[0];
+            company = positionCompany[1];
+        } else {
+            position = positionCompany[0];
+            company = "unknown";
+        }
         return LinkedinProfile.createNew(firstName, lastName, emailAddress, position, company);
     }
 
