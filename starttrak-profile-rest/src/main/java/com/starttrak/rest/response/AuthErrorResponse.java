@@ -6,7 +6,7 @@ package com.starttrak.rest.response;
 public class AuthErrorResponse extends CodeErrorResponse {
 
     public AuthErrorResponse() {
-        super(1001, "incorrect own session id", null);
+        super(1000, "incorrect own session id", null);
     }
 
 }

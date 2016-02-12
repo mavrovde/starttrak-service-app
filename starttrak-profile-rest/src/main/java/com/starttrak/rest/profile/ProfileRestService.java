@@ -6,6 +6,7 @@ import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
 import com.starttrak.rest.request.ProfileBean;
 import com.starttrak.rest.response.AuthErrorResponse;
+import com.starttrak.rest.response.CodeErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
 import org.jboss.logging.Logger;
@@ -80,27 +81,29 @@ public class ProfileRestService {
         logger.info("the header found {x-auth-id:" + hdrSessionId + "}");
         logger.info("the parameter found {x-auth-id:" + prmSessionId + "}");
         //so will be found the st profile since only it has public session id
-        Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(hdrSessionId);
-        if (!profile.isPresent()) {
-            profile = profileRepo.findByOwnSessionId(prmSessionId);
-        }
-        if (profile.isPresent()) {
-            ProfileEntity dbProfile = profile.get();
-            logger.info("the profile = " + dbProfile);
-            ProfileBean bnProfile = new ProfileBean(
-                    dbProfile.getFirstName(), dbProfile.getLastName(),
-                    dbProfile.getEmail(),
-                    Optional.ofNullable(dbProfile.getPhone()).orElse(null),
-                    Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
-                    Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
-                    dbProfile.getCompanyLabel(),
-                    Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
-                    Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
-                    Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
-            return new SuccessResponse<>(bnProfile);
-        } else {
+        Optional<UserEntity> user = userRepo.findByOwnSessionId(hdrSessionId);
+        if (!user.isPresent()) {
             return new AuthErrorResponse();
+        } else {
+            Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(prmSessionId);
+            if (!profile.isPresent()) {
+                return new CodeErrorResponse(1006, "the profile does not exists");
+            } else {
+                ProfileEntity dbProfile = profile.get();
+                logger.info("the profile = " + dbProfile);
+                ProfileBean bnProfile = new ProfileBean(
+                        dbProfile.getFirstName(), dbProfile.getLastName(),
+                        dbProfile.getEmail(),
+                        Optional.ofNullable(dbProfile.getPhone()).orElse(null),
+                        Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                        Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                        dbProfile.getCompanyLabel(),
+                        Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                        Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                        Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                        Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
+                return new SuccessResponse<>(bnProfile);
+            }
         }
     }
 
