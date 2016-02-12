@@ -1,10 +1,13 @@
 package com.starttrak.rest.request;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import javax.xml.bind.annotation.XmlElement;
 
 /**
  * @author serg.mavrov@gmail.com
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProfileBean {
 
     /*
@@ -29,10 +32,11 @@ state_id (only for USA)
     private String lastName;
 
     private String email;
+
     @XmlElement(name = "phone_number")
     private String phone;
 
-    @XmlElement(name = "country_id", nillable = true)
+    @XmlElement(name = "country_id")
     private long countryId;
     @XmlElement(name = "state_id")
     private long regionId;
@@ -51,6 +55,8 @@ state_id (only for USA)
     @XmlElement(name = "size_id")
     private long sizeId;
 
+    public ProfileBean() {
+    }
 
     public ProfileBean(String firstName, String lastName, String email, String phone, long countryId,
                        long regionId, String companyLabel, long positionId, long industryId,
