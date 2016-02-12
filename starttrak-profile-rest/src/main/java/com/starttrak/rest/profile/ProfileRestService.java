@@ -1,6 +1,7 @@
 package com.starttrak.rest.profile;
 
 import com.starttrak.Ping;
+import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.*;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
@@ -28,7 +29,6 @@ import java.util.Optional;
 public class ProfileRestService {
 
     private final static Logger logger = Logger.getLogger(ProfileRestService.class);
-    private final static long STRK_ID = 0;
 
     @Inject
     private ProfileRepo profileRepo;
@@ -50,7 +50,7 @@ public class ProfileRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        profileRepo.createSimple(STRK_ID, request.getEmail(),
+        profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
                 request.getFirstName(), request.getLastName(),
                 user.getOwnSessionId(), user);
         return new SuccessResponse<>(request);

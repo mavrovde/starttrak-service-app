@@ -1,5 +1,6 @@
 package com.starttrak.rest.auth;
 
+import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.ProfileRepo;
@@ -24,9 +25,6 @@ import java.util.Optional;
 @Path("/auth")
 @ApplicationScoped
 public class AuthRestService {
-
-    private final static int STRK_ID = 0;
-    private final static int LNKD_ID = 2;
 
     @Inject
     private UserRepo userRepo;
@@ -56,20 +54,22 @@ public class AuthRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse login(RegRequest regRequest) {
-        switch (regRequest.getSocNetworkId()) {
-            case STRK_ID: //starttrak
+        switch (SocNetwork.findByCode(regRequest.getSocNetworkId())) {
+            case STTR: //starttrak
                 Optional<UserEntity> user = userRepo.findByEmail(regRequest.getEmail());
                 if (user.isPresent()) {
                     return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
                 } else {
                     return new SuccessResponse<>(new OwnSession(userRepo.create(
+                            (long) SocNetwork.STTR.getCode(),
                             regRequest.getEmail(),
                             regRequest.getPassword(),
                             "registered by starttrak"
                     ).getOwnSessionId()));
                 }
-            case LNKD_ID: //linkedin
-                Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(LNKD_ID, regRequest.getEmail());
+            case LNKD: //linkedin
+                Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(
+                        (long) SocNetwork.LNKD.getCode(), regRequest.getEmail());
                 if (linkedin.isPresent()) {
                     return new SuccessResponse<>(new OwnSession(userRepo.findByEmail(
                             regRequest.getEmail()).orElseThrow(AuthenticationException::new
@@ -77,14 +77,14 @@ public class AuthRestService {
                 } else {
                     SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(regRequest.getAccessToken());
                     return new SuccessResponse<>(new OwnSession(
-                            profileRepo.updateSocialProfile(LNKD_ID, profile.getEmailAddress(),
+                            profileRepo.updateSocialProfile(SocNetwork.LNKD, profile.getEmailAddress(),
                                     profile.getFirstName(), profile.getLastName(),
                                     profile.getPosition(), profile.getCompany(),
                                     regRequest.getAccessToken())));
                 }
-            case 1: //facebook
+            case FCBK: //facebook
                 throw new IllegalStateException("no network login implemented");
-            case 3:
+            case XING: //xing
                 throw new IllegalStateException("no network login implemented");
             default:
                 throw new IllegalStateException("no network login implemented");

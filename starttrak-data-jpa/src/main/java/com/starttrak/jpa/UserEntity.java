@@ -40,6 +40,10 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "own_session_id")
     private String ownSessionId;
 
+    @ManyToOne(optional = true, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "source_network_id", nullable = true)
+    private NetworkEntity sourceNetwork;
+
     @Basic
     @Column(name = "password")
     private String password;
@@ -94,9 +98,16 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         this.password = password;
     }
 
+    public NetworkEntity getSourceNetwork() {
+        return sourceNetwork;
+    }
+
+    public void setSourceNetwork(NetworkEntity sourceNetwork) {
+        this.sourceNetwork = sourceNetwork;
+    }
+
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -107,6 +118,8 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (data != null ? !data.equals(that.data) : that.data != null) return false;
         if (ownSessionId != null ? !ownSessionId.equals(that.ownSessionId) : that.ownSessionId != null) return false;
+        if (sourceNetwork != null ? !sourceNetwork.equals(that.sourceNetwork) : that.sourceNetwork != null)
+            return false;
         return !(password != null ? !password.equals(that.password) : that.password != null);
 
     }
@@ -118,6 +131,7 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (ownSessionId != null ? ownSessionId.hashCode() : 0);
+        result = 31 * result + (sourceNetwork != null ? sourceNetwork.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
@@ -130,8 +144,8 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
                 ", email='" + email + '\'' +
                 ", data='" + data + '\'' +
                 ", ownSessionId='" + ownSessionId + '\'' +
+                ", sourceNetwork=" + sourceNetwork +
                 ", password='" + password + '\'' +
                 '}';
     }
-
 }

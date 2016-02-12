@@ -1,5 +1,6 @@
 package com.starttrak.repo;
 
+import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.NetworkEntity;
 import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
@@ -15,8 +16,6 @@ import java.util.*;
 @RequestScoped
 public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
-    private final static long STRK_ID = 0;
-
     @Override
     public Class<ProfileEntity> getEntityClass() {
         return ProfileEntity.class;
@@ -29,7 +28,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     private UserRepo userRepo;
 
     @Transactional(Transactional.TxType.REQUIRED)
-    private ProfileEntity create(long networkId, String email, String firstName, String lastName,
+    private ProfileEntity create(Long networkId, String email, String firstName, String lastName,
                                  String position, String company, String appKey, UserEntity user) {
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
@@ -43,13 +42,6 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         newProfile.setNetworkToken(appKey);
         newProfile.setLastLogin(new Date());
         return create(newProfile);
-    }
-
-    public Optional<ProfileEntity> findByEmail(String email) {
-        List<ProfileEntity> allProfiles = findAllBy(Page.OPTIONAL_DEFAULT,
-                getBuilder().equal(getFrom(Operation.select).get("email"), email)
-        );
-        return allProfiles.stream().findAny();
     }
 
     public Optional<ProfileEntity> findByEmailNetwork(long networkId, String email) {
@@ -70,23 +62,24 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public String updateSocialProfile(long networkId, String email, String firstName, String lastName,
+    public String updateSocialProfile(SocNetwork network, String email, String firstName, String lastName,
                                       String position, String company, String appKey) {
-        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(networkId, email);
+        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork((long) network.getCode(), email);
         UserEntity user; // we are trying to define current user
         if (!linkedinProfile.isPresent()) { //there is no linkedin profile
-            Optional<ProfileEntity> otherProfile = findByEmail(email);
-            if (!otherProfile.isPresent()) { //there is no any social profiles
-                // create an user for starttrak
-                user = userRepo.create(email, "empty_password", "registered by linkedin");
-                // create the starttrak profile
-                create(STRK_ID, email, firstName, lastName, position, company, user.getOwnSessionId(), user);
+            Optional<UserEntity> checkUser = userRepo.findByEmail(email);
+            if (checkUser.isPresent()) {//the user with the same email has been found
+                // so take an user
+                user = checkUser.get();
             } else {
-                // there was found at least one social profile, so take an user
-                user = otherProfile.get().getUser();
+                // create an user for starttrak
+                user = userRepo.create((long) network.getCode(), email, "empty_password", "registered by social network");
+                // create the starttrak profile
+                create((long) SocNetwork.STTR.getCode(), email, firstName, lastName, position, company,
+                        user.getOwnSessionId(), user);
             }
             // create linkedin profile
-            create(networkId, email, firstName, lastName, position, company, appKey, user);
+            create((long) network.getCode(), email, firstName, lastName, position, company, appKey, user);
             // -=-=-=-
         } else { // we have already linkedin profile
             linkedinProfile.get().setNetworkToken(appKey);
@@ -100,4 +93,5 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     public List<ProfileEntity> findByConditions() {
         return new ArrayList<>(); //todo:: provide some real data
     }
+
 }

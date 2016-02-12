@@ -1,5 +1,6 @@
 package com.starttrak.linkedin;
 
+import com.starttrak.common.SocNetwork;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.social.Linkedin;
 import com.starttrak.social.SocialNetworkClient;
@@ -16,8 +17,6 @@ import java.io.IOException;
  */
 public class LinkedinAuthResponseServlet extends HttpServlet {
 
-    private final static int LNKD_ID = 2;
-
     @Inject
     private ProfileRepo profileRepo;
 
@@ -33,7 +32,8 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
             if (appKey != null) {
                 SocialNetworkProfile profile = networkClient.getProfileByAccessToken(appKey);
                 response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
-                        profileRepo.updateSocialProfile(LNKD_ID, profile.getEmailAddress(),
+                        profileRepo.updateSocialProfile(
+                                SocNetwork.LNKD, profile.getEmailAddress(),
                                 profile.getFirstName(), profile.getLastName(),
                                 profile.getPosition(), profile.getCompany(), appKey));
             }
