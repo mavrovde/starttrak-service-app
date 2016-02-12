@@ -5,6 +5,7 @@ import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
 import com.starttrak.rest.request.RegRequest;
+import com.starttrak.rest.response.CodeErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
 import com.starttrak.social.Linkedin;
@@ -13,10 +14,7 @@ import com.starttrak.social.SocialNetworkProfile;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Optional;
 
@@ -39,6 +37,19 @@ public class AuthRestService {
     @Inject
     @Linkedin
     private SocialNetworkClient linkedinClient;
+
+    @GET
+    @Path("/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public StandardResponse validate(@QueryParam("session_id") String sessionId) {
+        Optional<UserEntity> user = userRepo.findByOwnSessionId(sessionId);
+        if (user.isPresent()) {
+            return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
+        } else {
+            return new CodeErrorResponse(1007, "the session does not exists");
+        }
+    }
 
     @POST
     @Path("/login")
