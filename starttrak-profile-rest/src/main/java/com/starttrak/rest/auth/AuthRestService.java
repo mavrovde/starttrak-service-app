@@ -28,7 +28,7 @@ import java.util.Optional;
 public class AuthRestService {
 
     private final static long STRK_ID = 0;
-    private final static long LNKD_ID = 1;
+    private final static long LNKD_ID = 2;
 
     @Inject
     private UserRepo userRepo;

@@ -17,7 +17,7 @@ public class RegRequest {
 {soc_network_type:3, oauth_token:””, oauth_token_secret:””}
      */
 
-    @XmlElement(name = "soc_network_id")
+    @XmlElement(name = "soc_network_type")
     private int socNetworkId;
 
     private String email;
