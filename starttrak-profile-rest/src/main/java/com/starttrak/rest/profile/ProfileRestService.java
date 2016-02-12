@@ -81,11 +81,18 @@ public class ProfileRestService {
         logger.info("the header found {x-auth-id:" + hdrSessionId + "}");
         logger.info("the parameter found {x-auth-id:" + prmSessionId + "}");
         //so will be found the st profile since only it has public session id
-        Optional<UserEntity> user = userRepo.findByOwnSessionId(hdrSessionId);
+        String sessionId = hdrSessionId;
+        if (sessionId == null) {
+            sessionId = prmSessionId;
+        }
+        if (sessionId == null) {
+            return new AuthErrorResponse();
+        }
+        Optional<UserEntity> user = userRepo.findByOwnSessionId(sessionId);
         if (!user.isPresent()) {
             return new AuthErrorResponse();
         } else {
-            Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(prmSessionId);
+            Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(sessionId);
             if (!profile.isPresent()) {
                 return new CodeErrorResponse(1006, "the profile does not exists");
             } else {
