@@ -1,4 +1,4 @@
-package com.starttrak.rest.filter;
+package com.starttrak.http.filter;
 
 import org.jboss.logging.Logger;
 
@@ -7,6 +7,9 @@ import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author serg.mavrov@gmail.com
+ */
 public class CORSFilter implements Filter {
 
     private final static Logger logger = Logger.getLogger(CORSFilter.class);
