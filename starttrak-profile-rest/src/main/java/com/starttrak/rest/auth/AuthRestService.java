@@ -11,6 +11,7 @@ import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
 import com.starttrak.social.Linkedin;
 import com.starttrak.social.SocialNetworkClient;
+import com.starttrak.social.SocialNetworkException;
 import com.starttrak.social.SocialNetworkProfile;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -58,6 +59,12 @@ public class AuthRestService {
             case STTR: //starttrak
                 Optional<UserEntity> user = userRepo.findByEmail(regRequest.getEmail());
                 if (user.isPresent()) {
+                    if (SocNetwork.STTR.getCode() != user.get().getSourceNetwork().getId().intValue()) {
+                        return new CodeErrorResponse(1001, "user exists (email is already taken)");
+                    }
+                    if (!regRequest.getPassword().equals(user.get().getPassword())) {
+                        return new CodeErrorResponse(1002, "an username/password is not correct");
+                    }
                     return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
                 } else {
                     return new SuccessResponse<>(new OwnSession(userRepo.create(
@@ -75,12 +82,16 @@ public class AuthRestService {
                             regRequest.getEmail()).orElseThrow(AuthenticationException::new
                     ).getOwnSessionId()));
                 } else {
-                    SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(regRequest.getAccessToken());
-                    return new SuccessResponse<>(new OwnSession(
-                            profileRepo.updateSocialProfile(SocNetwork.LNKD, profile.getEmailAddress(),
-                                    profile.getFirstName(), profile.getLastName(),
-                                    profile.getPosition(), profile.getCompany(),
-                                    regRequest.getAccessToken())));
+                    try {
+                        SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(regRequest.getAccessToken());
+                        return new SuccessResponse<>(new OwnSession(
+                                profileRepo.updateSocialProfile(SocNetwork.LNKD, profile.getEmailAddress(),
+                                        profile.getFirstName(), profile.getLastName(),
+                                        profile.getPosition(), profile.getCompany(),
+                                        regRequest.getAccessToken())));
+                    } catch (SocialNetworkException sne) {
+                        return new CodeErrorResponse(1006, "social network token issue");
+                    }
                 }
             case FCBK: //facebook
                 throw new IllegalStateException("no network login implemented");

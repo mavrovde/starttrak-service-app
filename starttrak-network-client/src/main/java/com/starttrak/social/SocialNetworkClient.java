@@ -5,9 +5,9 @@ package com.starttrak.social;
  */
 public interface SocialNetworkClient {
 
-    SocialNetworkProfile getProfileByAccessToken(String accessToken);
+    SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException;
 
-    SocialNetworkProfile getProfileByCode(String code);
+//    SocialNetworkProfile getProfileByCode(String code);
 
     String getAccessToken(String code);
 }

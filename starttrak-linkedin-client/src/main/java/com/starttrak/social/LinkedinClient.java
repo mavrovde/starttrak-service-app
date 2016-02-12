@@ -19,7 +19,7 @@ import javax.ws.rs.core.MultivaluedMap;
 public class LinkedinClient implements SocialNetworkClient {
 
     @Override
-    public SocialNetworkProfile getProfileByAccessToken(String accessToken) {
+    public SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException {
         Client client = Client.create();
         WebResource webResource = client
                 .resource("https://api.linkedin.com/v1/people/~:(email-address,first-name,last-name,headline)?format=json");
@@ -28,7 +28,7 @@ public class LinkedinClient implements SocialNetworkClient {
                 header("Authorization", "Bearer " + accessToken).
                 accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         if (getResponse.getStatus() != 200) {
-            throw new IllegalStateException("Failed to get the profile : " + getResponse.getStatus());
+            throw new SocialNetworkException("Failed to get the profile : " + getResponse.getStatus());
         }
         String textProfile = getResponse.getEntity(String.class);
         // -=-=-=-
@@ -75,9 +75,9 @@ public class LinkedinClient implements SocialNetworkClient {
         return clearAccessToken[1];
     }
 
-    @Override
-    public SocialNetworkProfile getProfileByCode(String code) {
-        return getProfileByAccessToken(getAccessToken(code));
-    }
+//    @Override
+//    public SocialNetworkProfile getProfileByCode(String code) {
+//        return getProfileByAccessToken(getAccessToken(code));
+//    }
 
 }

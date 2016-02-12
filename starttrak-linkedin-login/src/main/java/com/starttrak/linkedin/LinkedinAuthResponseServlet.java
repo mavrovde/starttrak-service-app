@@ -4,7 +4,9 @@ import com.starttrak.common.SocNetwork;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.social.Linkedin;
 import com.starttrak.social.SocialNetworkClient;
+import com.starttrak.social.SocialNetworkException;
 import com.starttrak.social.SocialNetworkProfile;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,8 @@ import java.io.IOException;
  * @author serg.mavrov@gmail.com
  */
 public class LinkedinAuthResponseServlet extends HttpServlet {
+
+    private final static Logger logger = Logger.getLogger(LinkedinAuthResponseServlet.class);
 
     @Inject
     private ProfileRepo profileRepo;
@@ -30,12 +34,18 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
             String appKey = networkClient.getAccessToken(code);
             //-=-=-=-
             if (appKey != null) {
-                SocialNetworkProfile profile = networkClient.getProfileByAccessToken(appKey);
-                response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
-                        profileRepo.updateSocialProfile(
-                                SocNetwork.LNKD, profile.getEmailAddress(),
-                                profile.getFirstName(), profile.getLastName(),
-                                profile.getPosition(), profile.getCompany(), appKey));
+                SocialNetworkProfile profile = null;
+                try {
+                    profile = networkClient.getProfileByAccessToken(appKey);
+                    response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
+                            profileRepo.updateSocialProfile(
+                                    SocNetwork.LNKD, profile.getEmailAddress(),
+                                    profile.getFirstName(), profile.getLastName(),
+                                    profile.getPosition(), profile.getCompany(), appKey));
+                } catch (SocialNetworkException e) {
+                    logger.error("some issue with social network was registered", e);
+                    throw new IllegalStateException(e);
+                }
             }
             // -=-=-
         }
