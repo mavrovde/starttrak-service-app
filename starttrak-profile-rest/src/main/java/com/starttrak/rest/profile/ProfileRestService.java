@@ -15,7 +15,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -73,6 +75,21 @@ public class ProfileRestService {
         } else {
             return new AuthErrorResponse();
         }
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ProfileEntity> search(SearchCondition conditions){
+        profileRepo.findByConditions();
+        return new ArrayList<>();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public void meet(List<Long> ids){
+        //send emails to the provided user ids
+        //and must be sent some kind of confirmation to the sender
+        //think about some mail provider (consult DM)
     }
 
 }

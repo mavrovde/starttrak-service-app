@@ -54,7 +54,7 @@ public class DictionariesRestService {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
             // -=-=-=-
             content.put("countries", countriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("regions", regionsRepo.findAllBy(Page.OPTIONAL_DEFAULT));
+            content.put("states", regionsRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("positions", positionsRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("sizes", sizesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("industries", industriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));

@@ -1,5 +1,7 @@
 package com.starttrak.rest.request;
 
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * @author serg.mavrov@gmail.com
  */
@@ -15,12 +17,18 @@ public class RegRequest {
 {soc_network_type:3, oauth_token:””, oauth_token_secret:””}
      */
 
+    @XmlElement(name = "soc_network_id")
     private int socNetworkId;
+
     private String email;
     private String password;
+
+    @XmlElement(name = "access_token")
     private String accessToken;
 
+    @XmlElement(name = "oauth_token")
     private String oauthToken;
+    @XmlElement(name = "oauth_token_secret")
     private String oauthTokenSecret;
 
     public int getSocNetworkId() {

@@ -5,10 +5,10 @@ package com.starttrak.rest.response;
  */
 public interface StandardResponse<TYPE> {
 
-    public String getCode();
+    int getCode();
 
-    public String getMessage();
+    String getMessage();
 
-    public TYPE getContent();
+    TYPE getContent();
 
 }

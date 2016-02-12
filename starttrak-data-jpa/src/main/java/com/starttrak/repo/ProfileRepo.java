@@ -7,6 +7,7 @@ import com.starttrak.jpa.UserEntity;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -106,4 +107,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         return user.getOwnSessionId();
     }
 
+    public List<ProfileEntity> findByConditions() {
+        return new ArrayList<>(); //todo:: provide real data
+    }
 }

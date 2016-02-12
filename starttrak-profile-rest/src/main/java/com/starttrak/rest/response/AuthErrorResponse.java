@@ -1,31 +1,13 @@
 package com.starttrak.rest.response;
 
-import com.starttrak.rest.response.AbstractResponse;
-import com.starttrak.rest.response.StandardResponse;
-
 /**
  * @author serg.mavrov@gmail.com
  */
-public class AuthErrorResponse extends AbstractResponse<String>
-        implements StandardResponse<String> {
-
+public class AuthErrorResponse extends AbstractResponse<Object>
+        implements StandardResponse<Object> {
 
     public AuthErrorResponse() {
-    }
-
-    @Override
-    public String getCode() {
-        return "1001";
-    }
-
-    @Override
-    public String getMessage() {
-        return "incorrect own session id";
-    }
-
-    @Override
-    public String getContent() {
-        return "empty";
+        super(1001, "incorrect own session id", null);
     }
 
 }

@@ -1,10 +1,13 @@
 package com.starttrak.rest.auth;
 
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  * @author serg.mavrov@gmail.com
  */
 public class OwnSession {
 
+    @XmlElement(name = "session_id")
     private String sessionId;
 
     public OwnSession(String sessionId) {
