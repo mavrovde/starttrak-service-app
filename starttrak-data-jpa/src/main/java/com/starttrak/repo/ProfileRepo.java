@@ -65,7 +65,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
     @Transactional(Transactional.TxType.REQUIRED)
     public ProfileEntity createSimple(long networkId, String email, String firstName, String lastName,
-                                String appKey, UserEntity user) {
+                                      String appKey, UserEntity user) {
         return create(networkId, email, firstName, lastName, null, null, appKey, user);
     }
 
@@ -80,8 +80,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                 // create an user for starttrak
                 user = userRepo.create(email, "empty_password", "registered by linkedin");
                 // create the starttrak profile
-                create(STRK_ID, email, firstName, lastName, position, company,
-                        user.getOwnSessionId(), user);
+                create(STRK_ID, email, firstName, lastName, position, company, user.getOwnSessionId(), user);
             } else {
                 // there was found at least one social profile, so take an user
                 user = otherProfile.get().getUser();
@@ -99,6 +98,6 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     }
 
     public List<ProfileEntity> findByConditions() {
-        return new ArrayList<>(); //todo:: provide real data
+        return new ArrayList<>(); //todo:: provide some real data
     }
 }
