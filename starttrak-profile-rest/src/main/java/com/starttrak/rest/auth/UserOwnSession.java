@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class UserOwnSession extends OwnSession {
 
-    @XmlElement(name = "profilex_exists")
+    @XmlElement(name = "profile_exists")
     private boolean profileExists;
 
     public UserOwnSession(String sessionId, boolean profileExists) {
