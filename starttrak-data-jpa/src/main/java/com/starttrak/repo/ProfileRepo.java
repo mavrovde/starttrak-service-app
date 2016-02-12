@@ -44,10 +44,11 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         return create(newProfile);
     }
 
-    public Optional<ProfileEntity> findByEmailNetwork(long networkId, String email) {
+    public Optional<ProfileEntity> findByEmailNetwork(SocNetwork network, String email) {
         return findBy(getBuilder().and(
                 getBuilder().equal(getFrom(Operation.select).get("email"), email),
-                getBuilder().equal(getFrom(Operation.select).get("network").get("id"), networkId)
+                getBuilder().equal(getFrom(Operation.select).get("network").get("id"),
+                        (long) network.getCode())
         ));
     }
 
@@ -64,7 +65,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     @Transactional(Transactional.TxType.REQUIRED)
     public String updateSocialProfile(SocNetwork network, String email, String firstName, String lastName,
                                       String position, String company, String appKey) {
-        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork((long) network.getCode(), email);
+        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(network, email);
         UserEntity user; // we are trying to define current user
         if (!linkedinProfile.isPresent()) { //there is no linkedin profile
             Optional<UserEntity> checkUser = userRepo.findByEmail(email);

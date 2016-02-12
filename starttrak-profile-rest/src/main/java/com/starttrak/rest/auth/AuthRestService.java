@@ -65,18 +65,18 @@ public class AuthRestService {
                     if (!regRequest.getPassword().equals(user.get().getPassword())) {
                         return new CodeErrorResponse(1002, "an username/password is not correct");
                     }
-                    return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
+                    Optional<ProfileEntity> profile = profileRepo.findByEmailNetwork(SocNetwork.STTR, regRequest.getEmail());
+                    return new SuccessResponse<>(new UserOwnSession(user.get().getOwnSessionId(), profile.isPresent()));
                 } else {
-                    return new SuccessResponse<>(new OwnSession(userRepo.create(
+                    return new SuccessResponse<>(new UserOwnSession(userRepo.create(
                             (long) SocNetwork.STTR.getCode(),
                             regRequest.getEmail(),
                             regRequest.getPassword(),
                             "registered by starttrak"
-                    ).getOwnSessionId()));
+                    ).getOwnSessionId(), false));
                 }
             case LNKD: //linkedin
-                Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(
-                        (long) SocNetwork.LNKD.getCode(), regRequest.getEmail());
+                Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(SocNetwork.LNKD, regRequest.getEmail());
                 if (linkedin.isPresent()) {
                     return new SuccessResponse<>(new OwnSession(userRepo.findByEmail(
                             regRequest.getEmail()).orElseThrow(AuthenticationException::new
