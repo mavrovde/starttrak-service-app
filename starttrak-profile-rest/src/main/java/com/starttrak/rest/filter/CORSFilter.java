@@ -21,10 +21,13 @@ public class CORSFilter implements Filter {
             throws IOException, ServletException {
 
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "GET,POST,PUT,HEAD,DELETE,OPTIONS");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Content-Type");
         chain.doFilter(request, response);
     }
 
     public void init(FilterConfig fConfig) throws ServletException {
         logger.info("CORS filter initiated");
     }
+
 }
