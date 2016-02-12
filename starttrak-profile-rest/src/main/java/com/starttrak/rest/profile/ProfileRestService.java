@@ -1,11 +1,10 @@
 package com.starttrak.rest.profile;
 
 import com.starttrak.Ping;
-import com.starttrak.jpa.ProfileEntity;
-import com.starttrak.jpa.UserEntity;
+import com.starttrak.jpa.*;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
-import com.starttrak.rest.request.ProfileCreateRequest;
+import com.starttrak.rest.request.ProfileBean;
 import com.starttrak.rest.response.AuthErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
@@ -48,14 +47,33 @@ public class ProfileRestService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileCreateRequest request) {
+    public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        return new SuccessResponse<>(profileRepo.create(STRK_ID, request.getEmail(),
-                request.getName(), request.getPhone(),
+        profileRepo.create(STRK_ID, request.getEmail(),
+                request.getFirstName() + " " + request.getLastName(),
+                request.getPhone(),
                 request.getPositionId(),
                 request.getCompanyLabel(), request.getCountryId(),
                 request.getRegionId(), request.getSeniorityId(),
-                request.getSizesId(), user.getOwnSessionId(), user));
+                request.getSizeId(), user.getOwnSessionId(), user);
+        return new SuccessResponse<>(request);
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
+        ProfileEntity profile = profileRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
+        profile.setName(request.getFirstName() + " " + request.getLastName());
+        profile.setPhone(request.getPhone());
+//        profile.setPosition(request.getPositionId());
+        profile.setCompanyLabel(request.getCompanyLabel());
+//        profile.setCountry(request.getCountryId());
+//        profile.setRegion(request.getRegionId());
+//        profile.setSeniority(request.getSeniorityId());
+//        profile.setSizes(request.getSizeId());
+        profileRepo.update(profile);
+        return new SuccessResponse<>(request); //todo:: improve
     }
 
     @GET
@@ -70,8 +88,20 @@ public class ProfileRestService {
             profile = profileRepo.findByOwnSessionId(prmSessionId);
         }
         if (profile.isPresent()) {
-            logger.info("the profile = " + profile.get());
-            return new SuccessResponse<>(profile.get());
+            ProfileEntity dbProfile = profile.get();
+            logger.info("the profile = " + dbProfile);
+            ProfileBean bnProfile = new ProfileBean(
+                    dbProfile.getName(), dbProfile.getName(),
+                    dbProfile.getEmail(),
+                    dbProfile.getPhone(),
+                    Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                    Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                    dbProfile.getCompanyLabel(),
+                    Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                    Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                    Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
+            return new SuccessResponse<>(bnProfile);
         } else {
             return new AuthErrorResponse();
         }
@@ -79,14 +109,14 @@ public class ProfileRestService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProfileEntity> search(SearchCondition conditions){
+    public List<ProfileEntity> search(SearchCondition conditions) {
         profileRepo.findByConditions();
         return new ArrayList<>();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public void meet(List<Long> ids){
+    public void meet(List<Long> ids) {
         //send emails to the provided user ids
         //and must be sent some kind of confirmation to the sender
         //think about some mail provider (consult DM)
