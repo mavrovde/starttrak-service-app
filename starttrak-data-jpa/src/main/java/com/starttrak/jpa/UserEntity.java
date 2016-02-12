@@ -22,7 +22,7 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "created", nullable = false, columnDefinition = "DATETIME")
@@ -44,11 +44,11 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "password")
     private String password;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -96,27 +96,29 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         UserEntity that = (UserEntity) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (created != null ? !created.equals(that.created) : that.created != null) return false;
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (data != null ? !data.equals(that.data) : that.data != null) return false;
         if (ownSessionId != null ? !ownSessionId.equals(that.ownSessionId) : that.ownSessionId != null) return false;
+        return !(password != null ? !password.equals(that.password) : that.password != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (created != null ? created.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (ownSessionId != null ? ownSessionId.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 
@@ -131,4 +133,5 @@ public class UserEntity extends AbstractEntity implements StandardEntity {
                 ", password='" + password + '\'' +
                 '}';
     }
+
 }

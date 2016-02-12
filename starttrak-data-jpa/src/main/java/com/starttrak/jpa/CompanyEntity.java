@@ -21,17 +21,17 @@ public class CompanyEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "label")
     private String label;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -51,17 +51,23 @@ public class CompanyEntity extends AbstractEntity implements StandardEntity {
 
         CompanyEntity that = (CompanyEntity) o;
 
-        if (id != that.id) return false;
-        if (label != null ? !label.equals(that.label) : that.label != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return !(label != null ? !label.equals(that.label) : that.label != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (label != null ? label.hashCode() : 0);
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "CompanyEntity{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                '}';
+    }
 }

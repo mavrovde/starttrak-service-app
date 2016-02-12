@@ -5,6 +5,6 @@ package com.starttrak.jpa;
  */
 public interface StandardEntity {
 
-    long getId();
+    Long getId();
 
 }

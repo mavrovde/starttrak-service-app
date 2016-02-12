@@ -21,7 +21,7 @@ public class SizeEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "label")
@@ -37,11 +37,11 @@ public class SizeEntity extends AbstractEntity implements StandardEntity {
     private int maxValue;
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,20 +76,30 @@ public class SizeEntity extends AbstractEntity implements StandardEntity {
 
         SizeEntity that = (SizeEntity) o;
 
-        if (id != that.id) return false;
         if (minValue != that.minValue) return false;
         if (maxValue != that.maxValue) return false;
-        if (label != null ? !label.equals(that.label) : that.label != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return !(label != null ? !label.equals(that.label) : that.label != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (label != null ? label.hashCode() : 0);
         result = 31 * result + minValue;
         result = 31 * result + maxValue;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SizeEntity{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
+                '}';
+    }
+
 }

@@ -22,11 +22,15 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Basic
-    @Column(name = "name", nullable = true)
-    private String name;
+    @Column(name = "first_name", nullable = true)
+    private String firstName;
+
+    @Basic
+    @Column(name = "last_name", nullable = true)
+    private String lastName;
 
     @Basic
     @Column(name = "email", nullable = false)
@@ -120,23 +124,30 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getEmail() {
         return email;
@@ -332,43 +343,64 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
 
         ProfileEntity that = (ProfileEntity) o;
 
-        if (id != that.id) return false;
         if (sizesMinValue != that.sizesMinValue) return false;
         if (sizesMaxValue != that.sizesMaxValue) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (country != null ? !country.equals(that.country) : that.country != null) return false;
         if (countryLabel != null ? !countryLabel.equals(that.countryLabel) : that.countryLabel != null) return false;
+        if (region != null ? !region.equals(that.region) : that.region != null) return false;
         if (regionLabel != null ? !regionLabel.equals(that.regionLabel) : that.regionLabel != null) return false;
+        if (company != null ? !company.equals(that.company) : that.company != null) return false;
         if (companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null) return false;
+        if (position != null ? !position.equals(that.position) : that.position != null) return false;
         if (positionLabel != null ? !positionLabel.equals(that.positionLabel) : that.positionLabel != null)
             return false;
+        if (industry != null ? !industry.equals(that.industry) : that.industry != null) return false;
         if (industryLabel != null ? !industryLabel.equals(that.industryLabel) : that.industryLabel != null)
             return false;
+        if (seniority != null ? !seniority.equals(that.seniority) : that.seniority != null) return false;
         if (seniorityLabel != null ? !seniorityLabel.equals(that.seniorityLabel) : that.seniorityLabel != null)
             return false;
+        if (sizes != null ? !sizes.equals(that.sizes) : that.sizes != null) return false;
         if (sizesLabel != null ? !sizesLabel.equals(that.sizesLabel) : that.sizesLabel != null) return false;
+        if (network != null ? !network.equals(that.network) : that.network != null) return false;
         if (networkToken != null ? !networkToken.equals(that.networkToken) : that.networkToken != null) return false;
+        if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
+        return !(user != null ? !user.equals(that.user) : that.user != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (countryLabel != null ? countryLabel.hashCode() : 0);
+        result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (regionLabel != null ? regionLabel.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (companyLabel != null ? companyLabel.hashCode() : 0);
+        result = 31 * result + (position != null ? position.hashCode() : 0);
         result = 31 * result + (positionLabel != null ? positionLabel.hashCode() : 0);
+        result = 31 * result + (industry != null ? industry.hashCode() : 0);
         result = 31 * result + (industryLabel != null ? industryLabel.hashCode() : 0);
+        result = 31 * result + (seniority != null ? seniority.hashCode() : 0);
         result = 31 * result + (seniorityLabel != null ? seniorityLabel.hashCode() : 0);
+        result = 31 * result + (sizes != null ? sizes.hashCode() : 0);
         result = 31 * result + (sizesLabel != null ? sizesLabel.hashCode() : 0);
         result = 31 * result + sizesMinValue;
         result = 31 * result + sizesMaxValue;
+        result = 31 * result + (network != null ? network.hashCode() : 0);
         result = 31 * result + (networkToken != null ? networkToken.hashCode() : 0);
+        result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 
@@ -376,7 +408,8 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     public String toString() {
         return "ProfileEntity{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", country=" + country +

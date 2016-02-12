@@ -21,7 +21,7 @@ public class NetworkEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "code")
@@ -31,11 +31,11 @@ public class NetworkEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "label")
     private String label;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,18 +62,26 @@ public class NetworkEntity extends AbstractEntity implements StandardEntity {
 
         NetworkEntity that = (NetworkEntity) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
-        if (label != null ? !label.equals(that.label) : that.label != null) return false;
+        return !(label != null ? !label.equals(that.label) : that.label != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (label != null ? label.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "NetworkEntity{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", label='" + label + '\'' +
+                '}';
     }
 }

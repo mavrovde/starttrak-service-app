@@ -7,10 +7,7 @@ import com.starttrak.jpa.UserEntity;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -32,11 +29,12 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     private UserRepo userRepo;
 
     @Transactional(Transactional.TxType.REQUIRED)
-    private ProfileEntity create(long networkId, String email, String name, String position, String company,
-                                 String appKey, UserEntity user) {
+    private ProfileEntity create(long networkId, String email, String firstName, String lastName,
+                                 String position, String company, String appKey, UserEntity user) {
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
-        newProfile.setName(name);
+        newProfile.setFirstName(firstName);
+        newProfile.setLastName(lastName);
         newProfile.setPositionLabel(position);
         newProfile.setCompanyLabel(company);
         newProfile.setUser(user);
@@ -66,16 +64,9 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public ProfileEntity create(long networkId, String email, String firstName, String lastName,
-                                String position, String company, String appKey, UserEntity user) {
-        return create(networkId, email, firstName + " " + lastName, position, company, appKey, user);
-    }
-
-    @Transactional(Transactional.TxType.REQUIRED)
-    public ProfileEntity create(long networkId, String email, String name, String phone, long positionId,
-                                String companyLabel, long countryId, long regionId, long seniorityId, long sizesId,
+    public ProfileEntity createSimple(long networkId, String email, String firstName, String lastName,
                                 String appKey, UserEntity user) {
-        return create(networkId, email, name, null, null, appKey, user);
+        return create(networkId, email, firstName, lastName, null, null, appKey, user);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)

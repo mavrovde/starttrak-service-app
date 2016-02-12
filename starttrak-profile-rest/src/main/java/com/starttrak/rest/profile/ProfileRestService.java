@@ -49,13 +49,9 @@ public class ProfileRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        profileRepo.create(STRK_ID, request.getEmail(),
-                request.getFirstName() + " " + request.getLastName(),
-                request.getPhone(),
-                request.getPositionId(),
-                request.getCompanyLabel(), request.getCountryId(),
-                request.getRegionId(), request.getSeniorityId(),
-                request.getSizeId(), user.getOwnSessionId(), user);
+        profileRepo.createSimple(STRK_ID, request.getEmail(),
+                request.getFirstName(), request.getLastName(),
+                user.getOwnSessionId(), user);
         return new SuccessResponse<>(request);
     }
 
@@ -64,7 +60,8 @@ public class ProfileRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         ProfileEntity profile = profileRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        profile.setName(request.getFirstName() + " " + request.getLastName());
+        profile.setFirstName(request.getFirstName());
+        profile.setLastName(request.getLastName());
         profile.setPhone(request.getPhone());
 //        profile.setPosition(request.getPositionId());
         profile.setCompanyLabel(request.getCompanyLabel());
@@ -91,9 +88,9 @@ public class ProfileRestService {
             ProfileEntity dbProfile = profile.get();
             logger.info("the profile = " + dbProfile);
             ProfileBean bnProfile = new ProfileBean(
-                    dbProfile.getName(), dbProfile.getName(),
+                    dbProfile.getFirstName(), dbProfile.getLastName(),
                     dbProfile.getEmail(),
-                    dbProfile.getPhone(),
+                    Optional.ofNullable(dbProfile.getPhone()).orElse(null),
                     Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
                     Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
                     dbProfile.getCompanyLabel(),

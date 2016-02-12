@@ -33,34 +33,34 @@ state_id (only for USA)
 
     private String email;
 
-    @XmlElement(name = "phone_number")
+    @XmlElement(name = "phone_number", nillable = true)
     private String phone;
 
-    @XmlElement(name = "country_id")
-    private long countryId;
-    @XmlElement(name = "state_id")
-    private long regionId;
+    @XmlElement(name = "country_id", nillable = true)
+    private Long countryId;
+    @XmlElement(name = "state_id", nillable = true)
+    private Long regionId;
 
-    @XmlElement(name = "company_name")
+    @XmlElement(name = "company_name", nillable = true)
     private String companyLabel;
 
-    @XmlElement(name = "position_id")
-    private long positionId;
-    @XmlElement(name = "industry_id")
-    private long industryId;
+    @XmlElement(name = "position_id", nillable = true)
+    private Long positionId;
+    @XmlElement(name = "industry_id", nillable = true)
+    private Long industryId;
 
-    @XmlElement(name = "seniority_id")
-    private long seniorityId;
+    @XmlElement(name = "seniority_id", nillable = true)
+    private Long seniorityId;
 
-    @XmlElement(name = "size_id")
-    private long sizeId;
+    @XmlElement(name = "size_id", nillable = true)
+    private Long sizeId;
 
     public ProfileBean() {
     }
 
-    public ProfileBean(String firstName, String lastName, String email, String phone, long countryId,
-                       long regionId, String companyLabel, long positionId, long industryId,
-                       long seniorityId, long sizeId) {
+    public ProfileBean(String firstName, String lastName, String email, String phone, Long countryId,
+                       Long regionId, String companyLabel, Long positionId, Long industryId,
+                       Long seniorityId, Long sizeId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -106,19 +106,19 @@ state_id (only for USA)
         this.phone = phone;
     }
 
-    public long getCountryId() {
+    public Long getCountryId() {
         return countryId;
     }
 
-    public void setCountryId(long countryId) {
+    public void setCountryId(Long countryId) {
         this.countryId = countryId;
     }
 
-    public long getRegionId() {
+    public Long getRegionId() {
         return regionId;
     }
 
-    public void setRegionId(long regionId) {
+    public void setRegionId(Long regionId) {
         this.regionId = regionId;
     }
 
@@ -130,56 +130,57 @@ state_id (only for USA)
         this.companyLabel = companyLabel;
     }
 
-    public long getPositionId() {
+    public Long getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(long positionId) {
+    public void setPositionId(Long positionId) {
         this.positionId = positionId;
     }
 
-    public long getIndustryId() {
+    public Long getIndustryId() {
         return industryId;
     }
 
-    public void setIndustryId(long industryId) {
+    public void setIndustryId(Long industryId) {
         this.industryId = industryId;
     }
 
-    public long getSeniorityId() {
+    public Long getSeniorityId() {
         return seniorityId;
     }
 
-    public void setSeniorityId(long seniorityId) {
+    public void setSeniorityId(Long seniorityId) {
         this.seniorityId = seniorityId;
     }
 
-    public long getSizeId() {
+    public Long getSizeId() {
         return sizeId;
     }
 
-    public void setSizeId(long sizeId) {
+    public void setSizeId(Long sizeId) {
         this.sizeId = sizeId;
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         ProfileBean that = (ProfileBean) o;
 
-        if (countryId != that.countryId) return false;
-        if (regionId != that.regionId) return false;
-        if (positionId != that.positionId) return false;
-        if (industryId != that.industryId) return false;
-        if (seniorityId != that.seniorityId) return false;
-        if (sizeId != that.sizeId) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        return !(companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null);
+        if (countryId != null ? !countryId.equals(that.countryId) : that.countryId != null) return false;
+        if (regionId != null ? !regionId.equals(that.regionId) : that.regionId != null) return false;
+        if (companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null) return false;
+        if (positionId != null ? !positionId.equals(that.positionId) : that.positionId != null) return false;
+        if (industryId != null ? !industryId.equals(that.industryId) : that.industryId != null) return false;
+        if (seniorityId != null ? !seniorityId.equals(that.seniorityId) : that.seniorityId != null) return false;
+        return !(sizeId != null ? !sizeId.equals(that.sizeId) : that.sizeId != null);
 
     }
 
@@ -189,13 +190,13 @@ state_id (only for USA)
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (int) (countryId ^ (countryId >>> 32));
-        result = 31 * result + (int) (regionId ^ (regionId >>> 32));
+        result = 31 * result + (countryId != null ? countryId.hashCode() : 0);
+        result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
         result = 31 * result + (companyLabel != null ? companyLabel.hashCode() : 0);
-        result = 31 * result + (int) (positionId ^ (positionId >>> 32));
-        result = 31 * result + (int) (industryId ^ (industryId >>> 32));
-        result = 31 * result + (int) (seniorityId ^ (seniorityId >>> 32));
-        result = 31 * result + (int) (sizeId ^ (sizeId >>> 32));
+        result = 31 * result + (positionId != null ? positionId.hashCode() : 0);
+        result = 31 * result + (industryId != null ? industryId.hashCode() : 0);
+        result = 31 * result + (seniorityId != null ? seniorityId.hashCode() : 0);
+        result = 31 * result + (sizeId != null ? sizeId.hashCode() : 0);
         return result;
     }
 

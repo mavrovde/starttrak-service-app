@@ -21,7 +21,7 @@ public class RegionEntity extends AbstractEntity implements StandardEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
-    private long id;
+    private Long id;
 
     @Basic
     @Column(name = "label")
@@ -31,11 +31,11 @@ public class RegionEntity extends AbstractEntity implements StandardEntity {
     @JoinColumn(name = "country_id", nullable = false)
     private CountryEntity country;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,16 +58,27 @@ public class RegionEntity extends AbstractEntity implements StandardEntity {
 
         RegionEntity that = (RegionEntity) o;
 
-        if (id != that.id) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (label != null ? !label.equals(that.label) : that.label != null) return false;
+        return !(country != null ? !country.equals(that.country) : that.country != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RegionEntity{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", country=" + country +
+                '}';
+    }
+
 }
