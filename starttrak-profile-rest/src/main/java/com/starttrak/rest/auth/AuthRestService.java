@@ -27,8 +27,8 @@ import java.util.Optional;
 @ApplicationScoped
 public class AuthRestService {
 
-    private final static long STRK_ID = 0;
-    private final static long LNKD_ID = 2;
+    private final static int STRK_ID = 0;
+    private final static int LNKD_ID = 2;
 
     @Inject
     private UserRepo userRepo;
@@ -46,7 +46,7 @@ public class AuthRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse login(RegRequest regRequest) {
         switch (regRequest.getSocNetworkId()) {
-            case 0:
+            case STRK_ID: //starttrak
                 Optional<UserEntity> user = userRepo.findByEmail(regRequest.getEmail());
                 if (user.isPresent()) {
                     return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
@@ -57,7 +57,7 @@ public class AuthRestService {
                             "registered by starttrak"
                     ).getOwnSessionId()));
                 }
-            case 1:
+            case LNKD_ID: //linkedin
                 Optional<ProfileEntity> linkedin = profileRepo.findByEmailNetwork(LNKD_ID, regRequest.getEmail());
                 if (linkedin.isPresent()) {
                     return new SuccessResponse<>(new OwnSession(userRepo.findByEmail(
@@ -71,7 +71,7 @@ public class AuthRestService {
                                     profile.getPosition(), profile.getCompany(),
                                     regRequest.getAccessToken())));
                 }
-            case 2:
+            case 1: //facebook
                 throw new IllegalStateException("no network login implemented");
             case 3:
                 throw new IllegalStateException("no network login implemented");

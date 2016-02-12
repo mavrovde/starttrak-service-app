@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class LinkedinAuthResponseServlet extends HttpServlet {
 
-    private final static long LNKD_ID = 2;
+    private final static int LNKD_ID = 2;
 
     @Inject
     private ProfileRepo profileRepo;
