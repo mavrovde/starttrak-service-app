@@ -1,4 +1,4 @@
-package com.starttrak.http;
+package com.starttrak.http.filter;
 
 import org.jboss.logging.Logger;
 
