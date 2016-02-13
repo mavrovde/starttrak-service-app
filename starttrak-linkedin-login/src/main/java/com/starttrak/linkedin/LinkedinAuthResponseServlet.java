@@ -34,9 +34,8 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
             String appKey = networkClient.getAccessToken(code);
             //-=-=-=-
             if (appKey != null) {
-                SocialNetworkProfile profile = null;
                 try {
-                    profile = networkClient.getProfileByAccessToken(appKey);
+                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(appKey);
                     response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
                             profileRepo.updateSocialProfile(
                                     SocNetwork.LNKD, profile.getEmailAddress(),
