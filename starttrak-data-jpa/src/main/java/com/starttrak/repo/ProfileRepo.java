@@ -27,6 +27,19 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     @Inject
     private UserRepo userRepo;
 
+    @Inject
+    private CountryRepo countryRepo;
+    @Inject
+    private RegionRepo regionRepo;
+    @Inject
+    private SizeRepo sizeRepo;
+    @Inject
+    private SeniorityRepo seniorityRepo;
+    @Inject
+    private PositionRepo positionRepo;
+    @Inject
+    private IndustryRepo industryRepo;
+
     @Transactional(Transactional.TxType.REQUIRED)
     private ProfileEntity create(Long networkId, String email, String firstName, String lastName,
                                  String position, String company, String appKey, UserEntity user) {
@@ -42,6 +55,66 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         newProfile.setNetworkToken(appKey);
         newProfile.setLastLogin(new Date());
         return create(newProfile);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public void update(String ownSessionId, String firstName, String lastName, String phone, Long positionId,
+                       String companyLabel, Long countryId, Long regionId, String cityLabel, Long seniorityId, Long sizeId,
+                       Long industryId) {
+        ProfileEntity profile = findByOwnSessionId(ownSessionId).orElseThrow(IllegalArgumentException::new);
+
+        profile.setFirstName(null);
+        Optional.ofNullable(firstName).ifPresent(profile::setFirstName);
+
+        profile.setLastName(null);
+        Optional.ofNullable(lastName).ifPresent(profile::setLastName);
+
+        profile.setPhone(null);
+        Optional.ofNullable(phone).ifPresent(profile::setPhone);
+
+        profile.setPosition(null);
+        Optional.ofNullable(positionId).ifPresent(id ->
+                        profile.setPosition(positionRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
+
+        profile.setCompanyLabel(null);
+        Optional.ofNullable(companyLabel).ifPresent(profile::setCompanyLabel);
+
+        profile.setCountry(null);
+        Optional.ofNullable(countryId).ifPresent(id ->
+                        profile.setCountry(countryRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
+
+        profile.setRegion(null);
+        Optional.ofNullable(regionId).ifPresent(id ->
+                        profile.setRegion(regionRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
+
+        profile.setCityLabel(null);
+        Optional.ofNullable(cityLabel).ifPresent(profile::setCityLabel);
+
+        profile.setSeniority(null);
+        Optional.ofNullable(seniorityId).ifPresent(id ->
+                        profile.setSeniority(seniorityRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
+
+        profile.setSizes(null);
+        Optional.ofNullable(sizeId).ifPresent(id ->
+                        profile.setSizes(sizeRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+
+        );
+
+        profile.setIndustry(null);
+        Optional.ofNullable(industryId).ifPresent(id ->
+                        profile.setIndustry(industryRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
+        update(profile);
     }
 
     public Optional<ProfileEntity> findByEmailNetwork(SocNetwork network, String email) {
@@ -94,5 +167,6 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     public List<ProfileEntity> findByConditions() {
         return new ArrayList<>(); //todo:: provide some real data
     }
+
 
 }

@@ -35,19 +35,6 @@ public class ProfileRestService {
     @Inject
     private UserRepo userRepo;
 
-    @Inject
-    private CountryRepo countryRepo;
-    @Inject
-    private RegionRepo regionRepo;
-    @Inject
-    private SizeRepo sizeRepo;
-    @Inject
-    private SeniorityRepo seniorityRepo;
-    @Inject
-    private PositionRepo positionRepo;
-    @Inject
-    private IndustryRepo industryRepo;
-
 
     @GET
     @Path("/ping")
@@ -73,18 +60,19 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
-        ProfileEntity profile = profileRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        profile.setFirstName(request.getFirstName());
-        profile.setLastName(request.getLastName());
-        profile.setPhone(request.getPhone());
-        profile.setPosition(positionRepo.find(request.getPositionId()).orElseThrow(IllegalArgumentException::new));
-        profile.setCompanyLabel(request.getCompanyLabel());
-        profile.setCountry(countryRepo.find(request.getCountryId()).orElseThrow(IllegalArgumentException::new));
-        profile.setRegion(regionRepo.find(request.getRegionId()).orElseThrow(IllegalArgumentException::new));
-        profile.setSeniority(seniorityRepo.find(request.getSeniorityId()).orElseThrow(IllegalArgumentException::new));
-        profile.setSizes(sizeRepo.find(request.getSizeId()).orElseThrow(IllegalArgumentException::new));
-        profile.setIndustry(industryRepo.find(request.getIndustryId()).orElseThrow(IllegalArgumentException::new));
-        profileRepo.update(profile);
+        profileRepo.update(ownSessionId,
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhone(),
+                request.getPositionId(),
+                request.getCompanyLabel(),
+                request.getCountryId(),
+                request.getRegionId(),
+                request.getCityName(),
+                request.getSeniorityId(),
+                request.getSizeId(),
+                request.getIndustryId()
+                );
         return new SuccessResponse<>(request);
     }
 
@@ -114,11 +102,13 @@ public class ProfileRestService {
                 logger.info("the profile = " + dbProfile);
                 ProfileBean bnProfile = new ProfileBean(
                         dbProfile.getId(),
+                        1L,
                         dbProfile.getFirstName(), dbProfile.getLastName(),
                         dbProfile.getEmail(),
                         Optional.ofNullable(dbProfile.getPhone()).orElse(null),
                         Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
                         Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                        dbProfile.getCityLabel(),
                         dbProfile.getCompanyLabel(),
                         Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
                         Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
@@ -129,6 +119,7 @@ public class ProfileRestService {
         }
     }
 
+    @Path("/search")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse search(SearchRequest conditions) {
@@ -136,11 +127,13 @@ public class ProfileRestService {
         return new SuccessResponse<>(profiles.stream().map(dbProfile ->
                         new ProfileBean(
                                 dbProfile.getId(),
+                                1L,
                                 dbProfile.getFirstName(), dbProfile.getLastName(),
                                 dbProfile.getEmail(),
                                 Optional.ofNullable(dbProfile.getPhone()).orElse(null),
                                 Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
                                 Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                                dbProfile.getCityLabel(),
                                 dbProfile.getCompanyLabel(),
                                 Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
                                 Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
@@ -149,6 +142,7 @@ public class ProfileRestService {
         ).collect(Collectors.toList()));
     }
 
+    @Path("/meet")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse meet(MeetRequest meet) {

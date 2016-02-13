@@ -23,10 +23,19 @@ position_id:<...>,
     @XmlElement(name = "search_text")
     private String text;
 
+    @XmlElement(name = "phone", nillable = true)
+    private String phone;
+
+    @XmlElement(name = "title_id", nillable = true)
+    private Long titleId;
+
     @XmlElement(name = "country_id", nillable = true)
     private Long countryId;
     @XmlElement(name = "state_id", nillable = true)
     private Long regionId;
+
+    @XmlElement(name = "city_name", nillable = true)
+    private String cityLabel;
 
     @XmlElement(name = "company_name", nillable = true)
     private String companyLabel;
@@ -50,6 +59,22 @@ position_id:<...>,
         this.text = text;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Long getTitleId() {
+        return titleId;
+    }
+
+    public void setTitleId(Long titleId) {
+        this.titleId = titleId;
+    }
+
     public Long getCountryId() {
         return countryId;
     }
@@ -64,6 +89,14 @@ position_id:<...>,
 
     public void setRegionId(Long regionId) {
         this.regionId = regionId;
+    }
+
+    public String getCityLabel() {
+        return cityLabel;
+    }
+
+    public void setCityLabel(String cityLabel) {
+        this.cityLabel = cityLabel;
     }
 
     public String getCompanyLabel() {
@@ -115,8 +148,11 @@ position_id:<...>,
         SearchRequest that = (SearchRequest) o;
 
         if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+        if (titleId != null ? !titleId.equals(that.titleId) : that.titleId != null) return false;
         if (countryId != null ? !countryId.equals(that.countryId) : that.countryId != null) return false;
         if (regionId != null ? !regionId.equals(that.regionId) : that.regionId != null) return false;
+        if (cityLabel != null ? !cityLabel.equals(that.cityLabel) : that.cityLabel != null) return false;
         if (companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null) return false;
         if (positionId != null ? !positionId.equals(that.positionId) : that.positionId != null) return false;
         if (industryId != null ? !industryId.equals(that.industryId) : that.industryId != null) return false;
@@ -128,8 +164,11 @@ position_id:<...>,
     @Override
     public int hashCode() {
         int result = text != null ? text.hashCode() : 0;
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (titleId != null ? titleId.hashCode() : 0);
         result = 31 * result + (countryId != null ? countryId.hashCode() : 0);
         result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
+        result = 31 * result + (cityLabel != null ? cityLabel.hashCode() : 0);
         result = 31 * result + (companyLabel != null ? companyLabel.hashCode() : 0);
         result = 31 * result + (positionId != null ? positionId.hashCode() : 0);
         result = 31 * result + (industryId != null ? industryId.hashCode() : 0);
@@ -142,8 +181,11 @@ position_id:<...>,
     public String toString() {
         return "SearchRequest{" +
                 "text='" + text + '\'' +
+                ", phone='" + phone + '\'' +
+                ", titleId=" + titleId +
                 ", countryId=" + countryId +
                 ", regionId=" + regionId +
+                ", cityLabel='" + cityLabel + '\'' +
                 ", companyLabel='" + companyLabel + '\'' +
                 ", positionId=" + positionId +
                 ", industryId=" + industryId +

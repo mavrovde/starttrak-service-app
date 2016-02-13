@@ -56,6 +56,10 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "region_label", nullable = true)
     private String regionLabel;
 
+    @Basic
+    @Column(name = "city_label", nullable = true)
+    private String cityLabel;
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "company_id", nullable = true)
     private CompanyEntity company;
@@ -272,6 +276,14 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         this.region = region;
     }
 
+    public String getCityLabel() {
+        return cityLabel;
+    }
+
+    public void setCityLabel(String cityLabel) {
+        this.cityLabel = cityLabel;
+    }
+
     public CompanyEntity getCompany() {
         return company;
     }
@@ -338,6 +350,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -354,6 +367,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         if (countryLabel != null ? !countryLabel.equals(that.countryLabel) : that.countryLabel != null) return false;
         if (region != null ? !region.equals(that.region) : that.region != null) return false;
         if (regionLabel != null ? !regionLabel.equals(that.regionLabel) : that.regionLabel != null) return false;
+        if (cityLabel != null ? !cityLabel.equals(that.cityLabel) : that.cityLabel != null) return false;
         if (company != null ? !company.equals(that.company) : that.company != null) return false;
         if (companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
@@ -385,6 +399,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         result = 31 * result + (countryLabel != null ? countryLabel.hashCode() : 0);
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (regionLabel != null ? regionLabel.hashCode() : 0);
+        result = 31 * result + (cityLabel != null ? cityLabel.hashCode() : 0);
         result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (companyLabel != null ? companyLabel.hashCode() : 0);
         result = 31 * result + (position != null ? position.hashCode() : 0);
@@ -416,6 +431,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
                 ", countryLabel='" + countryLabel + '\'' +
                 ", region=" + region +
                 ", regionLabel='" + regionLabel + '\'' +
+                ", cityLabel='" + cityLabel + '\'' +
                 ", company=" + company +
                 ", companyLabel='" + companyLabel + '\'' +
                 ", position=" + position +
@@ -435,3 +451,4 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
                 '}';
     }
 }
+

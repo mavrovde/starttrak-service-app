@@ -29,6 +29,9 @@ state_id (only for USA)
     @XmlElement(name = "user_id")
     private Long id;
 
+    @XmlElement(name = "title_id", nillable = true)
+    private Long titleId;
+
     @XmlElement(name = "first_name")
     private String firstName;
     @XmlElement(name = "last_name")
@@ -43,6 +46,9 @@ state_id (only for USA)
     private Long countryId;
     @XmlElement(name = "state_id", nillable = true)
     private Long regionId;
+
+    @XmlElement(name = "city_name", nillable = true)
+    private String cityName;
 
     @XmlElement(name = "company_name", nillable = true)
     private String companyLabel;
@@ -61,16 +67,18 @@ state_id (only for USA)
     public ProfileBean() {
     }
 
-    public ProfileBean(Long id, String firstName, String lastName, String email, String phone, Long countryId,
-                       Long regionId, String companyLabel, Long positionId, Long industryId,
+    public ProfileBean(Long id, Long titleId, String firstName, String lastName, String email, String phone, Long countryId,
+                       Long regionId, String cityName, String companyLabel, Long positionId, Long industryId,
                        Long seniorityId, Long sizeId) {
         this.id = id;
+        this.titleId = titleId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.countryId = countryId;
         this.regionId = regionId;
+        this.cityName = cityName;
         this.companyLabel = companyLabel;
         this.positionId = positionId;
         this.industryId = industryId;
@@ -84,6 +92,14 @@ state_id (only for USA)
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTitleId() {
+        return titleId;
+    }
+
+    public void setTitleId(Long titleId) {
+        this.titleId = titleId;
     }
 
     public String getFirstName() {
@@ -134,6 +150,14 @@ state_id (only for USA)
         this.regionId = regionId;
     }
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     public String getCompanyLabel() {
         return companyLabel;
     }
@@ -176,18 +200,22 @@ state_id (only for USA)
 
     @Override
     public boolean equals(Object o) {
+
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         ProfileBean that = (ProfileBean) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (titleId != null ? !titleId.equals(that.titleId) : that.titleId != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (countryId != null ? !countryId.equals(that.countryId) : that.countryId != null) return false;
         if (regionId != null ? !regionId.equals(that.regionId) : that.regionId != null) return false;
+        if (cityName != null ? !cityName.equals(that.cityName) : that.cityName != null) return false;
         if (companyLabel != null ? !companyLabel.equals(that.companyLabel) : that.companyLabel != null) return false;
         if (positionId != null ? !positionId.equals(that.positionId) : that.positionId != null) return false;
         if (industryId != null ? !industryId.equals(that.industryId) : that.industryId != null) return false;
@@ -199,12 +227,14 @@ state_id (only for USA)
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (titleId != null ? titleId.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (countryId != null ? countryId.hashCode() : 0);
         result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
+        result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
         result = 31 * result + (companyLabel != null ? companyLabel.hashCode() : 0);
         result = 31 * result + (positionId != null ? positionId.hashCode() : 0);
         result = 31 * result + (industryId != null ? industryId.hashCode() : 0);
@@ -217,12 +247,14 @@ state_id (only for USA)
     public String toString() {
         return "ProfileBean{" +
                 "id=" + id +
+                ", titleId=" + titleId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", countryId=" + countryId +
                 ", regionId=" + regionId +
+                ", cityName='" + cityName + '\'' +
                 ", companyLabel='" + companyLabel + '\'' +
                 ", positionId=" + positionId +
                 ", industryId=" + industryId +
@@ -231,3 +263,4 @@ state_id (only for USA)
                 '}';
     }
 }
+

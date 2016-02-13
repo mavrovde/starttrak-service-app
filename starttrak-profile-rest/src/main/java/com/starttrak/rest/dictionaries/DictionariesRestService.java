@@ -1,6 +1,7 @@
 package com.starttrak.rest.dictionaries;
 
 import com.starttrak.jpa.StandardEntity;
+import com.starttrak.jpa.TitleEntity;
 import com.starttrak.repo.*;
 import com.starttrak.rest.response.AuthErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
@@ -13,9 +14,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -59,6 +58,11 @@ public class DictionariesRestService {
             content.put("sizes", sizesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("industries", industriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("seniority", seniorityRepo.findAllBy(Page.OPTIONAL_DEFAULT));
+            content.put("titles", new ArrayList<>(
+                    Arrays.asList(new TitleEntity(1L, "Mr."),
+                            new TitleEntity(2L, "Ms."),
+                            new TitleEntity(3L, "Mrs."))
+            ));
             // -=-=-=-
             return new SuccessResponse<>(content);
         } catch (IllegalStateException ise) {
