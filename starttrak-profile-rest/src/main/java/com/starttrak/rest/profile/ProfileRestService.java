@@ -3,8 +3,7 @@ package com.starttrak.rest.profile;
 import com.starttrak.Ping;
 import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.*;
-import com.starttrak.repo.ProfileRepo;
-import com.starttrak.repo.UserRepo;
+import com.starttrak.repo.*;
 import com.starttrak.rest.request.ProfileBean;
 import com.starttrak.rest.response.AuthErrorResponse;
 import com.starttrak.rest.response.CodeErrorResponse;
@@ -16,10 +15,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -35,6 +34,20 @@ public class ProfileRestService {
 
     @Inject
     private UserRepo userRepo;
+
+    @Inject
+    private CountryRepo countryRepo;
+    @Inject
+    private RegionRepo regionRepo;
+    @Inject
+    private SizeRepo sizeRepo;
+    @Inject
+    private SeniorityRepo seniorityRepo;
+    @Inject
+    private PositionRepo positionRepo;
+    @Inject
+    private IndustryRepo industryRepo;
+
 
     @GET
     @Path("/ping")
@@ -64,14 +77,15 @@ public class ProfileRestService {
         profile.setFirstName(request.getFirstName());
         profile.setLastName(request.getLastName());
         profile.setPhone(request.getPhone());
-//        profile.setPosition(request.getPositionId());
+        profile.setPosition(positionRepo.find(request.getPositionId()).orElseThrow(IllegalArgumentException::new));
         profile.setCompanyLabel(request.getCompanyLabel());
-//        profile.setCountry(request.getCountryId());
-//        profile.setRegion(request.getRegionId());
-//        profile.setSeniority(request.getSeniorityId());
-//        profile.setSizes(request.getSizeId());
+        profile.setCountry(countryRepo.find(request.getCountryId()).orElseThrow(IllegalArgumentException::new));
+        profile.setRegion(regionRepo.find(request.getRegionId()).orElseThrow(IllegalArgumentException::new));
+        profile.setSeniority(seniorityRepo.find(request.getSeniorityId()).orElseThrow(IllegalArgumentException::new));
+        profile.setSizes(sizeRepo.find(request.getSizeId()).orElseThrow(IllegalArgumentException::new));
+        profile.setIndustry(industryRepo.find(request.getIndustryId()).orElseThrow(IllegalArgumentException::new));
         profileRepo.update(profile);
-        return new SuccessResponse<>(request); //todo:: improve
+        return new SuccessResponse<>(request);
     }
 
     @GET
@@ -99,6 +113,7 @@ public class ProfileRestService {
                 ProfileEntity dbProfile = profile.get();
                 logger.info("the profile = " + dbProfile);
                 ProfileBean bnProfile = new ProfileBean(
+                        dbProfile.getId(),
                         dbProfile.getFirstName(), dbProfile.getLastName(),
                         dbProfile.getEmail(),
                         Optional.ofNullable(dbProfile.getPhone()).orElse(null),
@@ -116,17 +131,28 @@ public class ProfileRestService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ProfileEntity> search(SearchCondition conditions) {
-        profileRepo.findByConditions();
-        return new ArrayList<>();
+    public StandardResponse search(SearchRequest conditions) {
+        List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
+        return new SuccessResponse<>(profiles.stream().map(dbProfile ->
+                        new ProfileBean(
+                                dbProfile.getId(),
+                                dbProfile.getFirstName(), dbProfile.getLastName(),
+                                dbProfile.getEmail(),
+                                Optional.ofNullable(dbProfile.getPhone()).orElse(null),
+                                Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                                Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                                dbProfile.getCompanyLabel(),
+                                Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                                Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                                Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                                Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId())
+        ).collect(Collectors.toList()));
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public void meet(List<Long> ids) {
-        //send emails to the provided user ids
-        //and must be sent some kind of confirmation to the sender
-        //think about some mail provider (consult DM)
+    public StandardResponse meet(MeetRequest meet) {
+        return new SuccessResponse<>("success");
     }
 
 }
