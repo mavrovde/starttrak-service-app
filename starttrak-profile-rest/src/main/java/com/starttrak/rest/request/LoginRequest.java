@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 /**
  * @author serg.mavrov@gmail.com
  */
-public class RegRequest {
+public class LoginRequest {
 
     /*
 {soc_network_type:0, email:””, password:””}
@@ -85,7 +85,7 @@ public class RegRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RegRequest that = (RegRequest) o;
+        LoginRequest that = (LoginRequest) o;
 
         if (socNetworkId != that.socNetworkId) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
@@ -109,7 +109,7 @@ public class RegRequest {
 
     @Override
     public String toString() {
-        return "RegRequest{" +
+        return "LoginRequest{" +
                 "socNetworkId=" + socNetworkId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

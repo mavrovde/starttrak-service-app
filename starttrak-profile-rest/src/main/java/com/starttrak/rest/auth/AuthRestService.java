@@ -5,7 +5,7 @@ import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
-import com.starttrak.rest.request.RegRequest;
+import com.starttrak.rest.request.LoginRequest;
 import com.starttrak.rest.response.CodeErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
@@ -54,7 +54,7 @@ public class AuthRestService {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public StandardResponse login(RegRequest regRequest) {
+    public StandardResponse login(LoginRequest regRequest) {
         switch (SocNetwork.findByCode(regRequest.getSocNetworkId())) {
             case STTR: //starttrak
                 Optional<UserEntity> user = userRepo.findByEmail(regRequest.getEmail());
