@@ -177,7 +177,7 @@ public class ProfileRestService {
                                     Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
                                     Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
                                     dbProfile.getUser().getSourceNetwork().getId(),
-                                    "http://vignette1.wikia.nocookie.net/logopedia/images/a/a5/Gravity_Guy_icon.png/revision/latest?cb=20140210144551")
+                                    dbProfile.getPhotoUrl())
             ).collect(Collectors.toList()));
         } catch (AuthenticationException ise) {
             logger.error(ise);
