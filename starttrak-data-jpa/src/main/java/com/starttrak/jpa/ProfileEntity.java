@@ -8,7 +8,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "profiles", schema = "starttrak")
-public class ProfileEntity extends AbstractEntity implements StandardEntity {
+public class ProfileEntity extends AbstractEntity implements StandardEntity, Comparable<ProfileEntity> {
 
     @TableGenerator(name = "entity_id_generator",
             table = "entity_ids",
@@ -492,6 +492,11 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
                 ", lastLogin=" + lastLogin +
                 ", user=" + user +
                 '}';
+    }
+
+    @Override
+    public int compareTo(ProfileEntity o) {
+        return (getFirstName() + getLastName()).compareTo((o.getFirstName()+o.getLastName()));
     }
 }
 

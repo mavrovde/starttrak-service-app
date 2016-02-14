@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "countries", schema = "starttrak")
-public class CountryEntity extends AbstractEntity implements StandardEntity {
+public class CountryEntity extends AbstractEntity implements StandardEntity,Labeled {
 
     @TableGenerator(name = "entity_id_generator",
             table = "entity_ids",

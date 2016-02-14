@@ -188,7 +188,7 @@ public class ProfileRestService {
                                     Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
                                     dbProfile.getUser().getSourceNetwork().getId(),
                                     dbProfile.getPhotoUrl())
-            ).collect(Collectors.toList()));
+            ).sorted().collect(Collectors.toList()));
         } catch (AuthenticationException ise) {
             logger.error(ise);
             return new AuthErrorResponse();

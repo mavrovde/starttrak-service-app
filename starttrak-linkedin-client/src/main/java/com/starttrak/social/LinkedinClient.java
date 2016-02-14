@@ -35,13 +35,12 @@ public class LinkedinClient implements SocialNetworkClient {
 
         String[] positionCompany = jsonProfile.get("headline").toString().split(" at ");
         String position;
-        String company;
+        String company = null;
         if (positionCompany.length > 1) {
             position = positionCompany[0];
             company = positionCompany[1];
         } else {
             position = positionCompany[0];
-            company = "unknown";
         }
 
         String pictures = jsonProfile.get("pictureUrls").toString();
@@ -50,7 +49,7 @@ public class LinkedinClient implements SocialNetworkClient {
         JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
         String pictureUrl = pictureUrls.stream().findAny().get().toString();
 
-        //-=-=-=- location
+        //-=-=-=- location (geo)
         String location = jsonProfile.get("location").toString();
         JSONObject jsonLocation = (JSONObject) JSONValue.parse(location);
         logger.info("json location = " + jsonLocation);

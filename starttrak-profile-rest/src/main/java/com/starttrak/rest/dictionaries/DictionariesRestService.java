@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -63,14 +64,14 @@ public class DictionariesRestService {
             Map<String, List<? extends StandardEntity>> content = new HashMap<>();
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             // -=-=-=-
-            content.put("countries", countriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("states", regionsRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("positions", positionsRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("sizes", sizesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("industries", industriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("seniority", seniorityRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("titles", titleRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            // -=-=-=-
+            content.put("countries", countriesRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("states", regionsRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("positions", positionsRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("sizes", sizesRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("industries", industriesRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("seniority", seniorityRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            content.put("titles", titleRepo.findAllBy(Page.OPTIONAL_DEFAULT).stream().sorted().collect(Collectors.toList()));
+            //-=-=-=-
             logger.info("x-auth-id:" + ownSessionId + " -> get dictionaries request");
             return new SuccessResponse<>(content);
         } catch (AuthenticationException ise) {

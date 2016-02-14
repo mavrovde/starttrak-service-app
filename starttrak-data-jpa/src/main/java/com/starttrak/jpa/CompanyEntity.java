@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "companies", schema = "starttrak")
-public class CompanyEntity extends AbstractEntity implements StandardEntity {
+public class CompanyEntity extends AbstractEntity implements StandardEntity, Labeled {
 
     @TableGenerator(name = "entity_id_generator",
             table = "entity_ids",
@@ -70,4 +70,5 @@ public class CompanyEntity extends AbstractEntity implements StandardEntity {
                 ", label='" + label + '\'' +
                 '}';
     }
+
 }

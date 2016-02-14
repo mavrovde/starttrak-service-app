@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "sizes", schema = "starttrak")
-public class SizeEntity extends AbstractEntity implements StandardEntity {
+public class SizeEntity extends AbstractEntity implements StandardEntity, Comparable<SizeEntity> {
 
     @TableGenerator(name = "entity_id_generator",
             table = "entity_ids",
@@ -102,4 +102,8 @@ public class SizeEntity extends AbstractEntity implements StandardEntity {
                 '}';
     }
 
+    @Override
+    public int compareTo(SizeEntity o) {
+        return getMinValue()-o.getMinValue();
+    }
 }

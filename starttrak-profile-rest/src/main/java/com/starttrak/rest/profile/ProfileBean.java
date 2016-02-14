@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author serg.mavrov@gmail.com
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ProfileBean {
+public class ProfileBean implements Comparable<ProfileBean>{
 
     /*
 Mandatory fields:
@@ -290,5 +290,11 @@ state_id (only for USA)
                 ", photoUrl='" + photoUrl + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(ProfileBean o) {
+        return (getFirstName() + getLastName()).compareTo((o.getFirstName()+o.getLastName()));
+    }
+
 }
 
