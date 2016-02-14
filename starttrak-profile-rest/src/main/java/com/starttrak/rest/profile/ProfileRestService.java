@@ -39,8 +39,10 @@ public class ProfileRestService {
     @Path("/ping")
     @Produces(MediaType.APPLICATION_JSON)
     public Ping getPing() {
+        logger.info(">>> PING request");
         Ping ping = new Ping();
         ping.setMessage(new Date().toString());
+        logger.info("<<< PING request");
         return ping;
     }
 
@@ -48,6 +50,7 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
+        logger.info("x-auth-id:" + ownSessionId + " <- create profile request");
         try {
             UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
@@ -67,6 +70,7 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
+        logger.info("x-auth-id:" + ownSessionId + " <- update profile request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.update(ownSessionId,
@@ -96,7 +100,7 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse get(@HeaderParam("x-auth-id") String hdrSessionId,
                                 @QueryParam("session_id") String prmSessionId) {
-
+        logger.info("x-auth-id:" + hdrSessionId + "/" + prmSessionId + " <- get profile request");
         Optional.ofNullable(hdrSessionId).ifPresent(id ->
                 logger.info("the header found {x-auth-id:" + id + "}"));
         Optional.ofNullable(prmSessionId).ifPresent(id ->
@@ -151,6 +155,7 @@ public class ProfileRestService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse search(@HeaderParam("x-auth-id") String ownSessionId, SearchRequest conditions) {
+        logger.info("x-auth-id:" + ownSessionId + " <- search request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
@@ -183,9 +188,11 @@ public class ProfileRestService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse meet(@HeaderParam("x-auth-id") String ownSessionId, MeetRequest meet) {
+        logger.info("x-auth-id:" + ownSessionId + " <- meet request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
-            meet.getIds().stream().forEach(userRepo::find);
+            meet.getIds().stream().forEach(id -> logger.info("check id{" + id+"}=" +
+                    userRepo.find(id).orElse(new UserEntity()).getEmail()));
             return new SuccessResponse<>("success");
         } catch (AuthenticationException ise) {
             logger.error(ise);
