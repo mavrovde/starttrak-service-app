@@ -100,7 +100,7 @@ public class ProfileRestService {
         Optional.ofNullable(hdrSessionId).ifPresent(id ->
                 logger.info("the header found {x-auth-id:" + id + "}"));
         Optional.ofNullable(prmSessionId).ifPresent(id ->
-                logger.info("the parameter found {x-auth-id:" + id + "}"));
+                logger.info("the parameter found {session-id:" + id + "}"));
 
         //so will be found the st profile since only it has public session id
         String sessionId = hdrSessionId;
