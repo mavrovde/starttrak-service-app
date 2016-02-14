@@ -73,6 +73,7 @@ public class ProfileRestService {
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.update(ownSessionId,
+                    request.getTitleId(),
                     request.getFirstName(),
                     request.getLastName(),
                     request.getPhone(),

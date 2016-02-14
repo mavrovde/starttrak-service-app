@@ -28,6 +28,8 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     private UserRepo userRepo;
 
     @Inject
+    private TitleRepo titleRepo;
+    @Inject
     private CountryRepo countryRepo;
     @Inject
     private RegionRepo regionRepo;
@@ -61,6 +63,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
     @Transactional(Transactional.TxType.REQUIRED)
     public void update(String ownSessionId,
+                       Long titleId,
                        String firstName, String lastName,
                        String phone,
                        Long positionId,
@@ -69,7 +72,14 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                        Long seniorityId,
                        Long sizeId,
                        Long industryId) {
+
         ProfileEntity profile = findByOwnSessionId(ownSessionId).orElseThrow(IllegalArgumentException::new);
+
+        profile.setTitle(null);
+        Optional.ofNullable(titleId).ifPresent(id ->
+                        profile.setTitle(titleRepo.find(id).
+                                orElseThrow(IllegalArgumentException::new))
+        );
 
         profile.setFirstName(null);
         Optional.ofNullable(firstName).ifPresent(profile::setFirstName);
