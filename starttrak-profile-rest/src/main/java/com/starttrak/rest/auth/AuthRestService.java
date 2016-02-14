@@ -93,6 +93,9 @@ public class AuthRestService {
                                         profile.getPosition(),
                                         profile.getCompany(),
                                         profile.getPictureUrl(),
+                                        profile.getCityName(),
+                                        profile.getRegion(),
+                                        profile.getCountry(),
                                         regRequest.getAccessToken())));
                     } catch (SocialNetworkException sne) {
                         return new CodeErrorResponse(1003, "social network token issue");

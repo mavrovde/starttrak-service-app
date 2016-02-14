@@ -1,6 +1,7 @@
 package com.starttrak.repo;
 
 import com.starttrak.jpa.AbstractEntity;
+import com.starttrak.jpa.RegionEntity;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -86,9 +87,8 @@ public abstract class AbstractRepository<ENTITY extends AbstractEntity>
     }
 
     @Override
-    public Optional<ENTITY> find(long id) {
-        Optional<ENTITY> t = Optional.ofNullable(getEm().find(getEntityClass(), id));
-        return t;
+    public Optional<ENTITY> find(Long id) {
+        return Optional.ofNullable(getEm().find(getEntityClass(), id));
     }
 
     @Override
@@ -106,7 +106,7 @@ public abstract class AbstractRepository<ENTITY extends AbstractEntity>
 
     @Override
     @Transactional(Transactional.TxType.REQUIRED)
-    public void delete(long id) {
+    public void delete(Long id) {
         Optional<ENTITY> t = find(id);
         delete(t.orElseThrow(IllegalArgumentException::new));
     }

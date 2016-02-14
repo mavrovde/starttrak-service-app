@@ -41,7 +41,11 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                                     SocNetwork.LNKD, profile.getEmailAddress(),
                                     profile.getFirstName(), profile.getLastName(),
                                     profile.getPosition(), profile.getCompany(),
-                                    profile.getPictureUrl(), appKey));
+                                    profile.getPictureUrl(),
+                                    profile.getCityName(),
+                                    profile.getRegion(),
+                                    profile.getCountry(),
+                                    appKey));
                 } catch (SocialNetworkException e) {
                     logger.error("some issue with social network was registered", e);
                     throw new IllegalStateException(e);

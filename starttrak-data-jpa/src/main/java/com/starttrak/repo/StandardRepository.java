@@ -16,7 +16,7 @@ public interface StandardRepository<ENTITY extends StandardEntity> {
 
     ENTITY create(ENTITY t);
 
-    Optional<ENTITY> find(long id);
+    Optional<ENTITY> find(Long id);
 
     List<ENTITY> findAllBy(Optional<Page> page);
 
@@ -24,6 +24,6 @@ public interface StandardRepository<ENTITY extends StandardEntity> {
 
     void delete(ENTITY t);
 
-    void delete(long id);
+    void delete(Long id);
 
 }

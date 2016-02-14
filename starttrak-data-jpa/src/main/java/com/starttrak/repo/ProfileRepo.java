@@ -1,9 +1,8 @@
 package com.starttrak.repo;
 
 import com.starttrak.common.SocNetwork;
-import com.starttrak.jpa.NetworkEntity;
-import com.starttrak.jpa.ProfileEntity;
-import com.starttrak.jpa.UserEntity;
+import com.starttrak.jpa.*;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,6 +14,8 @@ import java.util.*;
  */
 @RequestScoped
 public class ProfileRepo extends AbstractRepository<ProfileEntity> {
+
+    private final static Logger logger = Logger.getLogger(ProfileRepo.class);
 
     @Override
     public Class<ProfileEntity> getEntityClass() {
@@ -43,11 +44,15 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     private IndustryRepo industryRepo;
 
     @Transactional(Transactional.TxType.REQUIRED)
-    private ProfileEntity create(Long networkId, String email, String firstName, String lastName,
-                                 Optional<String> position,
-                                 Optional<String> company,
-                                 Optional<String> pictureUrl,
-                                 String appKey, UserEntity user) {
+    private ProfileEntity createByLabels(Long networkId, String email, String firstName, String lastName,
+                                         Optional<String> position,
+                                         Optional<String> company,
+                                         Optional<String> pictureUrl,
+                                         Optional<String> cityLabel,
+                                         Optional<String> regionLabel,
+                                         Optional<String> countryLabel,
+                                         String appKey, UserEntity user) {
+        logger.info("geo -> " + cityLabel + ", " + regionLabel + ", " + countryLabel);
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
@@ -59,6 +64,72 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 //        newProfile.setCompanyLabel(company.get());
         pictureUrl.ifPresent(newProfile::setPhotoUrl);
 //        newProfile.setPhotoUrl(pictureUrl.get());
+        //geo
+        cityLabel.ifPresent(newProfile::setCityLabel);
+        regionLabel.ifPresent(label ->{
+            Optional<RegionEntity> region = regionRepo.findByLabel(label);
+            region.ifPresent(r -> {
+                newProfile.setRegion(r);
+                newProfile.setRegionLabel(r.getLabel());
+            });
+        });
+        countryLabel.ifPresent(label ->{
+            Optional<CountryEntity> country = countryRepo.findByLabel(label);
+            country.ifPresent(c -> {
+                newProfile.setCountry(c);
+                newProfile.setCountryLabel(c.getLabel());
+            });
+        });
+        //-=-
+        newProfile.setUser(user);
+        newProfile.setNetwork(network);
+        newProfile.setNetworkToken(appKey);
+        newProfile.setLastLogin(new Date());
+        return create(newProfile);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public ProfileEntity createByIds(Long networkId, String email, String firstName, String lastName,
+                                     Optional<Long> positionId,
+                                     Optional<String> company,
+                                     Optional<String> pictureUrl,
+                                     Optional<String> cityName,
+                                     Optional<Long> regionId,
+                                     Optional<Long> countryId,
+                                     String appKey, UserEntity user) {
+        NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
+        ProfileEntity newProfile = new ProfileEntity();
+        newProfile.setEmail(email);
+        newProfile.setFirstName(firstName);
+        newProfile.setLastName(lastName);
+
+        positionId.ifPresent(id->{
+                    PositionEntity position = positionRepo.find(id).
+                            orElseThrow(IllegalArgumentException::new);
+                    newProfile.setPosition(position);
+                    newProfile.setPositionLabel(position.getLabel());
+                }
+        );
+
+        company.ifPresent(newProfile::setCompanyLabel);
+//        newProfile.setCompanyLabel(company.get());
+        pictureUrl.ifPresent(newProfile::setPhotoUrl);
+//        newProfile.setPhotoUrl(pictureUrl.get());
+        //geo
+        cityName.ifPresent(newProfile::setCityLabel);
+        regionId.ifPresent(id -> {
+            RegionEntity region = regionRepo.find(id).
+                    orElseThrow(IllegalArgumentException::new);
+            newProfile.setRegion(region);
+            newProfile.setRegionLabel(region.getLabel());
+        });
+        countryId.ifPresent(id -> {
+            CountryEntity country = countryRepo.find(id).
+                    orElseThrow(IllegalArgumentException::new);
+            newProfile.setCountry(country);
+            newProfile.setCountryLabel(country.getLabel());
+        });
+        //-=-
         newProfile.setUser(user);
         newProfile.setNetwork(network);
         newProfile.setNetworkToken(appKey);
@@ -157,17 +228,21 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         return findBy(getBuilder().equal(getFrom(Operation.select).get("networkToken"), ownSessionId));
     }
 
-    @Transactional(Transactional.TxType.REQUIRED)
-    public ProfileEntity createSimple(long networkId, String email, String firstName, String lastName,
-                                      String appKey, UserEntity user) {
-        return create(networkId, email, firstName, lastName, null, null, null, appKey, user);
-    }
+//    @Transactional(Transactional.TxType.REQUIRED)
+//    public ProfileEntity createSimple(long networkId, String email, String firstName, String lastName,
+//                                      String appKey, UserEntity user) {
+//        return create(networkId, email, firstName, lastName, null, null, null,
+//                null, null, null, appKey, user);
+//    }
 
     @Transactional(Transactional.TxType.REQUIRED)
     public String updateSocialProfile(SocNetwork network, String email, String firstName, String lastName,
                                       Optional<String> position,
                                       Optional<String> company,
                                       Optional<String> pictureUrl,
+                                      Optional<String> cityName,
+                                      Optional<String> region,
+                                      Optional<String> country,
                                       String appKey) {
         Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(network, email);
         UserEntity user; // we are trying to define current user
@@ -180,14 +255,15 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                 // create an user for starttrak
                 user = userRepo.create((long) network.getCode(), email, "empty_password", "registered by social network");
                 // create the starttrak profile
-                create((long) SocNetwork.STTR.getCode(), email, firstName, lastName,
+                createByLabels((long) SocNetwork.STTR.getCode(), email, firstName, lastName,
                         position, company,
-                        pictureUrl,
+                        pictureUrl, cityName, region, country,
                         user.getOwnSessionId(), user);
             }
             // create linkedin profile
-            create((long) network.getCode(), email, firstName, lastName, position, company,
-                    pictureUrl, appKey, user);
+            createByLabels((long) network.getCode(), email, firstName, lastName, position, company,
+                    pictureUrl, cityName, region, country,
+                    appKey, user);
             // -=-=-=-
         } else { // we have already linkedin profile
             linkedinProfile.get().setNetworkToken(appKey);

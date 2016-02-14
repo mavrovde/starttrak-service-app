@@ -4,6 +4,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import org.jboss.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -20,11 +21,13 @@ import java.util.Optional;
 @RequestScoped
 public class LinkedinClient implements SocialNetworkClient {
 
+    private final static Logger logger = Logger.getLogger(LinkedinClient.class);
+
     @Override
     public SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException {
         String textProfile = getJsonProfileByAccessToken(accessToken);
-        Object jsonParsed = JSONValue.parse(textProfile);
-        JSONObject jsonProfile = (JSONObject) jsonParsed;
+        Object parsedProfile = JSONValue.parse(textProfile);
+        JSONObject jsonProfile = (JSONObject) parsedProfile;
         // -=-=-=-
         String firstName = jsonProfile.get("firstName").toString();
         String lastName = jsonProfile.get("lastName").toString();
@@ -42,10 +45,24 @@ public class LinkedinClient implements SocialNetworkClient {
         }
 
         String pictures = jsonProfile.get("pictureUrls").toString();
-        Object picturesParsed = JSONValue.parse(pictures);
-        JSONObject jsonPictures = (JSONObject) picturesParsed;
+        Object parsedPictures = JSONValue.parse(pictures);
+        JSONObject jsonPictures = (JSONObject) parsedPictures;
         JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
         String pictureUrl = pictureUrls.stream().findAny().get().toString();
+
+        //-=-=-=- location
+        String location = jsonProfile.get("location").toString();
+        JSONObject jsonLocation = (JSONObject) JSONValue.parse(location);
+        logger.info("json location = " + jsonLocation);
+        String fullName = jsonLocation.get("name").toString();
+        String[] fullNames = fullName.split(",");
+        String cityName = null;
+        String countryLabel = null;
+        if (fullNames.length > 1) {
+            cityName = fullNames[0].trim();
+            countryLabel = fullNames[1].trim();
+        }
+        //-=-=-=-
 
         return LinkedinProfile.createNew(firstName, lastName, emailAddress,
                 Optional.ofNullable(position),
@@ -54,9 +71,9 @@ public class LinkedinClient implements SocialNetworkClient {
                 Optional.ofNullable(company),
                 Optional.ofNullable(null)/*sizes*/,
                 Optional.ofNullable(pictureUrl),
-                Optional.ofNullable(null)/*city*/,
+                Optional.ofNullable(cityName)/*city*/,
                 Optional.ofNullable(null)/*region*/,
-                Optional.ofNullable(null/*country*/));
+                Optional.ofNullable(countryLabel)/*country*/);
     }
 
     @Override

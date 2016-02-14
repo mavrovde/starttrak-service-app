@@ -52,8 +52,17 @@ public class ProfileRestService {
         logger.info("x-auth-id:" + ownSessionId + " <- create profile request");
         try {
             UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
-            profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
-                    request.getFirstName(), request.getLastName(),
+            profileRepo.createByIds((long)SocNetwork.STTR.getCode(),
+                    request.getEmail(),
+                    request.getFirstName(),
+                    request.getLastName(),
+                    Optional.ofNullable(request.getPositionId()),
+                    Optional.ofNullable(request.getCompanyLabel()),
+                    Optional.ofNullable(request.getPhotoUrl()),
+                    //geo
+                    Optional.ofNullable(request.getCityName()),
+                    Optional.ofNullable(request.getRegionId()),
+                    Optional.ofNullable(request.getCountryId()),
                     user.getOwnSessionId(), user);
             return new SuccessResponse<>(request);
         } catch (AuthenticationException ise) {
