@@ -102,7 +102,7 @@ public class ProfileRestService {
                 logger.info("the profile = " + dbProfile);
                 ProfileBean bnProfile = new ProfileBean(
                         dbProfile.getId(),
-                        1L,
+                        Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
                         dbProfile.getFirstName(), dbProfile.getLastName(),
                         dbProfile.getEmail(),
                         Optional.ofNullable(dbProfile.getPhone()).orElse(null),
@@ -126,8 +126,8 @@ public class ProfileRestService {
         List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
         return new SuccessResponse<>(profiles.stream().map(dbProfile ->
                         new ProfileBean(
-                                dbProfile.getId(),
-                                1L,
+                                dbProfile.getUser().getId(),
+                                Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
                                 dbProfile.getFirstName(), dbProfile.getLastName(),
                                 dbProfile.getEmail(),
                                 Optional.ofNullable(dbProfile.getPhone()).orElse(null),

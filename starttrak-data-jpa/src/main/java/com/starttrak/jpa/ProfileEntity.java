@@ -24,6 +24,14 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
     private Long id;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "title_id", nullable = true)
+    private TitleEntity title;
+
+    @Basic
+    @Column(name = "title_label", nullable = true)
+    private String titleLabel;
+
     @Basic
     @Column(name = "first_name", nullable = true)
     private String firstName;
@@ -136,6 +144,21 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         this.id = id;
     }
 
+    public TitleEntity getTitle() {
+        return title;
+    }
+
+    public void setTitle(TitleEntity title) {
+        this.title = title;
+    }
+
+    public String getTitleLabel() {
+        return titleLabel;
+    }
+
+    public void setTitleLabel(String titleLabel) {
+        this.titleLabel = titleLabel;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -350,7 +373,6 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -359,6 +381,8 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         if (sizesMinValue != that.sizesMinValue) return false;
         if (sizesMaxValue != that.sizesMaxValue) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (titleLabel != null ? !titleLabel.equals(that.titleLabel) : that.titleLabel != null) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
@@ -391,6 +415,8 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (titleLabel != null ? titleLabel.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
@@ -423,6 +449,8 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     public String toString() {
         return "ProfileEntity{" +
                 "id=" + id +
+                ", title=" + title +
+                ", titleLabel='" + titleLabel + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -451,4 +479,5 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
                 '}';
     }
 }
+
 

@@ -1,20 +1,31 @@
 package com.starttrak.jpa;
 
+import javax.persistence.*;
+
 /**
  * @author serg.mavrov@gmail.com
  */
+@Entity
+@Table(name = "titles", schema = "starttrak")
 public class TitleEntity extends AbstractEntity implements StandardEntity {
 
+    @TableGenerator(name = "entity_id_generator",
+            table = "entity_ids",
+            schema = "starttrak",
+            pkColumnName = "gen_name",
+            pkColumnValue = "title_entity",
+            valueColumnName = "gen_value",
+            initialValue = 0,
+            allocationSize = 10
+    )
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
     private Long id;
+
+    @Basic
+    @Column(name = "label")
     private String label;
-
-    public TitleEntity() {
-    }
-
-    public TitleEntity(Long id, String label) {
-        this.id = id;
-        this.label = label;
-    }
 
     @Override
     public Long getId() {

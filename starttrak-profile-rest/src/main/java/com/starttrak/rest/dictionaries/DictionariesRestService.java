@@ -44,6 +44,9 @@ public class DictionariesRestService {
     @Inject
     private SeniorityRepo seniorityRepo;
 
+    @Inject
+    private TitleRepo titleRepo;
+
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,11 +61,7 @@ public class DictionariesRestService {
             content.put("sizes", sizesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("industries", industriesRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             content.put("seniority", seniorityRepo.findAllBy(Page.OPTIONAL_DEFAULT));
-            content.put("titles", new ArrayList<>(
-                    Arrays.asList(new TitleEntity(1L, "Mr."),
-                            new TitleEntity(2L, "Ms."),
-                            new TitleEntity(3L, "Mrs."))
-            ));
+            content.put("titles", titleRepo.findAllBy(Page.OPTIONAL_DEFAULT));
             // -=-=-=-
             return new SuccessResponse<>(content);
         } catch (IllegalStateException ise) {
