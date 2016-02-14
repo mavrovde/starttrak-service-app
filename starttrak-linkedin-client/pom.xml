@@ -73,16 +73,9 @@
             <artifactId>weld-core</artifactId>
         </dependency>
 
-        <!-- wild fly-->
-
         <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-arquillian-container-remote</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-embedded</artifactId>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
         </dependency>
 
         <!-- shrink -->
