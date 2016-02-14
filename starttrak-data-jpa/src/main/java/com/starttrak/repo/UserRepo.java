@@ -2,6 +2,7 @@ package com.starttrak.repo;
 
 import com.starttrak.jpa.NetworkEntity;
 import com.starttrak.jpa.UserEntity;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,6 +16,8 @@ import java.util.UUID;
  */
 @RequestScoped
 public class UserRepo extends AbstractRepository<UserEntity> {
+
+    private final static Logger logger = Logger.getLogger(UserRepo.class);
 
     @Inject
     private NetworkRepo networkRepo;
@@ -39,7 +42,11 @@ public class UserRepo extends AbstractRepository<UserEntity> {
     }
 
     public Optional<UserEntity> findByOwnSessionId(String ownSessionId) {
-        return findBy(getBuilder().equal(getFrom(Operation.select).get("ownSessionId"), ownSessionId));
+        Optional<UserEntity> user = findBy(getBuilder().equal(getFrom(Operation.select).
+                get("ownSessionId"), ownSessionId));
+        logger.info("own-session-id:" + ownSessionId + " -> " +
+                user.orElse(new UserEntity()).getEmail());
+        return user;
     }
 
     public Optional<UserEntity> findByEmail(String email) {

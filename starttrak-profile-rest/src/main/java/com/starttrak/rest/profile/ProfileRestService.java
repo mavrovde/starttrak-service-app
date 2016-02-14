@@ -4,11 +4,10 @@ import com.starttrak.Ping;
 import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.*;
 import com.starttrak.repo.*;
+import com.starttrak.rest.auth.AuthenticationException;
 import com.starttrak.rest.request.ProfileBean;
-import com.starttrak.rest.response.AuthErrorResponse;
-import com.starttrak.rest.response.CodeErrorResponse;
-import com.starttrak.rest.response.StandardResponse;
-import com.starttrak.rest.response.SuccessResponse;
+import com.starttrak.rest.response.*;
+import org.hibernate.HibernateException;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -49,31 +48,50 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
-        UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(IllegalStateException::new);
-        profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
-                request.getFirstName(), request.getLastName(),
-                user.getOwnSessionId(), user);
-        return new SuccessResponse<>(request);
+        try {
+            UserEntity user = userRepo.findByOwnSessionId(ownSessionId).
+                    orElseThrow(AuthenticationException::new);
+            profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
+                    request.getFirstName(), request.getLastName(),
+                    user.getOwnSessionId(), user);
+            return new SuccessResponse<>(request);
+        } catch (AuthenticationException ise) {
+            logger.error(ise);
+            return new AuthErrorResponse();
+        } catch (HibernateException hr) {
+            logger.error(hr);
+            return new InternalErrorResponse(hr.getMessage());
+        }
     }
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
-        profileRepo.update(ownSessionId,
-                request.getFirstName(),
-                request.getLastName(),
-                request.getPhone(),
-                request.getPositionId(),
-                request.getCompanyLabel(),
-                request.getCountryId(),
-                request.getRegionId(),
-                request.getCityName(),
-                request.getSeniorityId(),
-                request.getSizeId(),
-                request.getIndustryId()
-                );
-        return new SuccessResponse<>(request);
+        try {
+            userRepo.findByOwnSessionId(ownSessionId).
+                    orElseThrow(AuthenticationException::new);
+            profileRepo.update(ownSessionId,
+                    request.getFirstName(),
+                    request.getLastName(),
+                    request.getPhone(),
+                    request.getPositionId(),
+                    request.getCompanyLabel(),
+                    request.getCountryId(),
+                    request.getRegionId(),
+                    request.getCityName(),
+                    request.getSeniorityId(),
+                    request.getSizeId(),
+                    request.getIndustryId()
+            );
+            return new SuccessResponse<>(request);
+        } catch (AuthenticationException ise) {
+            logger.error(ise);
+            return new AuthErrorResponse();
+        } catch (HibernateException hr) {
+            logger.error(hr);
+            return new InternalErrorResponse(hr.getMessage());
+        }
     }
 
     @GET
@@ -122,7 +140,7 @@ public class ProfileRestService {
     @Path("/search")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse search(SearchRequest conditions) {
+    public StandardResponse search(@HeaderParam("x-auth-id") String ownSessionId, SearchRequest conditions) {
         List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
         return new SuccessResponse<>(profiles.stream().map(dbProfile ->
                         new ProfileBean(
@@ -145,7 +163,7 @@ public class ProfileRestService {
     @Path("/meet")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse meet(MeetRequest meet) {
+    public StandardResponse meet(@HeaderParam("x-auth-id") String ownSessionId, MeetRequest meet) {
         return new SuccessResponse<>("success");
     }
 
