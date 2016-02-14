@@ -43,6 +43,7 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     @Transactional(Transactional.TxType.REQUIRED)
     private ProfileEntity create(Long networkId, String email, String firstName, String lastName,
                                  String position, String company, String appKey, UserEntity user) {
+        NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
         newProfile.setFirstName(firstName);
@@ -50,7 +51,6 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         newProfile.setPositionLabel(position);
         newProfile.setCompanyLabel(company);
         newProfile.setUser(user);
-        NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalStateException::new);
         newProfile.setNetwork(network);
         newProfile.setNetworkToken(appKey);
         newProfile.setLastLogin(new Date());
@@ -163,10 +163,5 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         }
         return user.getOwnSessionId();
     }
-
-    public List<ProfileEntity> findByConditions() {
-        return new ArrayList<>(); //todo:: provide some real data
-    }
-
 
 }
