@@ -64,12 +64,15 @@ state_id (only for USA)
     @XmlElement(name = "size_id", nillable = true)
     private Long sizeId;
 
+    @XmlElement(name = "soc_network_type")
+    private Long socNetworkId;
+
     public ProfileBean() {
     }
 
     public ProfileBean(Long id, Long titleId, String firstName, String lastName, String email, String phone, Long countryId,
                        Long regionId, String cityName, String companyLabel, Long positionId, Long industryId,
-                       Long seniorityId, Long sizeId) {
+                       Long seniorityId, Long sizeId, Long socNetworkId) {
         this.id = id;
         this.titleId = titleId;
         this.firstName = firstName;
@@ -84,6 +87,7 @@ state_id (only for USA)
         this.industryId = industryId;
         this.seniorityId = seniorityId;
         this.sizeId = sizeId;
+        this.socNetworkId = socNetworkId;
     }
 
     public Long getId() {
@@ -198,10 +202,16 @@ state_id (only for USA)
         this.sizeId = sizeId;
     }
 
+    public Long getSocNetworkId() {
+        return socNetworkId;
+    }
+
+    public void setSocNetworkId(Long socNetworkId) {
+        this.socNetworkId = socNetworkId;
+    }
+
     @Override
     public boolean equals(Object o) {
-
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -220,7 +230,8 @@ state_id (only for USA)
         if (positionId != null ? !positionId.equals(that.positionId) : that.positionId != null) return false;
         if (industryId != null ? !industryId.equals(that.industryId) : that.industryId != null) return false;
         if (seniorityId != null ? !seniorityId.equals(that.seniorityId) : that.seniorityId != null) return false;
-        return !(sizeId != null ? !sizeId.equals(that.sizeId) : that.sizeId != null);
+        if (sizeId != null ? !sizeId.equals(that.sizeId) : that.sizeId != null) return false;
+        return !(socNetworkId != null ? !socNetworkId.equals(that.socNetworkId) : that.socNetworkId != null);
 
     }
 
@@ -240,6 +251,7 @@ state_id (only for USA)
         result = 31 * result + (industryId != null ? industryId.hashCode() : 0);
         result = 31 * result + (seniorityId != null ? seniorityId.hashCode() : 0);
         result = 31 * result + (sizeId != null ? sizeId.hashCode() : 0);
+        result = 31 * result + (socNetworkId != null ? socNetworkId.hashCode() : 0);
         return result;
     }
 
@@ -260,6 +272,7 @@ state_id (only for USA)
                 ", industryId=" + industryId +
                 ", seniorityId=" + seniorityId +
                 ", sizeId=" + sizeId +
+                ", socNetworkId=" + socNetworkId +
                 '}';
     }
 }

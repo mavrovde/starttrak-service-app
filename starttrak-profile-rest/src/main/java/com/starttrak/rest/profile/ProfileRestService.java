@@ -141,7 +141,8 @@ public class ProfileRestService {
                             Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
                             Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
                             Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                            Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
+                            Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
+                            dbProfile.getUser().getSourceNetwork().getId());
                     return new SuccessResponse<>(bnProfile);
                 }
             }
@@ -173,7 +174,8 @@ public class ProfileRestService {
                                     Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
                                     Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
                                     Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId())
+                                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
+                                    dbProfile.getUser().getSourceNetwork().getId())
             ).collect(Collectors.toList()));
         } catch (AuthenticationException ise) {
             logger.error(ise);
