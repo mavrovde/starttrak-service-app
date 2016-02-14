@@ -95,7 +95,7 @@ public class AuthRestService {
                                         profile.getPictureUrl(),
                                         regRequest.getAccessToken())));
                     } catch (SocialNetworkException sne) {
-                        return new CodeErrorResponse(1006, "social network token issue");
+                        return new CodeErrorResponse(1003, "social network token issue");
                     }
                 }
             case FCBK: //facebook

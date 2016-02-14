@@ -11,6 +11,7 @@ import org.json.simple.JSONValue;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.Optional;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -28,6 +29,7 @@ public class LinkedinClient implements SocialNetworkClient {
         String firstName = jsonProfile.get("firstName").toString();
         String lastName = jsonProfile.get("lastName").toString();
         String emailAddress = jsonProfile.get("emailAddress").toString();
+
         String[] positionCompany = jsonProfile.get("headline").toString().split(" at ");
         String position;
         String company;
@@ -38,14 +40,23 @@ public class LinkedinClient implements SocialNetworkClient {
             position = positionCompany[0];
             company = "unknown";
         }
+
         String pictures = jsonProfile.get("pictureUrls").toString();
         Object picturesParsed = JSONValue.parse(pictures);
         JSONObject jsonPictures = (JSONObject) picturesParsed;
         JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
         String pictureUrl = pictureUrls.stream().findAny().get().toString();
 
-        return LinkedinProfile.createNew(firstName, lastName, emailAddress, position,
-                company, pictureUrl);
+        return LinkedinProfile.createNew(firstName, lastName, emailAddress,
+                Optional.ofNullable(position),
+                Optional.ofNullable(null)/*industry*/,
+                Optional.ofNullable(null)/*seniority*/,
+                Optional.ofNullable(company),
+                Optional.ofNullable(null)/*sizes*/,
+                Optional.ofNullable(pictureUrl),
+                Optional.ofNullable(null)/*city*/,
+                Optional.ofNullable(null)/*region*/,
+                Optional.ofNullable(null/*country*/));
     }
 
     @Override
@@ -90,10 +101,5 @@ public class LinkedinClient implements SocialNetworkClient {
         String[] clearAccessToken = accessTokenParts[1].split("\"");
         return clearAccessToken[1];
     }
-
-//    @Override
-//    public SocialNetworkProfile getProfileByCode(String code) {
-//        return getProfileByAccessToken(getAccessToken(code));
-//    }
 
 }

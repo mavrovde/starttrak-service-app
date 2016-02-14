@@ -22,9 +22,10 @@ public class LinkedClientTest {
     private final static Logger logger = Logger.getLogger(LinkedClientTest.class);
 
     private final static String ACCESS_TOKEN =
-            "AQXo8SHNT4VU7pS18ohNh5ZZJcg3GIKu035cdFopFPIDqw2Lfcl50ub84QxwLHW2nk" +
-                    "PGOuXUeTcpfg-Q_sRWXzmOgPEarR4J4Kkz8KVHxZioiGxxkx20oPCeJZGdDbueHPK60CtkL" +
-                    "fbg9HK5cGcxLJyOZSjqXn1bm4R1MqS4rwb6V6lAJzs";
+            "AQVz3r_gUlFS_vGFXDXbUkYbCwhuDxPwPT2e9S3dYTtde8mDqQAaP1a8IWQ" +
+                    "ekdWfRYGHll7__yklyo033NEweAQd6hZGIfHxICC2bB-bgmAC7k" +
+                    "tmzYTbd_qo9adhfg6Ug3W59pX3GD2fhjrQcJPYdev8qYlYIjluD" +
+                    "Qaa1c9ugGm-hA4Al6A";
 
     @Deployment
     public static JavaArchive getJar() {

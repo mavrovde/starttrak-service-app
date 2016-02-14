@@ -44,16 +44,21 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
     @Transactional(Transactional.TxType.REQUIRED)
     private ProfileEntity create(Long networkId, String email, String firstName, String lastName,
-                                 String position, String company, String pictureUrl,
+                                 Optional<String> position,
+                                 Optional<String> company,
+                                 Optional<String> pictureUrl,
                                  String appKey, UserEntity user) {
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
         newProfile.setFirstName(firstName);
         newProfile.setLastName(lastName);
-        newProfile.setPositionLabel(position);
-        newProfile.setCompanyLabel(company);
-        newProfile.setPhotoUrl(pictureUrl);
+        position.ifPresent(newProfile::setPositionLabel);
+//        newProfile.setPositionLabel(position.get());
+        company.ifPresent(newProfile::setCompanyLabel);
+//        newProfile.setCompanyLabel(company.get());
+        pictureUrl.ifPresent(newProfile::setPhotoUrl);
+//        newProfile.setPhotoUrl(pictureUrl.get());
         newProfile.setUser(user);
         newProfile.setNetwork(network);
         newProfile.setNetworkToken(appKey);
@@ -160,7 +165,10 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
 
     @Transactional(Transactional.TxType.REQUIRED)
     public String updateSocialProfile(SocNetwork network, String email, String firstName, String lastName,
-                                      String position, String company, String pictureUrl, String appKey) {
+                                      Optional<String> position,
+                                      Optional<String> company,
+                                      Optional<String> pictureUrl,
+                                      String appKey) {
         Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(network, email);
         UserEntity user; // we are trying to define current user
         if (!linkedinProfile.isPresent()) { //there is no linkedin profile
@@ -172,8 +180,10 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                 // create an user for starttrak
                 user = userRepo.create((long) network.getCode(), email, "empty_password", "registered by social network");
                 // create the starttrak profile
-                create((long) SocNetwork.STTR.getCode(), email, firstName, lastName, position, company,
-                        pictureUrl, user.getOwnSessionId(), user);
+                create((long) SocNetwork.STTR.getCode(), email, firstName, lastName,
+                        position, company,
+                        pictureUrl,
+                        user.getOwnSessionId(), user);
             }
             // create linkedin profile
             create((long) network.getCode(), email, firstName, lastName, position, company,

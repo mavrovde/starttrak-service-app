@@ -1,5 +1,7 @@
 package com.starttrak.social;
 
+import java.util.Optional;
+
 /**
  * @author serg.mavrov@gmail.com
  */
@@ -11,10 +13,20 @@ public interface SocialNetworkProfile {
 
     String getEmailAddress();
 
-    String getPosition();
+    Optional<String> getPosition();
 
-    String getCompany();
+    Optional<String> getIndustry();
 
-    String getPictureUrl();
+    Optional<String> getSizes();
+
+    Optional<String> getCompany();
+
+    Optional<String> getPictureUrl();
+
+    Optional<String> getCountry();
+
+    Optional<String> getRegion();
+
+    Optional<String> getCityName();
 
 }
