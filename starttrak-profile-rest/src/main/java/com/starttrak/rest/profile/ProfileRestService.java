@@ -100,7 +100,7 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse get(@HeaderParam("x-auth-id") String hdrSessionId,
                                 @QueryParam("session_id") String prmSessionId) {
-        logger.info("x-auth-id:" + hdrSessionId + "/" + prmSessionId + " <- get profile request");
+        logger.info("with " + hdrSessionId + "/" + prmSessionId + " <- get profile request");
         Optional.ofNullable(hdrSessionId).ifPresent(id ->
                 logger.info("the header found {x-auth-id:" + id + "}"));
         Optional.ofNullable(prmSessionId).ifPresent(id ->
