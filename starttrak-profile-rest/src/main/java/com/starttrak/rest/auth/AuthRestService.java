@@ -5,7 +5,7 @@ import com.starttrak.jpa.ProfileEntity;
 import com.starttrak.jpa.UserEntity;
 import com.starttrak.repo.ProfileRepo;
 import com.starttrak.repo.UserRepo;
-import com.starttrak.rest.request.LoginRequest;
+import com.starttrak.rest.profile.LoginRequest;
 import com.starttrak.rest.response.CodeErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;

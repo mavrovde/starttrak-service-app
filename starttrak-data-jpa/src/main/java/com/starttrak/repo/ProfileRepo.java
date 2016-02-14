@@ -125,6 +125,11 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
         ));
     }
 
+    public List<ProfileEntity> findAllByNetwork(Optional<Page> page, SocNetwork network) {
+        return findAllBy(page, getBuilder().equal(getFrom(Operation.select).get("network").get("id"),
+                (long) network.getCode()));
+    }
+
     public Optional<ProfileEntity> findByOwnSessionId(String ownSessionId) {
         return findBy(getBuilder().equal(getFrom(Operation.select).get("networkToken"), ownSessionId));
     }

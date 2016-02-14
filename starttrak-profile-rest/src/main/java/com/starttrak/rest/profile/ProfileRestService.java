@@ -5,7 +5,6 @@ import com.starttrak.common.SocNetwork;
 import com.starttrak.jpa.*;
 import com.starttrak.repo.*;
 import com.starttrak.rest.auth.AuthenticationException;
-import com.starttrak.rest.request.ProfileBean;
 import com.starttrak.rest.response.*;
 import org.hibernate.HibernateException;
 import org.jboss.logging.Logger;
@@ -159,7 +158,8 @@ public class ProfileRestService {
         logger.info("x-auth-id:" + ownSessionId + " <- search request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
-            List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
+            List<ProfileEntity> profiles = profileRepo.
+                    findAllByNetwork(Page.OPTIONAL_DEFAULT, SocNetwork.STTR);
             return new SuccessResponse<>(profiles.stream().map(dbProfile ->
                             new ProfileBean(
                                     dbProfile.getUser().getId(),

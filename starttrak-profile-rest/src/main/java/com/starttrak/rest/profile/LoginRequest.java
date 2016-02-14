@@ -1,4 +1,4 @@
-package com.starttrak.rest.request;
+package com.starttrak.rest.profile;
 
 import javax.xml.bind.annotation.XmlElement;
 
