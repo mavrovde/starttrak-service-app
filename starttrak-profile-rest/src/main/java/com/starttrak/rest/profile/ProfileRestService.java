@@ -49,8 +49,7 @@ public class ProfileRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         try {
-            UserEntity user = userRepo.findByOwnSessionId(ownSessionId).
-                    orElseThrow(AuthenticationException::new);
+            UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.createSimple((long) SocNetwork.STTR.getCode(), user.getEmail(),
                     request.getFirstName(), request.getLastName(),
                     user.getOwnSessionId(), user);
@@ -69,8 +68,7 @@ public class ProfileRestService {
     @Consumes(MediaType.APPLICATION_JSON)
     public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         try {
-            userRepo.findByOwnSessionId(ownSessionId).
-                    orElseThrow(AuthenticationException::new);
+            userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.update(ownSessionId,
                     request.getFirstName(),
                     request.getLastName(),
@@ -98,42 +96,54 @@ public class ProfileRestService {
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse get(@HeaderParam("x-auth-id") String hdrSessionId,
                                 @QueryParam("session_id") String prmSessionId) {
-        logger.info("the header found {x-auth-id:" + hdrSessionId + "}");
-        logger.info("the parameter found {x-auth-id:" + prmSessionId + "}");
+
+        Optional.ofNullable(hdrSessionId).ifPresent(id ->
+                logger.info("the header found {x-auth-id:" + id + "}"));
+        Optional.ofNullable(prmSessionId).ifPresent(id ->
+                logger.info("the parameter found {x-auth-id:" + id + "}"));
+
         //so will be found the st profile since only it has public session id
         String sessionId = hdrSessionId;
         if (sessionId == null) {
             sessionId = prmSessionId;
         }
         if (sessionId == null) {
+            logger.error("cannot identify the session - no header/parameter");
             return new AuthErrorResponse();
         }
-        Optional<UserEntity> user = userRepo.findByOwnSessionId(sessionId);
-        if (!user.isPresent()) {
-            return new AuthErrorResponse();
-        } else {
-            Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(sessionId);
-            if (!profile.isPresent()) {
-                return new CodeErrorResponse(1006, "the profile does not exists");
+        try {
+            Optional<UserEntity> user = userRepo.findByOwnSessionId(sessionId);
+            if (!user.isPresent()) {
+                logger.error("cannot identify an user by x-auth-id:" + sessionId);
+                return new AuthErrorResponse();
             } else {
-                ProfileEntity dbProfile = profile.get();
-                logger.info("the profile = " + dbProfile);
-                ProfileBean bnProfile = new ProfileBean(
-                        dbProfile.getId(),
-                        Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
-                        dbProfile.getFirstName(), dbProfile.getLastName(),
-                        dbProfile.getEmail(),
-                        Optional.ofNullable(dbProfile.getPhone()).orElse(null),
-                        Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
-                        Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
-                        dbProfile.getCityLabel(),
-                        dbProfile.getCompanyLabel(),
-                        Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
-                        Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
-                        Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                        Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
-                return new SuccessResponse<>(bnProfile);
+                Optional<ProfileEntity> profile = profileRepo.findByOwnSessionId(sessionId);
+                if (!profile.isPresent()) {
+                    logger.warn("cannot find any profile for an user by x-auth-id:" + sessionId);
+                    return new CodeErrorResponse(1006, "the profile does not exists");
+                } else {
+                    ProfileEntity dbProfile = profile.get();
+                    logger.info("the profile found and will be converted -> " + dbProfile);
+                    ProfileBean bnProfile = new ProfileBean(
+                            dbProfile.getId(),
+                            Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
+                            dbProfile.getFirstName(), dbProfile.getLastName(),
+                            dbProfile.getEmail(),
+                            Optional.ofNullable(dbProfile.getPhone()).orElse(null),
+                            Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                            dbProfile.getCityLabel(),
+                            dbProfile.getCompanyLabel(),
+                            Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId());
+                    return new SuccessResponse<>(bnProfile);
+                }
             }
+        } catch (HibernateException hr) {
+            logger.error(hr);
+            return new InternalErrorResponse(hr.getMessage());
         }
     }
 
@@ -141,30 +151,49 @@ public class ProfileRestService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse search(@HeaderParam("x-auth-id") String ownSessionId, SearchRequest conditions) {
-        List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
-        return new SuccessResponse<>(profiles.stream().map(dbProfile ->
-                        new ProfileBean(
-                                dbProfile.getUser().getId(),
-                                Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
-                                dbProfile.getFirstName(), dbProfile.getLastName(),
-                                dbProfile.getEmail(),
-                                Optional.ofNullable(dbProfile.getPhone()).orElse(null),
-                                Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
-                                Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
-                                dbProfile.getCityLabel(),
-                                dbProfile.getCompanyLabel(),
-                                Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
-                                Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
-                                Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                                Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId())
-        ).collect(Collectors.toList()));
+        try {
+            userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
+            List<ProfileEntity> profiles = profileRepo.findAllBy(Page.OPTIONAL_DEFAULT);
+            return new SuccessResponse<>(profiles.stream().map(dbProfile ->
+                            new ProfileBean(
+                                    dbProfile.getUser().getId(),
+                                    Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
+                                    dbProfile.getFirstName(), dbProfile.getLastName(),
+                                    dbProfile.getEmail(),
+                                    Optional.ofNullable(dbProfile.getPhone()).orElse(null),
+                                    Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                                    Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                                    dbProfile.getCityLabel(),
+                                    dbProfile.getCompanyLabel(),
+                                    Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                                    Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                                    Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId())
+            ).collect(Collectors.toList()));
+        } catch (AuthenticationException ise) {
+            logger.error(ise);
+            return new AuthErrorResponse();
+        } catch (HibernateException hr) {
+            logger.error(hr);
+            return new InternalErrorResponse(hr.getMessage());
+        }
     }
 
     @Path("/meet")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse meet(@HeaderParam("x-auth-id") String ownSessionId, MeetRequest meet) {
-        return new SuccessResponse<>("success");
+        try {
+            userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
+            meet.getIds().stream().forEach(userRepo::find);
+            return new SuccessResponse<>("success");
+        } catch (AuthenticationException ise) {
+            logger.error(ise);
+            return new AuthErrorResponse();
+        } catch (HibernateException hr) {
+            logger.error(hr);
+            return new InternalErrorResponse(hr.getMessage());
+        }
     }
 
 }
