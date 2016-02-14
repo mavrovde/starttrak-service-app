@@ -7,7 +7,7 @@ public interface SocialNetworkClient {
 
     SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException;
 
-//    SocialNetworkProfile getProfileByCode(String code);
+    String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException;
 
     String getAccessToken(String code);
 }

@@ -15,4 +15,6 @@ public interface SocialNetworkProfile {
 
     String getCompany();
 
+    String getPictureUrl();
+
 }

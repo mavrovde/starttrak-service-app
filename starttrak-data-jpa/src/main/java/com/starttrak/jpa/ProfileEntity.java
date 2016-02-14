@@ -120,6 +120,10 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
     @Column(name = "sizes_max_value", nullable = true)
     private int sizesMaxValue;
 
+    @Basic
+    @Column(name = "photo_url", nullable = true)
+    private String photoUrl;
+
     @ManyToOne(optional = true, cascade = CascadeType.MERGE)
     @JoinColumn(name = "network_id", nullable = true)
     private NetworkEntity network;
@@ -347,6 +351,14 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         this.sizes = sizes;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     public NetworkEntity getNetwork() {
         return network;
     }
@@ -405,6 +417,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
             return false;
         if (sizes != null ? !sizes.equals(that.sizes) : that.sizes != null) return false;
         if (sizesLabel != null ? !sizesLabel.equals(that.sizesLabel) : that.sizesLabel != null) return false;
+        if (photoUrl != null ? !photoUrl.equals(that.photoUrl) : that.photoUrl != null) return false;
         if (network != null ? !network.equals(that.network) : that.network != null) return false;
         if (networkToken != null ? !networkToken.equals(that.networkToken) : that.networkToken != null) return false;
         if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
@@ -438,6 +451,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
         result = 31 * result + (sizesLabel != null ? sizesLabel.hashCode() : 0);
         result = 31 * result + sizesMinValue;
         result = 31 * result + sizesMaxValue;
+        result = 31 * result + (photoUrl != null ? photoUrl.hashCode() : 0);
         result = 31 * result + (network != null ? network.hashCode() : 0);
         result = 31 * result + (networkToken != null ? networkToken.hashCode() : 0);
         result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
@@ -472,6 +486,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity {
                 ", sizesLabel='" + sizesLabel + '\'' +
                 ", sizesMinValue=" + sizesMinValue +
                 ", sizesMaxValue=" + sizesMaxValue +
+                ", photoUrl='" + photoUrl + '\'' +
                 ", network=" + network +
                 ", networkToken='" + networkToken + '\'' +
                 ", lastLogin=" + lastLogin +

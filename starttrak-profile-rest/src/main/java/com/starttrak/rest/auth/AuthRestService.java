@@ -83,11 +83,16 @@ public class AuthRestService {
                     ).getOwnSessionId()));
                 } else {
                     try {
-                        SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(regRequest.getAccessToken());
+                        SocialNetworkProfile profile = linkedinClient.getProfileByAccessToken(
+                                regRequest.getAccessToken());
                         return new SuccessResponse<>(new OwnSession(
-                                profileRepo.updateSocialProfile(SocNetwork.LNKD, profile.getEmailAddress(),
-                                        profile.getFirstName(), profile.getLastName(),
-                                        profile.getPosition(), profile.getCompany(),
+                                profileRepo.updateSocialProfile(SocNetwork.LNKD,
+                                        profile.getEmailAddress(),
+                                        profile.getFirstName(),
+                                        profile.getLastName(),
+                                        profile.getPosition(),
+                                        profile.getCompany(),
+                                        profile.getPictureUrl(),
                                         regRequest.getAccessToken())));
                     } catch (SocialNetworkException sne) {
                         return new CodeErrorResponse(1006, "social network token issue");

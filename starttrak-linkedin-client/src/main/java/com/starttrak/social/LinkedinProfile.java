@@ -10,19 +10,22 @@ public class LinkedinProfile implements SocialNetworkProfile {
     private String emailAddress;
     private String position;
     private String company;
+    private String pictureUrl;
 
     public static SocialNetworkProfile createNew(String firstName, String lastName, String emailAddress,
-                                                 String position, String company) {
+                                                 String position, String company, String pictureUrl) {
         return new LinkedinProfile(firstName, lastName, emailAddress,
-                position, company);
+                position, company, pictureUrl);
     }
 
-    private LinkedinProfile(String firstName, String lastName, String emailAddress, String position, String company) {
+    private LinkedinProfile(String firstName, String lastName, String emailAddress,
+                            String position, String company, String pictureUrl) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.position = position;
         this.company = company;
+        this.pictureUrl = pictureUrl;
     }
 
     @Override
@@ -69,9 +72,18 @@ public class LinkedinProfile implements SocialNetworkProfile {
         this.company = company;
     }
 
+
+    @Override
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -81,7 +93,8 @@ public class LinkedinProfile implements SocialNetworkProfile {
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
         if (emailAddress != null ? !emailAddress.equals(that.emailAddress) : that.emailAddress != null) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
-        return !(company != null ? !company.equals(that.company) : that.company != null);
+        if (company != null ? !company.equals(that.company) : that.company != null) return false;
+        return !(pictureUrl != null ? !pictureUrl.equals(that.pictureUrl) : that.pictureUrl != null);
 
     }
 
@@ -92,6 +105,7 @@ public class LinkedinProfile implements SocialNetworkProfile {
         result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0);
         result = 31 * result + (position != null ? position.hashCode() : 0);
         result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (pictureUrl != null ? pictureUrl.hashCode() : 0);
         return result;
     }
 
@@ -103,6 +117,7 @@ public class LinkedinProfile implements SocialNetworkProfile {
                 ", emailAddress='" + emailAddress + '\'' +
                 ", position='" + position + '\'' +
                 ", company='" + company + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
                 '}';
     }
 }

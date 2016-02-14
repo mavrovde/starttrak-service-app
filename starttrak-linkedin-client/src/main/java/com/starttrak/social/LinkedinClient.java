@@ -4,6 +4,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -20,18 +21,7 @@ public class LinkedinClient implements SocialNetworkClient {
 
     @Override
     public SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException {
-        Client client = Client.create();
-        WebResource webResource = client
-                .resource("https://api.linkedin.com/v1/people/~:(email-address,first-name,last-name,headline)?format=json");
-        ClientResponse getResponse = webResource.
-                header("Connection", "Keep-Alive").
-                header("Authorization", "Bearer " + accessToken).
-                accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        if (getResponse.getStatus() != 200) {
-            throw new SocialNetworkException("Failed to get the profile : " + getResponse.getStatus());
-        }
-        String textProfile = getResponse.getEntity(String.class);
-        // -=-=-=-
+        String textProfile = getJsonProfileByAccessToken(accessToken);
         Object jsonParsed = JSONValue.parse(textProfile);
         JSONObject jsonProfile = (JSONObject) jsonParsed;
         // -=-=-=-
@@ -48,7 +38,33 @@ public class LinkedinClient implements SocialNetworkClient {
             position = positionCompany[0];
             company = "unknown";
         }
-        return LinkedinProfile.createNew(firstName, lastName, emailAddress, position, company);
+        String pictures = jsonProfile.get("pictureUrls").toString();
+        Object picturesParsed = JSONValue.parse(pictures);
+        JSONObject jsonPictures = (JSONObject) picturesParsed;
+        JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
+        String pictureUrl = pictureUrls.stream().findAny().get().toString();
+
+        return LinkedinProfile.createNew(firstName, lastName, emailAddress, position,
+                company, pictureUrl);
+    }
+
+    @Override
+    public String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException {
+        Client client = Client.create();
+        WebResource webResource = client
+                .resource("https://api.linkedin.com/v1/people/~:" +
+                        "(email-address,first-name,last-name," +
+                        "headline,location,positions,industry," +
+                        "picture-urls::(original))" +
+                        "?format=json");
+        ClientResponse getResponse = webResource.
+                header("Connection", "Keep-Alive").
+                header("Authorization", "Bearer " + accessToken).
+                accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        if (getResponse.getStatus() != 200) {
+            throw new SocialNetworkException("Failed to get the profile : " + getResponse.getStatus());
+        }
+        return getResponse.getEntity(String.class);
     }
 
     @Override
