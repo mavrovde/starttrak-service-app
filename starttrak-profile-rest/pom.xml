@@ -56,6 +56,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.starttrak</groupId>
+            <artifactId>starttrak-facebook-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jboss.spec</groupId>
             <artifactId>jboss-javaee-7.0</artifactId>
             <type>pom</type>
@@ -130,7 +136,6 @@
             <version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
-
 
 
         <dependency>
