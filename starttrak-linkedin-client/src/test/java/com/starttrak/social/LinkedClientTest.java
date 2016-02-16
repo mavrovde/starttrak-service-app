@@ -21,13 +21,13 @@ public class LinkedClientTest {
     private final static Logger logger = Logger.getLogger(LinkedClientTest.class);
 
     private final static String SERGII_ACCESS_TOKEN =
-            "AQXEEdn5zXA1EL4LKRli5B2Hno5HYnWGjwn6tc1MNqn_rmQWqciHxYt3ZNk94kOUCcxUdiU_90E364oNXVVohNP-_NIqkOyTkUwuZ8BH51WVE_jPo2ho93OYDQVl822j1IrW7d3tr4QNzVD29m0hPsQBbtxGcRhxW3WF15CHpYuLGlTYbs8";
+            "AQX3kUGPK82yO4HLKYphRq2RTZIsqAA_zR-MkLQIWxyH__F1x5Z3PEfYNE1YFYLTYwzuieXP3PDvKs0IdujOGC3A53XWpE6IXLIkikqCEVTRxNAcsZ339PalYSH1tzSBDP0GuOdnK-jatueOUqIrWjyUZA3By9BCwS6e4rmJ_cFS1WskfMY";
 
-    private final static String DENIS_ACCESS_TOKEN =
-            "AQUMXQTBS6mxAH9I4-_HUArMQ_bsAKDRRYJ_R2criIDWgV_VfJhaHxQebZEO" +
-                    "tISWmtvzbaGJxI7rVtWmEpwjM2xPPFqEuHYgZSNnbLmvkMmkCi4w" +
-                    "btHlyGujdaCcvwqFpiSohRvTSh0ZAz_qEeK89QbzaL2-9g9oLZLIC" +
-                    "tnynySsYLkW4M4";
+//    private final static String DENIS_ACCESS_TOKEN =
+//            "AQUMXQTBS6mxAH9I4-_HUArMQ_bsAKDRRYJ_R2criIDWgV_VfJhaHxQebZEO" +
+//                    "tISWmtvzbaGJxI7rVtWmEpwjM2xPPFqEuHYgZSNnbLmvkMmkCi4w" +
+//                    "btHlyGujdaCcvwqFpiSohRvTSh0ZAz_qEeK89QbzaL2-9g9oLZLIC" +
+//                    "tnynySsYLkW4M4";
 
     @Deployment
     public static JavaArchive getJar() {
@@ -62,7 +62,7 @@ public class LinkedClientTest {
         assertNotNull(linkedinClient);
         String sergiiProfile = linkedinClient.getJsonProfileByAccessToken(SERGII_ACCESS_TOKEN);
         logger.info("the json profile is " + sergiiProfile);
-        String denisProfile = linkedinClient.getJsonProfileByAccessToken(DENIS_ACCESS_TOKEN);
-        logger.info("the json profile is " + denisProfile);
+//        String denisProfile = linkedinClient.getJsonProfileByAccessToken(DENIS_ACCESS_TOKEN);
+//        logger.info("the json profile is " + denisProfile);
     }
 }
