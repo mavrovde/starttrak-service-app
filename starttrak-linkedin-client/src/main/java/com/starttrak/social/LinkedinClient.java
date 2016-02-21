@@ -12,6 +12,7 @@ import org.json.simple.JSONValue;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -47,7 +48,10 @@ public class LinkedinClient implements SocialNetworkClient {
         Object parsedPictures = JSONValue.parse(pictures);
         JSONObject jsonPictures = (JSONObject) parsedPictures;
         JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
-        String pictureUrl = pictureUrls.stream().findAny().get().toString();
+        String pictureUrl = null;
+        if (pictureUrls != null && !pictureUrls.isEmpty()) {
+            pictureUrl = pictureUrls.stream().findAny().toString();
+        }
 
         //-=-=-=- location (geo)
         String location = jsonProfile.get("location").toString();
