@@ -52,7 +52,7 @@ public class ProfileRestService {
         logger.info("x-auth-id:" + ownSessionId + " <- create profile request");
         try {
             UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
-            profileRepo.createByIds((long)SocNetwork.STTR.getCode(),
+            profileRepo.createByIds(SocNetwork.STTR.getCode(),
                     user.getEmail(),
                     Optional.ofNullable(request.getFirstName()),
                     Optional.ofNullable(request.getLastName()),

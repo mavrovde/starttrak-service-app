@@ -1,26 +1,24 @@
 package com.starttrak.common;
 
-import java.util.Scanner;
-
 /**
  * @author serg.mavrov@gmail.com
  */
 public enum SocNetwork {
 
-    STTR(0, "LINKEDIN"),
-    FCBK(1, "FACEBOOK"),
-    LNKD(2, "LINKEDIN"),
-    XING(3, "XING");
+    STTR(0L, "LINKEDIN"),
+    FCBK(1L, "FACEBOOK"),
+    LNKD(2L, "LINKEDIN"),
+    XING(3L, "XING");
 
-    private int code;
+    private Long code;
     private String label;
 
-    SocNetwork(int code, String label) {
+    SocNetwork(Long code, String label) {
         this.code = code;
         this.label = label;
     }
 
-    public int getCode() {
+    public Long getCode() {
         return code;
     }
 

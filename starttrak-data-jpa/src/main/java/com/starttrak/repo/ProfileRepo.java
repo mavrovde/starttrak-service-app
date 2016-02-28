@@ -257,15 +257,16 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                 user = checkUser.get();
             } else {
                 // create an user for starttrak
-                user = userRepo.create((long) network.getCode(), email, "empty_password", "registered by social network");
+                user = userRepo.create(network.getCode(), email, "empty_password",
+                        "registered by social network");
                 // create the starttrak profile
-                createByLabels((long) SocNetwork.STTR.getCode(), email, firstName, lastName,
+                createByLabels(SocNetwork.STTR.getCode(), email, firstName, lastName,
                         position, company,
                         pictureUrl, cityName, region, country,
                         user.getOwnSessionId(), user);
             }
             // create linkedin profile
-            createByLabels((long) network.getCode(), email, firstName, lastName, position, company,
+            createByLabels(network.getCode(), email, firstName, lastName, position, company,
                     pictureUrl, cityName, region, country,
                     appKey, user);
             // -=-=-=-
