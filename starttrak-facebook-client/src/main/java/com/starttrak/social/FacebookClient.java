@@ -2,8 +2,11 @@ package com.starttrak.social;
 
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
+import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
+import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -24,6 +27,7 @@ public class FacebookClient implements SocialNetworkClient {
 
     @Override
     public SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException {
+        String textProfile = getJsonProfileByAccessToken(accessToken);
         return FacebookProfile.createNew(null, null, null,
                 Optional.ofNullable(null),
                 Optional.ofNullable(null)/*industry*/,
@@ -38,7 +42,17 @@ public class FacebookClient implements SocialNetworkClient {
 
     @Override
     public String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException {
-        return accessToken;
+        try {
+            OAuthClientRequest bearerClientRequest =
+                    new OAuthBearerClientRequest("https://graph.facebook.com/me")
+                            .setAccessToken(accessToken).buildQueryMessage();
+            OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+            return oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
+                    OAuthResourceResponse.class).getBody();
+        } catch (OAuthProblemException | OAuthSystemException e) {
+            logger.error("some issue with getting/saving facebook profile", e);
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override

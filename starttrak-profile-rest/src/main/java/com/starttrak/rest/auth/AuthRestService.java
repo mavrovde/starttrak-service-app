@@ -9,10 +9,7 @@ import com.starttrak.rest.profile.LoginRequest;
 import com.starttrak.rest.response.CodeErrorResponse;
 import com.starttrak.rest.response.StandardResponse;
 import com.starttrak.rest.response.SuccessResponse;
-import com.starttrak.social.Linkedin;
-import com.starttrak.social.SocialNetworkClient;
-import com.starttrak.social.SocialNetworkException;
-import com.starttrak.social.SocialNetworkProfile;
+import com.starttrak.social.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -36,6 +33,10 @@ public class AuthRestService {
     @Inject
     @Linkedin
     private SocialNetworkClient linkedinClient;
+
+    @Inject
+    @Facebook
+    private SocialNetworkClient facebookClient;
 
     @GET
     @Path("/validate")
@@ -102,7 +103,31 @@ public class AuthRestService {
                     }
                 }
             case FCBK: //facebook
-                throw new IllegalStateException("no network login implemented");
+                Optional<ProfileEntity> facebook = profileRepo.findByEmailNetwork(SocNetwork.FCBK, regRequest.getEmail());
+                if (facebook.isPresent()) {
+                    return new SuccessResponse<>(new OwnSession(userRepo.findByEmail(
+                            regRequest.getEmail()).orElseThrow(AuthenticationException::new
+                    ).getOwnSessionId()));
+                } else {
+                    try {
+                        SocialNetworkProfile profile = facebookClient.getProfileByAccessToken(
+                                regRequest.getAccessToken());
+                        return new SuccessResponse<>(new OwnSession(
+                                profileRepo.updateSocialProfile(SocNetwork.FCBK,
+                                        profile.getEmailAddress(),
+                                        profile.getFirstName(),
+                                        profile.getLastName(),
+                                        profile.getPosition(),
+                                        profile.getCompany(),
+                                        profile.getPictureUrl(),
+                                        profile.getCityName(),
+                                        profile.getRegion(),
+                                        profile.getCountry(),
+                                        regRequest.getAccessToken())));
+                    } catch (SocialNetworkException sne) {
+                        return new CodeErrorResponse(1003, "social network token issue");
+                    }
+                }
             case XING: //xing
                 throw new IllegalStateException("no network login implemented");
             default:

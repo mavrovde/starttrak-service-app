@@ -188,7 +188,7 @@ public abstract class DefaultProfile implements SocialNetworkProfile {
 
     @Override
     public String toString() {
-        return "LinkedinProfile{" +
+        return "SocialNetwork{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +

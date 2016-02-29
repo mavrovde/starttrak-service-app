@@ -31,11 +31,11 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
         if (code != null) {
-            String appKey = networkClient.getAccessToken(code);
+            String accessToken = networkClient.getAccessToken(code);
             //-=-=-=-
-            if (appKey != null) {
+            if (accessToken != null) {
                 try {
-                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(appKey);
+                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(accessToken);
                     response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
                             profileRepo.updateSocialProfile(
                                     SocNetwork.LNKD, profile.getEmailAddress(),
@@ -45,7 +45,7 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
                                     profile.getCityName(),
                                     profile.getRegion(),
                                     profile.getCountry(),
-                                    appKey));
+                                    accessToken));
                 } catch (SocialNetworkException e) {
                     logger.error("some issue with social network was registered", e);
                     throw new IllegalStateException(e);
