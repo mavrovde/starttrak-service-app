@@ -53,9 +53,9 @@ public class ProfileRestService {
         try {
             UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
             profileRepo.createByIds((long)SocNetwork.STTR.getCode(),
-                    request.getEmail(),
-                    request.getFirstName(),
-                    request.getLastName(),
+                    user.getEmail(),
+                    Optional.ofNullable(request.getFirstName()),
+                    Optional.ofNullable(request.getLastName()),
                     Optional.ofNullable(request.getPositionId()),
                     Optional.ofNullable(request.getCompanyLabel()),
                     Optional.ofNullable(request.getPhotoUrl()),

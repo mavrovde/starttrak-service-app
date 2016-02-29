@@ -44,7 +44,8 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     private IndustryRepo industryRepo;
 
     @Transactional(Transactional.TxType.REQUIRED)
-    private ProfileEntity createByLabels(Long networkId, String email, String firstName, String lastName,
+    private ProfileEntity createByLabels(Long networkId, String email,
+                                         String firstName, String lastName,
                                          Optional<String> position,
                                          Optional<String> company,
                                          Optional<String> pictureUrl,
@@ -52,7 +53,6 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                                          Optional<String> regionLabel,
                                          Optional<String> countryLabel,
                                          String appKey, UserEntity user) {
-        logger.info("geo -> " + cityLabel + ", " + regionLabel + ", " + countryLabel);
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
@@ -89,7 +89,9 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public ProfileEntity createByIds(Long networkId, String email, String firstName, String lastName,
+    public ProfileEntity createByIds(Long networkId, String email,
+                                     Optional<String> firstName,
+                                     Optional<String> lastName,
                                      Optional<Long> positionId,
                                      Optional<String> company,
                                      Optional<String> pictureUrl,
@@ -98,10 +100,12 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                                      Optional<Long> countryId,
                                      String appKey, UserEntity user) {
         NetworkEntity network = networkRepo.find(networkId).orElseThrow(IllegalArgumentException::new);
+
         ProfileEntity newProfile = new ProfileEntity();
         newProfile.setEmail(email);
-        newProfile.setFirstName(firstName);
-        newProfile.setLastName(lastName);
+
+        firstName.ifPresent(newProfile::setFirstName);
+        lastName.ifPresent(newProfile::setLastName);
 
         positionId.ifPresent(id->{
                     PositionEntity position = positionRepo.find(id).
