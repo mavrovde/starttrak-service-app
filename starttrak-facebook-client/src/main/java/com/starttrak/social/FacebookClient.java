@@ -12,6 +12,8 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.jboss.logging.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import javax.enterprise.context.RequestScoped;
 import java.util.Optional;
@@ -47,8 +49,15 @@ public class FacebookClient implements SocialNetworkClient {
                     new OAuthBearerClientRequest("https://graph.facebook.com/me")
                             .setAccessToken(accessToken).buildQueryMessage();
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
-            return oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
+            String jsonProfile = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
                     OAuthResourceResponse.class).getBody();
+            // {"name":"Sergii Mavrov","id":"1559934400987103"}
+            Object parsedProfile = JSONValue.parse(textProfile);
+            JSONObject jsonProfile = (JSONObject) parsedProfile;
+            // -=-=-=-
+            String firstName = jsonProfile.get("firstName").toString();
+            String lastName = jsonProfile.get("lastName").toString();
+            String emailAddress = jsonProfile.get("emailAddress").toString();
         } catch (OAuthProblemException | OAuthSystemException e) {
             logger.error("some issue with getting/saving facebook profile", e);
             throw new IllegalStateException(e);
