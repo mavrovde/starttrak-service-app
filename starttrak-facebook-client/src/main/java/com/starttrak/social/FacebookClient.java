@@ -48,7 +48,7 @@ public class FacebookClient implements SocialNetworkClient {
                 Optional.ofNullable(null)/*seniority*/,
                 Optional.ofNullable(null),
                 Optional.ofNullable(null)/*sizes*/,
-                Optional.ofNullable(null),
+                Optional.ofNullable(null), /*photo*/
                 Optional.ofNullable(null)/*city*/,
                 Optional.ofNullable(null)/*region*/,
                 Optional.ofNullable(null)/*country*/);
