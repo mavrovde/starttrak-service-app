@@ -1,0 +1,43 @@
+<web-app>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <servlet>
+        <servlet-name>FacebookAuthRequestServlet</servlet-name>
+        <servlet-class>com.starttrak.facebook.FacebookAuthRequestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FacebookAuthRequestServlet</servlet-name>
+        <url-pattern>/facebook-authorize</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FacebookAuthResponseServlet</servlet-name>
+        <servlet-class>com.starttrak.facebook.FacebookAuthResponseServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FacebookAuthResponseServlet</servlet-name>
+        <url-pattern>/facebook-auth-response</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>com.starttrak.http.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>
+
+
+

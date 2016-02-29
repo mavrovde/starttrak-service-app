@@ -248,9 +248,9 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                                       Optional<String> region,
                                       Optional<String> country,
                                       String appKey) {
-        Optional<ProfileEntity> linkedinProfile = findByEmailNetwork(network, email);
+        Optional<ProfileEntity> socNetworkProfile = findByEmailNetwork(network, email);
         UserEntity user; // we are trying to define current user
-        if (!linkedinProfile.isPresent()) { //there is no linkedin profile
+        if (!socNetworkProfile.isPresent()) { //there is no linkedin profile
             Optional<UserEntity> checkUser = userRepo.findByEmail(email);
             if (checkUser.isPresent()) {//the user with the same email has been found
                 // so take an user
@@ -270,10 +270,10 @@ public class ProfileRepo extends AbstractRepository<ProfileEntity> {
                     appKey, user);
             // -=-=-=-
         } else { // we have already linkedin profile
-            linkedinProfile.get().setNetworkToken(appKey);
-            linkedinProfile.get().setLastLogin(new Date());
-            update(linkedinProfile.get());
-            user = linkedinProfile.get().getUser();
+            socNetworkProfile.get().setNetworkToken(appKey);
+            socNetworkProfile.get().setLastLogin(new Date());
+            update(socNetworkProfile.get());
+            user = socNetworkProfile.get().getUser();
         }
         return user.getOwnSessionId();
     }
