@@ -38,6 +38,7 @@
         <module>starttrak-linkedin-client</module>
         <module>starttrak-linkedin-login</module>
         <module>starttrak-facebook-client</module>
+        <module>starttrak-facebook-login</module>
         <module>starttrak-profile-rest</module>
     </modules>
 
