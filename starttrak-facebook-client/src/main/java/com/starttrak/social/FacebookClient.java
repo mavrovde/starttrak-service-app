@@ -30,7 +30,19 @@ public class FacebookClient implements SocialNetworkClient {
     @Override
     public SocialNetworkProfile getProfileByAccessToken(String accessToken) throws SocialNetworkException {
         String textProfile = getJsonProfileByAccessToken(accessToken);
-        return FacebookProfile.createNew(null, null, null,
+//        {
+//                "id": "1395229297457615",
+//                    "first_name": "Sergii",
+//                    "last_name": "Mavrov",
+//                    "email": "serg.mavrov@icloud.com"
+//        }
+        Object parsedProfile = JSONValue.parse(textProfile);
+        JSONObject jsonProfile = (JSONObject) parsedProfile;
+        // -=-=-=-
+        String firstName = jsonProfile.get("first_name").toString();
+        String lastName = jsonProfile.get("last_name").toString();
+        String emailAddress = jsonProfile.get("email").toString();
+        return FacebookProfile.createNew(firstName, lastName, emailAddress,
                 Optional.ofNullable(null),
                 Optional.ofNullable(null)/*industry*/,
                 Optional.ofNullable(null)/*seniority*/,
@@ -46,18 +58,11 @@ public class FacebookClient implements SocialNetworkClient {
     public String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException {
         try {
             OAuthClientRequest bearerClientRequest =
-                    new OAuthBearerClientRequest("https://graph.facebook.com/me")
+                    new OAuthBearerClientRequest("https://graph.facebook.com/me?fields=id,first_name,last_name,email")
                             .setAccessToken(accessToken).buildQueryMessage();
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
-            String jsonProfile = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
+            return oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
                     OAuthResourceResponse.class).getBody();
-            // {"name":"Sergii Mavrov","id":"1559934400987103"}
-            Object parsedProfile = JSONValue.parse(textProfile);
-            JSONObject jsonProfile = (JSONObject) parsedProfile;
-            // -=-=-=-
-            String firstName = jsonProfile.get("firstName").toString();
-            String lastName = jsonProfile.get("lastName").toString();
-            String emailAddress = jsonProfile.get("emailAddress").toString();
         } catch (OAuthProblemException | OAuthSystemException e) {
             logger.error("some issue with getting/saving facebook profile", e);
             throw new IllegalStateException(e);
