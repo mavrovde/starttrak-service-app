@@ -103,12 +103,12 @@ public class LinkedinClient implements SocialNetworkClient {
     }
 
     @Override
-    public String getPhotoUrl(String accessToken) {
+    public String getPhotoUrl(String accessToken) throws SocialNetworkException{
         return "not implemented";
     }
 
     @Override
-    public String getAccessToken(String code, String redirectUrl) {
+    public String getAccessToken(String code, String redirectUrl) throws SocialNetworkException{
         Client client = Client.create();
         WebResource webResourcePost =
                 client.resource("https://www.linkedin.com/uas/oauth2/accessToken");

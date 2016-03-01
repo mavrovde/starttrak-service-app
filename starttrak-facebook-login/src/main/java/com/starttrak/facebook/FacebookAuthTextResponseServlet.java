@@ -32,10 +32,10 @@ public class FacebookAuthTextResponseServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
         if (code != null) {
-            String accessToken = networkClient.getAccessToken(code,
-                    "http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-text-response");
-            if (accessToken != null) {
-                try {
+            try {
+                String accessToken = networkClient.getAccessToken(code,
+                        "http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-text-response");
+                if (accessToken != null) {
                     response.setContentType("text/html");
                     // Actual logic goes here.
                     PrintWriter out = response.getWriter();
@@ -52,11 +52,10 @@ public class FacebookAuthTextResponseServlet extends HttpServlet {
 //                                    profile.getRegion(),
 //                                    profile.getCountry(),
 //                                    accessToken));
-
-                } catch (SocialNetworkException e) {
-                    logger.error("some issue with social network was registered", e);
-                    throw new IllegalStateException(e);
                 }
+            } catch (SocialNetworkException e) {
+                logger.error("some issue with social network was registered", e);
+                throw new IllegalStateException(e);
             }
         }
     }

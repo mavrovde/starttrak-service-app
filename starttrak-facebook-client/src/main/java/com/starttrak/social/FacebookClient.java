@@ -79,15 +79,15 @@ public class FacebookClient implements SocialNetworkClient {
                     OAuthResourceResponse.class).getBody();
         } catch (OAuthProblemException | OAuthSystemException e) {
             logger.error("some issue with getting/saving facebook profile", e);
-            throw new IllegalStateException(e);
+            throw new SocialNetworkException("facebook json profile", e);
         }
     }
 
     @Override
-    public String getPhotoUrl(String accessToken) {
+    public String getPhotoUrl(String accessToken) throws SocialNetworkException {
         try {
             OAuthClientRequest bearerClientRequest =
-                    new OAuthBearerClientRequest("https://graph.facebook.com/me/picture?type=large")
+                    new OAuthBearerClientRequest("https://graph.facebook.com/me/picture?type=large&redirect=false")
                             .setAccessToken(accessToken).buildQueryMessage();
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
             String response = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
@@ -113,12 +113,12 @@ public class FacebookClient implements SocialNetworkClient {
             return pictureUrl[0];
         } catch (OAuthProblemException | OAuthSystemException e) {
             logger.error("some issue with getting/saving facebook photo", e);
-            throw new IllegalStateException(e);
+            throw new SocialNetworkException("facebook photo url", e);
         }
     }
 
     @Override
-    public String getAccessToken(String code, String url) {
+    public String getAccessToken(String code, String url) throws SocialNetworkException {
         try {
             OAuthClientRequest oauthRequest = OAuthClientRequest
                     .tokenProvider(OAuthProviderType.FACEBOOK)
@@ -135,7 +135,7 @@ public class FacebookClient implements SocialNetworkClient {
             return oAuthResponse.getAccessToken();
         } catch (OAuthSystemException | OAuthProblemException e) {
             logger.error("some error during facebook request", e);
-            throw new IllegalStateException(e);
+            throw new SocialNetworkException("facebook access token", e);
         }
     }
 
