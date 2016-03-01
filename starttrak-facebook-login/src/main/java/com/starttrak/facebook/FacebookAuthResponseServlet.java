@@ -40,25 +40,25 @@ public class FacebookAuthResponseServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
         if (code != null) {
-            String accessToken = networkClient.getAccessToken(code);
+            String accessToken = networkClient.getAccessToken(code,
+                    "http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-response");
             if (accessToken != null) {
                 try {
-//                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(accessToken);
+                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(accessToken);
                     response.setContentType("text/html");
                     // Actual logic goes here.
-                    PrintWriter out = response.getWriter();
-                    out.println("<h1>" + networkClient.getJsonProfileByAccessToken(accessToken) + "</h1>");
-
-//                    response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
-//                            profileRepo.updateSocialProfile(
-//                                    SocNetwork.FCBK, profile.getEmailAddress(),
-//                                    profile.getFirstName(), profile.getLastName(),
-//                                    profile.getPosition(), profile.getCompany(),
-//                                    profile.getPictureUrl(),
-//                                    profile.getCityName(),
-//                                    profile.getRegion(),
-//                                    profile.getCountry(),
-//                                    accessToken));
+//                    PrintWriter out = response.getWriter();
+//                    out.println("<h1>" + networkClient.getJsonProfileByAccessToken(accessToken) + "</h1>");
+                    response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
+                            profileRepo.updateSocialProfile(
+                                    SocNetwork.FCBK, profile.getEmailAddress(),
+                                    profile.getFirstName(), profile.getLastName(),
+                                    profile.getPosition(), profile.getCompany(),
+                                    profile.getPictureUrl(),
+                                    profile.getCityName(),
+                                    profile.getRegion(),
+                                    profile.getCountry(),
+                                    accessToken));
                 } catch (SocialNetworkException e) {
                     logger.error("some issue with social network was registered", e);
                     throw new IllegalStateException(e);

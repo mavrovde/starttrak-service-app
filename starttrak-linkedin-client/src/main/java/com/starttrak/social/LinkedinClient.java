@@ -103,7 +103,12 @@ public class LinkedinClient implements SocialNetworkClient {
     }
 
     @Override
-    public String getAccessToken(String code) {
+    public String getPhotoUrl(String accessToken) {
+        return "not implemented";
+    }
+
+    @Override
+    public String getAccessToken(String code, String redirectUrl) {
         Client client = Client.create();
         WebResource webResourcePost =
                 client.resource("https://www.linkedin.com/uas/oauth2/accessToken");
@@ -112,7 +117,7 @@ public class LinkedinClient implements SocialNetworkClient {
         formData.add("client_secret", "12WaBJlQxbSndcSI");
         formData.add("grant_type", "authorization_code");
         formData.add("code", code);
-        formData.add("redirect_uri", "http://mavrov.de:8080/starttrak-linkedin-login/linkedin-auth-response");
+        formData.add("redirect_uri", redirectUrl);
         ClientResponse postResponse =
                 webResourcePost.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).post(ClientResponse.class, formData);
         if (postResponse.getStatus() != 200) {

@@ -31,7 +31,8 @@ public class LinkedinAuthResponseServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = request.getParameter("code");
         if (code != null) {
-            String accessToken = networkClient.getAccessToken(code);
+            String accessToken = networkClient.getAccessToken(code,
+                    "http://mavrov.de:8080/starttrak-linkedin-login/linkedin-auth-response");
             //-=-=-=-
             if (accessToken != null) {
                 try {

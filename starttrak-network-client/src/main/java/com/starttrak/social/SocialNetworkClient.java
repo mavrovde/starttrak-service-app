@@ -9,5 +9,7 @@ public interface SocialNetworkClient {
 
     String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException;
 
-    String getAccessToken(String code);
+    String getPhotoUrl(String accessToken);
+
+    String getAccessToken(String code, String redirectUrl);
 }

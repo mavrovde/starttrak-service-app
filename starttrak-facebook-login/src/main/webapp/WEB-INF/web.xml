@@ -28,6 +28,16 @@
         <url-pattern>/facebook-auth-response</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>FacebookAuthTextResponseServlet</servlet-name>
+        <servlet-class>com.starttrak.facebook.FacebookAuthTextResponseServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FacebookAuthTextResponseServlet</servlet-name>
+        <url-pattern>/facebook-auth-text-response</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>CORSFilter</filter-name>
         <filter-class>com.starttrak.http.filter.CORSFilter</filter-class>

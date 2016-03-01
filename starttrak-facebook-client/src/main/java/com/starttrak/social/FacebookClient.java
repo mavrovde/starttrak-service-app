@@ -38,27 +38,41 @@ public class FacebookClient implements SocialNetworkClient {
 //        }
         Object parsedProfile = JSONValue.parse(textProfile);
         JSONObject jsonProfile = (JSONObject) parsedProfile;
-        // -=-=-=-
         String firstName = jsonProfile.get("first_name").toString();
         String lastName = jsonProfile.get("last_name").toString();
         String emailAddress = jsonProfile.get("email").toString();
+
+        final String[] cityName = {null};
+        final String[] countryName = {null};
+        Optional<Object> jsonLocation = Optional.ofNullable(jsonProfile.get("location"));
+        jsonLocation.ifPresent(value -> {
+                    JSONObject parsedLocation = (JSONObject) JSONValue.parse(value.toString());
+                    String finalLocation = parsedLocation.get("name").toString();
+                    if (finalLocation != null) {
+                        String[] loc = finalLocation.split(",");
+                        cityName[0] = loc[0];
+                        countryName[0] = loc[1];
+                    }
+                }
+        );
+        String pictureUrl = getPhotoUrl(accessToken);
         return FacebookProfile.createNew(firstName, lastName, emailAddress,
                 Optional.ofNullable(null),
                 Optional.ofNullable(null)/*industry*/,
                 Optional.ofNullable(null)/*seniority*/,
                 Optional.ofNullable(null),
                 Optional.ofNullable(null)/*sizes*/,
-                Optional.ofNullable(null), /*photo*/
-                Optional.ofNullable(null)/*city*/,
+                Optional.ofNullable(pictureUrl), /*photo*/
+                Optional.ofNullable(cityName[0])/*city*/,
                 Optional.ofNullable(null)/*region*/,
-                Optional.ofNullable(null)/*country*/);
+                Optional.ofNullable(countryName[0])/*country*/);
     }
 
     @Override
     public String getJsonProfileByAccessToken(String accessToken) throws SocialNetworkException {
         try {
             OAuthClientRequest bearerClientRequest =
-                    new OAuthBearerClientRequest("https://graph.facebook.com/me?fields=id,first_name,last_name,email")
+                    new OAuthBearerClientRequest("https://graph.facebook.com/me?fields=id,first_name,last_name,email,location")
                             .setAccessToken(accessToken).buildQueryMessage();
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
             return oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
@@ -70,14 +84,48 @@ public class FacebookClient implements SocialNetworkClient {
     }
 
     @Override
-    public String getAccessToken(String code) {
+    public String getPhotoUrl(String accessToken) {
+        try {
+            OAuthClientRequest bearerClientRequest =
+                    new OAuthBearerClientRequest("https://graph.facebook.com/me/picture?type=large")
+                            .setAccessToken(accessToken).buildQueryMessage();
+            OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+            String response = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
+                    OAuthResourceResponse.class).getBody();
+            /*
+            {
+                "data": {
+                    "is_silhouette": false,
+                    "url": "https://scontent.xx.fbcdn.net/hprofile-xft1/v/t1.0-1/p200x200/1929950_1539026919744518_557623504237816364_n.jpg?oh=c623e205aa064ad72c82992671fad8f4&oe=574B2F1D"
+                }
+            }
+             */
+            Object parsedResponse = JSONValue.parse(response);
+            JSONObject jsonResponse = (JSONObject) parsedResponse;
+            Optional<Object> data = Optional.ofNullable(jsonResponse.get("data"));
+            final String[] pictureUrl = {null};
+            data.ifPresent(value -> {
+                        Object parsedData = JSONValue.parse(value.toString());
+                        JSONObject jsonData = (JSONObject) parsedData;
+                        pictureUrl[0] = jsonData.get("url").toString();
+                    }
+            );
+            return pictureUrl[0];
+        } catch (OAuthProblemException | OAuthSystemException e) {
+            logger.error("some issue with getting/saving facebook photo", e);
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public String getAccessToken(String code, String url) {
         try {
             OAuthClientRequest oauthRequest = OAuthClientRequest
                     .tokenProvider(OAuthProviderType.FACEBOOK)
                     .setGrantType(GrantType.AUTHORIZATION_CODE)
                     .setClientId("659248597511389")
                     .setClientSecret("4e8d68b411affc73f0d15b82970b3056")
-                    .setRedirectURI("http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-response")
+                    .setRedirectURI(url)
                     .setCode(code)
                     .buildBodyMessage();
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());

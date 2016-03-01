@@ -19,10 +19,15 @@ public class FacebookAuthRequestServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            String redirectURL = "http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-response";
+            if (request.getParameter("text") != null) {
+                logger.info("text parameter found -> text response provided");
+                redirectURL = "http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-text-response";
+            }
             OAuthClientRequest oauthRequest = OAuthClientRequest
                     .authorizationProvider(OAuthProviderType.FACEBOOK)
                     .setClientId("659248597511389")
-                    .setRedirectURI("http://mavrov.de:8080/starttrak-facebook-login/facebook-auth-response")
+                    .setRedirectURI(redirectURL)
                     .buildQueryMessage();
             //redirect to the linkedin site
             response.sendRedirect(oauthRequest.getLocationUri());
