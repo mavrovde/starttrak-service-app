@@ -92,6 +92,7 @@ public class FacebookClient implements SocialNetworkClient {
             OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
             String response = oAuthClient.resource(bearerClientRequest, OAuth.HttpMethod.GET,
                     OAuthResourceResponse.class).getBody();
+            logger.info("facebook photo response -> " + response);
             /*
             {
                 "data": {
@@ -100,8 +101,7 @@ public class FacebookClient implements SocialNetworkClient {
                 }
             }
              */
-            Object parsedResponse = JSONValue.parse(response);
-            JSONObject jsonResponse = (JSONObject) parsedResponse;
+            JSONObject jsonResponse = (JSONObject) JSONValue.parse(response);
             Optional<Object> data = Optional.ofNullable(jsonResponse.get("data"));
             final String[] pictureUrl = {null};
             data.ifPresent(value -> {
