@@ -1,7 +1,7 @@
 package com.starttrak.xing;
 
 import com.starttrak.repo.ProfileRepo;
-import com.starttrak.social.Facebook;
+import com.starttrak.social.Xing;
 import com.starttrak.social.SocialNetworkClient;
 import com.starttrak.social.SocialNetworkException;
 import org.jboss.logging.Logger;
@@ -24,7 +24,7 @@ public class XingAuthTextResponseServlet extends HttpServlet {
     private ProfileRepo profileRepo;
 
     @Inject
-    @Facebook
+    @Xing
     private SocialNetworkClient networkClient;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -39,17 +39,6 @@ public class XingAuthTextResponseServlet extends HttpServlet {
                     PrintWriter out = response.getWriter();
                     out.println("<h1>" + networkClient.getJsonProfileByAccessToken(accessToken) + "</h1>");
                     out.println("<h1>" + networkClient.getPhotoUrl(accessToken) + "</h1>");
-//                    SocialNetworkProfile profile = networkClient.getProfileByAccessToken(accessToken);
-//                    response.sendRedirect("http://mavrov.de:8080/starttrak-profiles-rest/service/profile?session_id=" +
-//                            profileRepo.updateSocialProfile(
-//                                    SocNetwork.FCBK, profile.getEmailAddress(),
-//                                    profile.getFirstName(), profile.getLastName(),
-//                                    profile.getPosition(), profile.getCompany(),
-//                                    profile.getPictureUrl(),
-//                                    profile.getCityName(),
-//                                    profile.getRegion(),
-//                                    profile.getCountry(),
-//                                    accessToken));
                 }
             } catch (SocialNetworkException e) {
                 logger.error("some issue with social network was registered", e);

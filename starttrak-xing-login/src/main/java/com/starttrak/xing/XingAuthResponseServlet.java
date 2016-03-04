@@ -2,7 +2,7 @@ package com.starttrak.xing;
 
 import com.starttrak.common.SocNetwork;
 import com.starttrak.repo.ProfileRepo;
-import com.starttrak.social.Facebook;
+import com.starttrak.social.Xing;
 import com.starttrak.social.SocialNetworkClient;
 import com.starttrak.social.SocialNetworkException;
 import com.starttrak.social.SocialNetworkProfile;
@@ -25,7 +25,7 @@ public class XingAuthResponseServlet extends HttpServlet {
     private ProfileRepo profileRepo;
 
     @Inject
-    @Facebook
+    @Xing
     private SocialNetworkClient networkClient;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
