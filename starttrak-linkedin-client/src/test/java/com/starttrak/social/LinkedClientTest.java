@@ -21,7 +21,7 @@ public class LinkedClientTest {
     private final static Logger logger = Logger.getLogger(LinkedClientTest.class);
 
     private final static String SERGII_ACCESS_TOKEN =
-            "AQX3kUGPK82yO4HLKYphRq2RTZIsqAA_zR-MkLQIWxyH__F1x5Z3PEfYNE1YFYLTYwzuieXP3PDvKs0IdujOGC3A53XWpE6IXLIkikqCEVTRxNAcsZ339PalYSH1tzSBDP0GuOdnK-jatueOUqIrWjyUZA3By9BCwS6e4rmJ_cFS1WskfMY";
+            "AQWyHIB-Zi3cS-VElj-pTGGCvPyDxUBr4Km01YhNtTB6opFyr-cRqesF8wU42tAuqv8MkHTtuqkaATOoVY2wM7RVTBoHsDzFXtE-7OKlJHwr4k_AmH5s14IXe_XVTLAhIgnls6cnmwx9J1adLUGGhBhYZy4nzfD_QeOhOv0EoSV_QjTUI7A";
 
 //    private final static String DENIS_ACCESS_TOKEN =
 //            "AQUMXQTBS6mxAH9I4-_HUArMQ_bsAKDRRYJ_R2criIDWgV_VfJhaHxQebZEO" +
