@@ -1,0 +1,53 @@
+<web-app>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <servlet>
+        <servlet-name>XingAuthRequestServlet</servlet-name>
+        <servlet-class>com.starttrak.xing.XingAuthRequestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>XingAuthRequestServlet</servlet-name>
+        <url-pattern>/xing-authorize</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>XingAuthResponseServlet</servlet-name>
+        <servlet-class>com.starttrak.xing.XingAuthResponseServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>XingAuthResponseServlet</servlet-name>
+        <url-pattern>/xing-auth-response</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>XingAuthTextResponseServlet</servlet-name>
+        <servlet-class>com.starttrak.xing.XingAuthTextResponseServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>XingAuthTextResponseServlet</servlet-name>
+        <url-pattern>/xing-auth-text-response</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>com.starttrak.http.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>
+
+
+
