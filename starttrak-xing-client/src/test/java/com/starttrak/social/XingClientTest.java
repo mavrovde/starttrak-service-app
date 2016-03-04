@@ -1,12 +1,12 @@
 package com.starttrak.social;
 
-import java.util.Scanner;
-
 import org.junit.Test;
-import org.scribe.builder.*;
-import org.scribe.builder.api.*;
+import org.scribe.builder.ServiceBuilder;
+import org.scribe.builder.api.XingApi;
 import org.scribe.model.*;
-import org.scribe.oauth.*;
+import org.scribe.oauth.OAuthService;
+
+import java.util.Scanner;
 
 public class XingClientTest {
 
