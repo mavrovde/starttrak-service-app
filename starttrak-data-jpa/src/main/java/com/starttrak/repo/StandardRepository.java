@@ -1,11 +1,9 @@
 package com.starttrak.repo;
 
-import com.starttrak.jpa.StandardEntity;
-
-import javax.persistence.criteria.Predicate;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
+
+import com.starttrak.jpa.StandardEntity;
 
 /**
  * @author serg.mavrov@gmail.com

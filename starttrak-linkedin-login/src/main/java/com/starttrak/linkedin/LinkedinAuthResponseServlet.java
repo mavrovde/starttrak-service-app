@@ -19,7 +19,9 @@ import java.io.IOException;
  */
 public class LinkedinAuthResponseServlet extends HttpServlet {
 
-    private final static Logger logger = Logger.getLogger(LinkedinAuthResponseServlet.class);
+	private static final long serialVersionUID = 1L;
+
+	private final static Logger logger = Logger.getLogger(LinkedinAuthResponseServlet.class);
 
     @Inject
     private ProfileRepo profileRepo;

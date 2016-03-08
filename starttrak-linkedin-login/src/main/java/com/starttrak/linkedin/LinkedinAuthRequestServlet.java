@@ -10,7 +10,9 @@ import java.io.IOException;
  */
 public class LinkedinAuthRequestServlet extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private static final long serialVersionUID = 1L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //redirect to the linkedin site
         response.sendRedirect("https://www.linkedin.com/uas/oauth2/authorization?"
                         + "response_type=code"

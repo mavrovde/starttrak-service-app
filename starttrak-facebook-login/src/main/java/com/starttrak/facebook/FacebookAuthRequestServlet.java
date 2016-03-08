@@ -14,8 +14,10 @@ import java.io.IOException;
  * @author serg.mavrov@gmail.com
  */
 public class FacebookAuthRequestServlet extends HttpServlet {
-
-    private final static Logger logger = Logger.getLogger(FacebookAuthRequestServlet.class);
+    
+	private static final long serialVersionUID = 1L;
+	
+	private final static Logger logger = Logger.getLogger(FacebookAuthRequestServlet.class);
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {

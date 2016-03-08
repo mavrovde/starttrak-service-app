@@ -10,7 +10,9 @@ import java.io.IOException;
  */
 public class LinkedinAuthServlet extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private static final long serialVersionUID = 1L;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect("http://mavrov.de:8080/starttrak-linkedin-login/linkedin-authorize");
     }
 

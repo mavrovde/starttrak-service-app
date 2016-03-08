@@ -18,8 +18,10 @@ import java.io.IOException;
  * @author serg.mavrov@gmail.com
  */
 public class FacebookAuthResponseServlet extends HttpServlet {
+    
+	private static final long serialVersionUID = 1L;
 
-    private final static Logger logger = Logger.getLogger(FacebookAuthResponseServlet.class);
+	private final static Logger logger = Logger.getLogger(FacebookAuthResponseServlet.class);
 
     @Inject
     private ProfileRepo profileRepo;

@@ -6,6 +6,7 @@ import com.starttrak.jpa.*;
 import com.starttrak.repo.*;
 import com.starttrak.rest.auth.AuthenticationException;
 import com.starttrak.rest.response.*;
+
 import org.hibernate.HibernateException;
 import org.jboss.logging.Logger;
 
@@ -13,6 +14,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +50,7 @@ public class ProfileRestService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public StandardResponse create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
+    public StandardResponse<?> create(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         logger.info("x-auth-id:" + ownSessionId + " <- create profile request");
         try {
             UserEntity user = userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
@@ -77,7 +79,7 @@ public class ProfileRestService {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public StandardResponse update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
+    public StandardResponse<?> update(@HeaderParam("x-auth-id") String ownSessionId, ProfileBean request) {
         logger.info("x-auth-id:" + ownSessionId + " <- update profile request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
@@ -107,7 +109,7 @@ public class ProfileRestService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse get(@HeaderParam("x-auth-id") String hdrSessionId,
+    public StandardResponse<?> get(@HeaderParam("x-auth-id") String hdrSessionId,
                                 @QueryParam("session_id") String prmSessionId) {
         logger.info("with " + hdrSessionId + "/" + prmSessionId + " <- get profile request");
         Optional.ofNullable(hdrSessionId).ifPresent(id ->
@@ -165,7 +167,7 @@ public class ProfileRestService {
     @Path("/search")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse search(@HeaderParam("x-auth-id") String ownSessionId, SearchRequest conditions) {
+    public StandardResponse<?> search(@HeaderParam("x-auth-id") String ownSessionId, SearchRequest conditions) {
         logger.info("x-auth-id:" + ownSessionId + " <- search request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
@@ -201,7 +203,7 @@ public class ProfileRestService {
     @Path("/meet")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse meet(@HeaderParam("x-auth-id") String ownSessionId, MeetRequest meet) {
+    public StandardResponse<?> meet(@HeaderParam("x-auth-id") String ownSessionId, MeetRequest meet) {
         logger.info("x-auth-id:" + ownSessionId + " <- meet request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);

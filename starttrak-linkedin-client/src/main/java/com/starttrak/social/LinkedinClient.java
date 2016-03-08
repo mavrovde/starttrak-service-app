@@ -1,19 +1,20 @@
 package com.starttrak.social;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import java.util.Optional;
+
+import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+
 import org.jboss.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import java.util.ArrayList;
-import java.util.Optional;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -48,7 +49,7 @@ public class LinkedinClient implements SocialNetworkClient {
         Object parsedPictures = JSONValue.parse(pictures);
         JSONObject jsonPictures = (JSONObject) parsedPictures;
         JSONArray pictureUrls = (JSONArray) jsonPictures.get("values");
-        Optional pictureUrl = Optional.empty();
+        Optional<?> pictureUrl = Optional.empty();
         if (pictureUrls != null && !pictureUrls.isEmpty()) {
             pictureUrl = pictureUrls.stream().findAny();
         }

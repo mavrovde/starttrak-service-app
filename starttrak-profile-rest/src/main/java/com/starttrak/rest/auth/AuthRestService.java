@@ -42,7 +42,7 @@ public class AuthRestService {
     @Path("/validate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StandardResponse validate(@QueryParam("session_id") String sessionId) {
+    public StandardResponse<?> validate(@QueryParam("session_id") String sessionId) {
         Optional<UserEntity> user = userRepo.findByOwnSessionId(sessionId);
         if (user.isPresent()) {
             return new SuccessResponse<>(new OwnSession(user.get().getOwnSessionId()));
@@ -55,7 +55,7 @@ public class AuthRestService {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public StandardResponse login(LoginRequest regRequest) {
+    public StandardResponse<?> login(LoginRequest regRequest) {
         switch (SocNetwork.findByCode(regRequest.getSocNetworkId())) {
             case STTR: //starttrak
                 Optional<UserEntity> user = userRepo.findByEmail(regRequest.getEmail());

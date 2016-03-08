@@ -5,7 +5,9 @@ package com.starttrak.social;
  */
 public class SocialNetworkException extends Exception {
 
-    public SocialNetworkException(String message, Throwable cause) {
+	private static final long serialVersionUID = 1L;
+
+	public SocialNetworkException(String message, Throwable cause) {
         super(message, cause);
     }
 

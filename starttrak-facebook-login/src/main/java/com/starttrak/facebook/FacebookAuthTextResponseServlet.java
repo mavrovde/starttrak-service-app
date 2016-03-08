@@ -1,29 +1,30 @@
 package com.starttrak.facebook;
 
-import com.starttrak.common.SocNetwork;
-import com.starttrak.repo.ProfileRepo;
-import com.starttrak.social.Facebook;
-import com.starttrak.social.SocialNetworkClient;
-import com.starttrak.social.SocialNetworkException;
-import com.starttrak.social.SocialNetworkProfile;
-import org.jboss.logging.Logger;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import org.jboss.logging.Logger;
+
+import com.starttrak.social.Facebook;
+import com.starttrak.social.SocialNetworkClient;
+import com.starttrak.social.SocialNetworkException;
 
 /**
  * @author serg.mavrov@gmail.com
  */
 public class FacebookAuthTextResponseServlet extends HttpServlet {
+    
+	private static final long serialVersionUID = 1L;
 
-    private final static Logger logger = Logger.getLogger(FacebookAuthTextResponseServlet.class);
+	private final static Logger logger = Logger.getLogger(FacebookAuthTextResponseServlet.class);
 
-    @Inject
-    private ProfileRepo profileRepo;
+    //@Inject
+    //private ProfileRepo profileRepo;
 
     @Inject
     @Facebook

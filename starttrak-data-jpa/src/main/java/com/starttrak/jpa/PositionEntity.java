@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "positions", schema = "starttrak")
 public class PositionEntity extends AbstractEntity implements StandardEntity, Labeled {
 
-    @TableGenerator(name = "entity_id_generator",
+    @TableGenerator(name = "entity_id_generator_positions",
             table = "entity_ids",
             schema = "starttrak",
             pkColumnName = "gen_name",
@@ -20,7 +20,7 @@ public class PositionEntity extends AbstractEntity implements StandardEntity, La
     )
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator_positions")
     private Long id;
 
     @Basic

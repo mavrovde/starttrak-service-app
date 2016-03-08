@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "profiles", schema = "starttrak")
 public class ProfileEntity extends AbstractEntity implements StandardEntity, Comparable<ProfileEntity> {
 
-    @TableGenerator(name = "entity_id_generator",
+    @TableGenerator(name = "entity_id_generator_profiles",
             table = "entity_ids",
             schema = "starttrak",
             pkColumnName = "gen_name",
@@ -21,7 +21,7 @@ public class ProfileEntity extends AbstractEntity implements StandardEntity, Com
     )
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "entity_id_generator_profiles")
     private Long id;
 
     @ManyToOne(optional = true)

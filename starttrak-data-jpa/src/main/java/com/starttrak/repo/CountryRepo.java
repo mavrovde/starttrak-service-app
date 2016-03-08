@@ -1,10 +1,10 @@
 package com.starttrak.repo;
 
-import com.starttrak.jpa.CountryEntity;
-import com.starttrak.jpa.RegionEntity;
+import java.util.Optional;
 
 import javax.enterprise.context.RequestScoped;
-import java.util.Optional;
+
+import com.starttrak.jpa.CountryEntity;
 
 /**
  * @author serg.mavrov@gmail.com

@@ -1,20 +1,24 @@
 package com.starttrak.repo;
 
-import com.starttrak.jpa.AbstractEntity;
-import com.starttrak.jpa.RegionEntity;
-import org.jboss.logging.Logger;
+import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
+
+import org.jboss.logging.Logger;
+
+import com.starttrak.jpa.AbstractEntity;
 
 /**
  * @author serg.mavrov@gmail.com
@@ -22,7 +26,7 @@ import java.util.Optional;
 public abstract class AbstractRepository<ENTITY extends AbstractEntity>
         implements StandardRepository<ENTITY> {
 
-    private final static Logger logger = Logger.getLogger(AbstractRepository.class);
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     //    private static final String USED_CACHE = "org.hibernate.cacheable";
     private CriteriaBuilder builder;
@@ -31,7 +35,7 @@ public abstract class AbstractRepository<ENTITY extends AbstractEntity>
     private CriteriaDelete<ENTITY> deleteCriteria;
     private Root<ENTITY> from;
     private TypedQuery<ENTITY> typedQuery;
-    private Query query;
+    //private Query query;
 
     @Inject
     private EntityManager entityManager;

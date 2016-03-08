@@ -1,21 +1,26 @@
 package com.starttrak.repo;
 
-import com.starttrak.common.SocNetwork;
-import com.starttrak.jpa.*;
-import org.jboss.logging.Logger;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.*;
+
+import com.starttrak.common.SocNetwork;
+import com.starttrak.jpa.CountryEntity;
+import com.starttrak.jpa.NetworkEntity;
+import com.starttrak.jpa.PositionEntity;
+import com.starttrak.jpa.ProfileEntity;
+import com.starttrak.jpa.RegionEntity;
+import com.starttrak.jpa.UserEntity;
 
 /**
  * @author serg.mavrov@gmail.com
  */
 @RequestScoped
 public class ProfileRepo extends AbstractRepository<ProfileEntity> {
-
-    private final static Logger logger = Logger.getLogger(ProfileRepo.class);
 
     @Override
     public Class<ProfileEntity> getEntityClass() {
