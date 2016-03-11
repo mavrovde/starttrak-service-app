@@ -39,8 +39,8 @@
         <module>starttrak-linkedin-client</module>
         <module>starttrak-facebook-login</module>
         <module>starttrak-facebook-client</module>
-        <!--<module>starttrak-xing-login</module>-->
-        <!--<module>starttrak-xing-client</module>-->
+        <module>starttrak-xing-login</module>
+        <module>starttrak-xing-client</module>
         <module>starttrak-profile-rest</module>
     </modules>
 

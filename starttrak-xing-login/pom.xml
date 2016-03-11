@@ -14,7 +14,7 @@
     <packaging>war</packaging>
 
     <build>
-        <finalName>starttrak-facebook-login</finalName>
+        <finalName>starttrak-xing-login</finalName>
 
         <resources>
             <resource>

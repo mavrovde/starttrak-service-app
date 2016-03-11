@@ -27,5 +27,8 @@ public class XingProfile extends DefaultProfile {
         super(firstName, lastName, emailAddress, position, industry, seniority, company, sizes,
                 pictureUrl, cityName, region, country);
     }
+    
+    
+    
 
 }

@@ -8,6 +8,7 @@
         <session-timeout>30</session-timeout>
     </session-config>
 
+<!--  
     <servlet>
         <servlet-name>XingAuthRequestServlet</servlet-name>
         <servlet-class>com.starttrak.xing.XingAuthRequestServlet</servlet-class>
@@ -17,7 +18,7 @@
         <servlet-name>XingAuthRequestServlet</servlet-name>
         <url-pattern>/xing-authorize</url-pattern>
     </servlet-mapping>
-
+-->
     <servlet>
         <servlet-name>XingAuthResponseServlet</servlet-name>
         <servlet-class>com.starttrak.xing.XingAuthResponseServlet</servlet-class>
