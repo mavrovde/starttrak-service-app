@@ -1,8 +1,8 @@
 package com.starttrak.xing.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,9 +21,9 @@ public class AuthService {
 	public boolean check(JSONObject ob){
 		
 		// 1. make array of strings
-		List <String> list = convertJsonToList(ob);
+		Set <String> set = convertJsonToList(ob);
 		
-		String[] ar = list.toArray(new String[list.size()]);
+		String[] ar = set.toArray(new String[set.size()]);
 		// 2. sort alphabetically
 		Arrays.sort(ar);
 		
@@ -38,12 +38,12 @@ public class AuthService {
 		return false;
 	}	
 			
-	private List<String> convertJsonToList(JSONObject ob){
+	private Set<String> convertJsonToList(JSONObject ob){
 		return convertJsonToList("", ob);
 	}
 	
-	private List<String> convertJsonToList(String keyPrefix , JSONObject ob){
-		List <String> ar = new ArrayList<>();
+	private Set<String> convertJsonToList(String keyPrefix , JSONObject ob){
+		Set <String> ar = new HashSet<>();
 		for(Object key : ob.keySet()){
 			Object v = ob.get(key);
 			if(v == null){
