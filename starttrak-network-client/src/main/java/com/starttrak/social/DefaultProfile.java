@@ -39,6 +39,8 @@ public abstract class DefaultProfile implements SocialNetworkProfile {
         this.region = region;
         this.country = country;
     }
+    
+    public DefaultProfile(){}
 
     @Override
     public String getFirstName() {
@@ -204,4 +206,6 @@ public abstract class DefaultProfile implements SocialNetworkProfile {
                 '}';
     }
 
+    
+    
 }

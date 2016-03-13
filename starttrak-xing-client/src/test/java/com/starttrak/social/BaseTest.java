@@ -1,4 +1,4 @@
-package com.starttrak.xing;
+package com.starttrak.social;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -14,7 +14,7 @@ public abstract class BaseTest {
 	
 	@Deployment
     public static JavaArchive getJar() {
-        return ShrinkWrap.create(JavaArchive.class).addPackages(true, "com.starttrak.xing")
+        return ShrinkWrap.create(JavaArchive.class).addPackages(true, "com.starttrak.social")
                 .addAsManifestResource("META-INF/beans.xml", "beans.xml");
     }
 	

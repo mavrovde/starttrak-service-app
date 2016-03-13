@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.starttrak.xing.BaseTest;
@@ -17,6 +18,7 @@ public class AuthServiceTest extends BaseTest{
     private AuthService service;
 	
 	@Test
+	@Ignore
 	public void testHash() throws ParseException{
 		JSONObject ob = prepareJSON();				
 		boolean f = service.check(ob);
