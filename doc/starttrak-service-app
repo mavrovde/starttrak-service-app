@@ -1,0 +1,35 @@
+1. структура:
+    
+    
+модуль: starttrack-<SOC_NET_NAME>-client
+физическое представление : JAR
+Содержит реализацию получения данных из соц. сети 
+
+
+
+модуль: starttrack-<SOC_NET_NAME>-login
+
+
+
+
+
+XING
+условия: https://dev.xing.com/api/terms_and_conditions
+
+генерация кода для авторизации: https://dev.xing.com/plugins/login_with/new#
+
+пример авторизации: https://dev.xing.com/plugins/login_with/docs#get-started
+
+
+Your domain
+http://mavrov.de:8080/
+Privacy policy URL
+http://mavrov.de/policy
+Consumer key
+5e8cf778b48076873756
+Signature salt
+b8e72ffa2f9181edfbe918b068bfa5994f6d1505
+
+
+ответ:
+while(1);{"users":[{"id":"24556836_4a0966","first_name":"Alexander","last_name":"Babin","display_name":"Alexander Babin","active_email":"alexander.babin@gmail.com","permalink":"https://www.xing.com/profile/Alexander_Babin2","business_address":{"street":null,"city":"Moscow","province":"Moscow City","country":"RU"},"photo_urls":{"maxi_thumb":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.70x93.jpg"},"professional_experience":{"primary_company":{"name":"CTI","title":"Руководитель группы разработки операторских решений","industry":"INFORMATION_TECHNOLOGY_AND_SERVICES"}},"signature":"238d26d56d05b90c370ec8e7ea3507c6d5a7b8e2b8fc2e8f3749608df266808e"}],"scope":"xing-lw"}
