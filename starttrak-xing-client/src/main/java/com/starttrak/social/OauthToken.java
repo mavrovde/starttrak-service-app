@@ -5,7 +5,7 @@ package com.starttrak.social;
  * 
  * @author Alexander Babin
  * @version 1.0
- * @since 13.03.2015
+ * @since 13.03.2016
  *
  */
 public class OauthToken {

@@ -29,7 +29,7 @@ public class XingProfile extends DefaultProfile {
     }
     
     
-    static class Builder{
+    public static class Builder{
     	private String firstName;
         private String lastName;
         private String emailAddress;
