@@ -2,8 +2,13 @@ package com.starttrak.social;
 
 import java.util.Optional;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
- * @author serg.mavrov@gmail.com
+ * @author serg.mavrov@gmail.com <br> 
+ * Alexander Babin (alexander.babin@gmail.com)
  */
 public abstract class DefaultProfile implements SocialNetworkProfile {
 
@@ -153,57 +158,60 @@ public abstract class DefaultProfile implements SocialNetworkProfile {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DefaultProfile that = (DefaultProfile) o;
 
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (emailAddress != null ? !emailAddress.equals(that.emailAddress) : that.emailAddress != null) return false;
-        if (position != null ? !position.equals(that.position) : that.position != null) return false;
-        if (industry != null ? !industry.equals(that.industry) : that.industry != null) return false;
-        if (seniority != null ? !seniority.equals(that.seniority) : that.seniority != null) return false;
-        if (company != null ? !company.equals(that.company) : that.company != null) return false;
-        if (sizes != null ? !sizes.equals(that.sizes) : that.sizes != null) return false;
-        if (pictureUrl != null ? !pictureUrl.equals(that.pictureUrl) : that.pictureUrl != null) return false;
-        if (cityName != null ? !cityName.equals(that.cityName) : that.cityName != null) return false;
-        if (region != null ? !region.equals(that.region) : that.region != null) return false;
-        return !(country != null ? !country.equals(that.country) : that.country != null);
-
+        return new EqualsBuilder()
+                .append(firstName, that.getFirstName())
+                .append(lastName, that.getLastName())
+                .append(emailAddress, that.getEmailAddress())
+                .append(position, that.getPosition())
+                .append(industry, that.getIndustry())
+                .append(seniority, that.getSeniority())
+                .append(company, that.getCompany())
+                .append(sizes, that.getSizes())
+                .append(pictureUrl, that.getPictureUrl())
+                .append(cityName, that.getCityName())
+                .append(region, that.getRegion())
+                .append(country, that.getCountry())
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = firstName != null ? firstName.hashCode() : 0;
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0);
-        result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (industry != null ? industry.hashCode() : 0);
-        result = 31 * result + (seniority != null ? seniority.hashCode() : 0);
-        result = 31 * result + (company != null ? company.hashCode() : 0);
-        result = 31 * result + (sizes != null ? sizes.hashCode() : 0);
-        result = 31 * result + (pictureUrl != null ? pictureUrl.hashCode() : 0);
-        result = 31 * result + (cityName != null ? cityName.hashCode() : 0);
-        result = 31 * result + (region != null ? region.hashCode() : 0);
-        result = 31 * result + (country != null ? country.hashCode() : 0);
-        return result;
+    	return new HashCodeBuilder()
+		        .append(firstName)
+		        .append(lastName)
+		        .append(emailAddress)
+		        .append(position)
+		        .append(industry)
+		        .append(seniority)
+		        .append(company)
+		        .append(sizes)
+		        .append(pictureUrl)
+		        .append(cityName)
+		        .append(region)
+		        .append(country)
+		        .toHashCode();
     }
 
     @Override
     public String toString() {
-        return "SocialNetwork{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                ", position=" + position +
-                ", industry=" + industry +
-                ", seniority=" + seniority +
-                ", company=" + company +
-                ", sizes=" + sizes +
-                ", pictureUrl=" + pictureUrl +
-                ", cityName=" + cityName +
-                ", region=" + region +
-                ", country=" + country +
-                '}';
+        return ToStringBuilder.reflectionToString(this);
+	        /*
+        	.append(firstName)
+	        .append(lastName)
+	        .append(emailAddress)
+	        .append(position)
+	        .append(industry)
+	        .append(seniority)
+	        .append(company)
+	        .append(sizes)
+	        .append(pictureUrl)
+	        .append(cityName)
+	        .append(region)
+	        .append(country)
+	        .toString();
+	        */
     }
 
     
