@@ -1,0 +1,94 @@
+
+{
+
+"id":"24556836_6d0e9c",
+"active_email":"alexander.babin@gmail.com",
+"time_zone":{"utc_offset":3.0,"name":"Europe/Moscow"},
+"display_name":"Alexander Babin",
+"academic_title":null,
+"first_name":"Alexander",
+"last_name":"Babin",
+"gender":"m",
+"page_name":"Alexander_Babin2",
+"birth_date":{"year":null,"month":null,"day":null},
+"wants":null,
+"haves":null,
+"top_haves":null,
+"interests":null,
+"web_profiles":{},
+"badges":[],
+"legal_information":{"preview_content":null},
+"photo_urls":{
+    "large":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.140x185.jpg",
+    "maxi_thumb":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.70x93.jpg",
+    "medium_thumb":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.57x75.jpg",
+    "mini_thumb":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.18x24.jpg",
+    "thumb":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.30x40.jpg",
+    "size_32x32":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.32x32.jpg",
+    "size_48x48":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.48x48.jpg",
+    "size_64x64":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.64x64.jpg",
+    "size_96x96":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.96x96.jpg",
+    "size_128x128":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.128x128.jpg",
+    "size_192x192":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.192x192.jpg",
+    "size_256x256":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.256x256.jpg",
+    "size_1024x1024":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.1024x1024.jpg",
+    "size_original":"https://www.xing.com/image/1_e_2_b9c9aedee_24556836_1/alexander-babin-foto.original.jpg"
+},
+"permalink":"https://www.xing.com/profile/Alexander_Babin2",
+"languages":{},
+"employment_status":"EXECUTIVE",
+"organisation_member":null,
+"instant_messaging_accounts":{},
+"educational_background":{"degree":null,"primary_school":null,"schools":[],"qualifications":[]},
+"professional_experience":{
+    "primary_company":{
+        "id":"50614772_3ae87a",
+        "name":"CTI",
+        "url":null,
+        "tag":"CTI",
+        "title":"\u0420\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0433\u0440\u0443\u043f\u043f\u044b \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u043e\u043f\u0435\u0440\u0430\u0442\u043e\u0440\u0441\u043a\u0438\u0445 \u0440\u0435\u0448\u0435\u043d\u0438\u0439",
+        "begin_date":null,
+        "end_date":null,
+        "description":null,
+        "discipline":null,
+        "until_now":true,
+        "industry":"INFORMATION_TECHNOLOGY_AND_SERVICES",
+        "industries":[
+            {"id":90000,"localized_name":"\u0418\u043d\u0442\u0435\u0440\u043d\u0435\u0442 \u0438 \u0418\u0422"}
+        ],
+        "company_size":null,
+        "career_level":null,
+        "form_of_employment":"FULL_TIME_EMPLOYEE"
+    },
+    "companies":[
+        {"id":"50614772_3ae87a","name":"CTI","url":null,"tag":"CTI","title":"\u0420\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c \u0433\u0440\u0443\u043f\u043f\u044b \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u043e\u043f\u0435\u0440\u0430\u0442\u043e\u0440\u0441\u043a\u0438\u0445 \u0440\u0435\u0448\u0435\u043d\u0438\u0439","begin_date":null,"end_date":null,"description":null,"discipline":null,"until_now":true,"industry":"INFORMATION_TECHNOLOGY_AND_SERVICES","industries":[{"id":90000,"localized_name":"\u0418\u043d\u0442\u0435\u0440\u043d\u0435\u0442 \u0438 \u0418\u0422"}],"company_size":null,"career_level":null,"form_of_employment":"FULL_TIME_EMPLOYEE"}
+    ],
+    "awards":[],
+    "non_primary_companies":[]
+},
+"private_address":{
+    "street":null,
+    "zip_code":"117342",
+    "city":"\u041c\u043e\u0441\u043a\u0432\u0430",
+    "province":null,
+    "country":"RU",
+    "email":"alexander.babin@gmail.com",
+    "fax":null,
+    "phone":null,
+    "mobile_phone":null
+},
+"business_address":{
+    "street":null,
+    "zip_code":null,
+    "city":"Moscow",
+    "province":null,
+    "country":"RU",
+    "email":null,
+    "fax":null,
+    "phone":null,
+    "mobile_phone":null
+},
+"premium_services":[]
+}
+
+
