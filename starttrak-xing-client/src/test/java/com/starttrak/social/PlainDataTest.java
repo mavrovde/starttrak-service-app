@@ -3,18 +3,21 @@ package com.starttrak.social;
 import org.junit.Test;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.XingApi;
-import org.scribe.model.*;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-import java.util.Scanner;
+public class PlainDataTest {
 
-public class MainTest2 {
-
-    public static void main(String[] args) {
+	@Test
+    public void obtainData() {
         
     	String apiKey = "200498315bfcba1df1dc";
         String apiSecret = "c9d77b643643bd940c475ce08deba22c55dd3fa6";
     	
+        // my auth token (Alexander Babin)
     	String oauthToken = "6d176908c2b9c1f402ba";
     	String oauthTikenSecret = "4d458965f9d42c2145be";
     	    	
@@ -39,9 +42,5 @@ public class MainTest2 {
         System.out.println();
         System.out.println(response.getBody());
     }
-
-    @Test
-    public void dummyTest() {
-
-    }
+    
 }
