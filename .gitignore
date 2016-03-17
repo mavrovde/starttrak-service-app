@@ -53,4 +53,5 @@ crashlytics-build.properties
 .project
 */target/
 */.settings/
+*/.metadata/
 .settings/
