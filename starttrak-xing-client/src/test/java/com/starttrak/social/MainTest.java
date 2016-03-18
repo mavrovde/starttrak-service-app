@@ -17,7 +17,8 @@ public class MainTest {
 
         // Interact via Commandline
         Scanner input = new Scanner(System.in);
-
+        input.close();
+        
         System.out.println("=== Example to use the XING API ===");
 
         // Entering the API-key
