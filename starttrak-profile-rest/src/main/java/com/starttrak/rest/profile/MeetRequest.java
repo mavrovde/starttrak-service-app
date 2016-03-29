@@ -11,6 +11,10 @@ public class MeetRequest {
     @XmlElement(name = "user_ids")
     private List<Long> ids;
 
+    private boolean send;
+
+    private String message;
+
     public MeetRequest() {
     }
 
@@ -26,11 +30,21 @@ public class MeetRequest {
         this.ids = ids;
     }
 
-    @Override
-    public String toString() {
-        return "MeetRequest{" +
-                "ids=" + ids +
-                '}';
+    public boolean isSend() {
+        return send;
     }
+
+    public void setSend(boolean send) {
+        this.send = send;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
 
 }

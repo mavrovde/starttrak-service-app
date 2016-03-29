@@ -110,7 +110,7 @@ public class ProfileRestService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public StandardResponse<?> get(@HeaderParam("x-auth-id") String hdrSessionId,
-                                @QueryParam("session_id") String prmSessionId) {
+                                   @QueryParam("session_id") String prmSessionId) {
         logger.info("with " + hdrSessionId + "/" + prmSessionId + " <- get profile request");
         Optional.ofNullable(hdrSessionId).ifPresent(id ->
                 logger.info("the header found {x-auth-id:" + id + "}"));
@@ -174,22 +174,22 @@ public class ProfileRestService {
             List<ProfileEntity> profiles = profileRepo.
                     findAllByNetwork(Page.OPTIONAL_DEFAULT, SocNetwork.STTR);
             return new SuccessResponse<>(profiles.stream().map(dbProfile ->
-                            new ProfileBean(
-                                    dbProfile.getUser().getId(),
-                                    Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
-                                    dbProfile.getFirstName(), dbProfile.getLastName(),
-                                    dbProfile.getEmail(),
-                                    Optional.ofNullable(dbProfile.getPhone()).orElse(null),
-                                    Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
-                                    Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
-                                    dbProfile.getCityLabel(),
-                                    dbProfile.getCompanyLabel(),
-                                    Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
-                                    Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
-                                    Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
-                                    Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
-                                    dbProfile.getUser().getSourceNetwork().getId(),
-                                    dbProfile.getPhotoUrl())
+                    new ProfileBean(
+                            dbProfile.getUser().getId(),
+                            Optional.ofNullable(dbProfile.getTitle()).orElse(new TitleEntity()).getId(),
+                            dbProfile.getFirstName(), dbProfile.getLastName(),
+                            dbProfile.getEmail(),
+                            Optional.ofNullable(dbProfile.getPhone()).orElse(null),
+                            Optional.ofNullable(dbProfile.getCountry()).orElse(new CountryEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getRegion()).orElse(new RegionEntity()).getId(),
+                            dbProfile.getCityLabel(),
+                            dbProfile.getCompanyLabel(),
+                            Optional.ofNullable(dbProfile.getPosition()).orElse(new PositionEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getIndustry()).orElse(new IndustryEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getSeniority()).orElse(new SeniorityEntity()).getId(),
+                            Optional.ofNullable(dbProfile.getSizes()).orElse(new SizeEntity()).getId(),
+                            dbProfile.getUser().getSourceNetwork().getId(),
+                            dbProfile.getPhotoUrl())
             ).sorted().collect(Collectors.toList()));
         } catch (AuthenticationException ise) {
             logger.error(ise);
@@ -207,9 +207,20 @@ public class ProfileRestService {
         logger.info("x-auth-id:" + ownSessionId + " <- meet request");
         try {
             userRepo.findByOwnSessionId(ownSessionId).orElseThrow(AuthenticationException::new);
-            meet.getIds().stream().forEach(id -> logger.info("check id{" + id+"}=" +
+            meet.getIds().stream().forEach(id -> logger.info("check id{" + id + "}=" +
                     userRepo.find(id).orElse(new UserEntity()).getEmail()));
-            return new SuccessResponse<>("success");
+
+            if (!meet.isSend()) {
+                return new SuccessResponse<>("We are ready to send something");
+            } else {
+                if (!meet.getMessage().isEmpty()) {
+                    //todo:: SEND THE MESSAGE
+                    return new SuccessResponse<>("success");
+                } else {
+                    return new EmptyMessageResponse();
+                }
+            }
+
         } catch (AuthenticationException ise) {
             logger.error(ise);
             return new AuthErrorResponse();
